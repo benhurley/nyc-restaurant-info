@@ -6,9 +6,8 @@
     "node": "10.x"
   },
   "scripts": {
-    "start": "cd react-ui && yarn install && yarn start",
-    "start-server": "node server",
-    "build": "cd react-ui/ && yarn install && yarn run build"
+    "start": "node server",
+    "build": "cd react-ui/ && npm install && npm run build"
   },
   "cacheDirectories": [
     "node_modules",

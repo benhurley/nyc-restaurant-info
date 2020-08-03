@@ -20,7 +20,11 @@ If you would like to contribute to the project, please reach out to me at benfro
 ### Run the API server
 
 ```bash
-yarn start-server
+# initial setup
+npm install
+
+# start the server
+npm start
 ```
 
 ### Run the React UI
@@ -30,7 +34,14 @@ The React app is configured to proxy backend requests to the local Node server. 
 In a separate terminal from the API server, start the UI:
 
 ```bash
-yarn start
+# change into the react directory
+cd react-ui/
+
+# initial setup
+npm install
+
+# start the server
+npm start
 ```
 
 ### Optional Commands
@@ -38,7 +49,7 @@ yarn start
 #### Install new npm packages for Node
 
 ```bash
-yarn install package-name --save
+npm install package-name --save
 ```
 
 #### Install new npm packages for React UI
@@ -47,7 +58,7 @@ yarn install package-name --save
 # navigate into the react directory
 cd react-ui/
 
-yarn install package-name --save
+npm install package-name --save
 ```
 
 ---------------------------
