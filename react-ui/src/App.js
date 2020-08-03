@@ -31,7 +31,9 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>Food Feels</h1>
+        <h1>
+          Food Feels
+        </h1>
         { process.env.NODE_ENV === 'production' ?
             <p>
               This is a production build of Food Feels. App coming soon!
