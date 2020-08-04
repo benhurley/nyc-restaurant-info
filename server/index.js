@@ -45,7 +45,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   app.get('/api/restaurants', (req, res) => {
-    db.collection('restaurants').find({}).toArray((err, result) => {
+    mongoUtil.restaurants().find({}).toArray((err, result) => {
       if(err) {
         res.send(err);
       } else {
@@ -56,7 +56,7 @@ if (!isDev && cluster.isMaster) {
 
   app.get('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    db.collection('restaurants').findOne({'_id': mongoId}).then(doc => {
+    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
       if(!doc) {
         throw new Error('No record found.');
       } else {

@@ -9,7 +9,7 @@ MongoClient
   .then(client => {
     db = client.db('restaurantathome');
     dbClient = client;
-    //collection = db.collection('restaurants');
+    collection = db.collection('restaurants');
   })
   .catch(error => console.error(error));
 
@@ -19,3 +19,7 @@ process.on('SIGINT', () => {
   process.exit();
 });
 
+module.exports = {
+    restaurants: () => collection,
+    getDbClient: () => dbClient
+};
