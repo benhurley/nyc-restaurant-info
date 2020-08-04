@@ -6,7 +6,8 @@
     "node": "10.x"
   },
   "scripts": {
-    "start": "nodemon server",
+    "start": "node server",
+    "start-dev": "nodemon server",
     "build": "cd react-ui/ && npm install && npm run build"
   },
   "cacheDirectories": [
