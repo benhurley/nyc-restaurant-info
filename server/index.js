@@ -38,7 +38,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   app.get('/jwt', (req, res) => {
-    let privateKey = fs.readFileSync('./private.pem', 'utf8');
+    let privateKey = process.env.PRIVATE_KEY
     let token = jwt.sign({"body": "stuff"}, privateKey, {algorithm: 'HS256'});
     res.send(token);
   });
