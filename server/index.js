@@ -73,7 +73,7 @@ if (!isDev && cluster.isMaster) {
     if(!isDev) {
       if(typeof req.headers.authorization !== "undefined") {
         let token = req.headers.authorization.split(" ")[1];
-        let privateKey = fs.readFileSync('./private.pem', 'utf8');
+        let privateKey = process.env.PRIVATE_KEY
 
         jwt.verify(token, privateKey, {algorithm: "HS256"}, (err, decoded) => {
             if (err) {
