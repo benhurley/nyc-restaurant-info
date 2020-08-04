@@ -45,24 +45,28 @@ if (!isDev && cluster.isMaster) {
   });
 
   app.get('/api/restaurants', (req, res) => {
-    mongoUtil.restaurants().find({}).toArray((err, result) => {
-      if(err) {
-        res.send(err);
-      } else {
-        res.json(result);
-      }
-    });
+    if (mongoUtil.restaurants()){
+      mongoUtil.restaurants().find({}).toArray((err, result) => {
+        if(err) {
+          res.send(err);
+        } else {
+          res.json(result);
+        }
+      });
+    }
   });
 
   app.get('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-      if(!doc) {
-        throw new Error('No record found.');
-      } else {
-        res.json(doc);
-      }
-    });
+    if (mongoUtil.restaurants()){
+      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+        if(!doc) {
+          throw new Error('No record found.');
+        } else {
+          res.json(doc);
+        }
+      });
+    }
   });
 
   // All remaining requests return the React app, so it can handle routing.
