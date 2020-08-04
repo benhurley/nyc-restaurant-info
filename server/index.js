@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
 var cors = require('cors');
+require('dotenv').config();
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;

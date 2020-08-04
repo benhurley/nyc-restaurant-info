@@ -5,7 +5,7 @@ let dbClient;
 let collection;
 
 MongoClient
-  .connect(mongo_uri, { useNewUrlParser: true, poolSize: 10 })
+  .connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, poolSize: 10 })
   .then(client => {
     db = client.db('restaurantathome');
     dbClient = client;
