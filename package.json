@@ -6,7 +6,7 @@
     "node": "10.x"
   },
   "scripts": {
-    "start": "node server",
+    "start": "nodemon server",
     "build": "cd react-ui/ && npm install && npm run build"
   },
   "cacheDirectories": [
@@ -14,7 +14,8 @@
     "react-ui/node_modules"
   ],
   "dependencies": {
-    "express": "^4.16.4"
+    "express": "^4.16.4",
+    "mongodb": "^3.6.0"
   },
   "repository": {
     "type": "git",
