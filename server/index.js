@@ -44,7 +44,7 @@ if (!isDev && cluster.isMaster) {
     res.send(token);
   });
 
-  app.get('/api/restaurants', isAuthorized, (req, res) => {
+  app.get('/api/restaurants', (req, res) => {
     mongoUtil.restaurants().find({}).toArray((err, result) => {
       if(err) {
         res.send(err);
