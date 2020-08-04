@@ -34,7 +34,7 @@ if (!isDev && cluster.isMaster) {
   // Answer API requests.
   app.get('/api', function (req, res) {
     res.set('Content-Type', 'application/json');
-    res.send('{"message":"Hello from the custom server!"}');
+    res.send('{"message":"Connected"}');
   });
 
   app.get('/jwt', (req, res) => {

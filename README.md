@@ -1,4 +1,70 @@
-# create-react-app with a Node server on Heroku
+# Food Feels
+
+## Are you missing indoor dining as much as I am?
+
+In the wake of Covid-19, delivery and takeout food orders have replaced indoor dining in many parts of the US. A major component as to why a customer chooses a particular restaurant is the <i> experience </i>, where the actual meal may only play a minor role. Popular delivery and takeout apps are missing a crucial component to the dining experience, which is the atmosphere while you are eating.
+
+This project is a POC to help recreate (as much as possible) the vibe at some of your favorite restaurants while we wait for indoor dining to return. With data such as how to set your table, lighting, music, etc. you can get closer than ever before. If nothing else, it serves as an idea for date-night or a family meal.
+
+There are two ways we can begin aggregating restaurant data:
+
+1. Web-scraping positive online reviews
+2. Allowing the restaurant to submit a form so customers can recreate the experience at home
+
+## Contact
+
+If you would like to contribute to the project, please reach out to me at benfromtech@gmail.com
+
+## Local Development
+
+### Run the API server
+
+```bash
+# initial setup
+npm install
+
+# start the server
+npm start
+```
+
+### Run the React UI
+
+The React app is configured to proxy backend requests to the local Node server. (See [`"proxy"` config](react-ui/package.json))
+
+In a separate terminal from the API server, start the UI:
+
+```bash
+# change into the react directory
+cd react-ui/
+
+# initial setup
+npm install
+
+# start the server
+npm start
+```
+
+### Optional Commands
+
+#### Install new npm packages for Node
+
+```bash
+npm install package-name --save
+```
+
+#### Install new npm packages for React UI
+
+```bash
+# navigate into the react directory
+cd react-ui/
+
+npm install package-name --save
+```
+
+---------------------------
+This project is forked and detached from https://github.com/mars/heroku-cra-node
+
+## create-react-app with a Node server on Heroku
 
 A minimal example of using a Node backend (server for API, proxy, & routing) with a [React frontend](https://github.com/facebookincubator/create-react-app).
 
@@ -7,11 +73,9 @@ A minimal example of using a Node backend (server for API, proxy, & routing) wit
 * 🚀 [Deploy to Heroku](#user-content-deploy-to-heroku)
 * ⤵️ [Switching from create-react-app-buildpack](#user-content-switching-from-create-react-app-buildpack)
 * 🎛 [Runtime Config](#user-content-runtime-config)
-* 💻 [Local Development](#user-content-local-development)
 
 To deploy a frontend-only React app, use the static-site optimized  
 ▶️ [create-react-app-buildpack](https://github.com/mars/create-react-app-buildpack)
-
 
 ## Design Points
 
@@ -29,7 +93,6 @@ Includes a minimal [Node Cluster](https://nodejs.org/docs/latest-v8.x/api/cluste
 ## Demo
 
 [Demo deployment](https://cra-node.herokuapp.com/): example API call from the React UI is [fetched with a relative URL](react-ui/src/App.js#L16) that is served by an Express handler in the Node server.
-
 
 ## Deploy to Heroku
 
@@ -110,55 +173,3 @@ create-react-app itself supports [configuration with environment variables](http
    git commit --allow-empty -m 'Enable runtime config with create-react-app-inner-buildpack'
    git push heroku master
    ```
-
-## Local Development
-
-Because this app is made of two npm projects, there are two places to run `npm` commands:
-
-1. **Node API server** at the root `./`
-1. **React UI** in `react-ui/` directory.
-
-### Run the API server
-
-In a terminal:
-
-```bash
-# Initial setup
-npm install
-
-# Start the server
-npm start
-```
-
-#### Install new npm packages for Node
-
-```bash
-npm install package-name --save
-```
-
-
-### Run the React UI
-
-The React app is configured to proxy backend requests to the local Node server. (See [`"proxy"` config](react-ui/package.json))
-
-In a separate terminal from the API server, start the UI:
-
-```bash
-# Always change directory, first
-cd react-ui/
-
-# Initial setup
-npm install
-
-# Start the server
-npm start
-```
-
-#### Install new npm packages for React UI
-
-```bash
-# Always change directory, first
-cd react-ui/
-
-npm install package-name --save
-```
