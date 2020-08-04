@@ -93,4 +93,11 @@ if (!isDev && cluster.isMaster) {
   app.listen(PORT, function () {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);
   });
+
+  // cors origin URL - Allow inbound traffic from origin
+  corsOptions = {
+    origin: process.env.HEROKU_APP_URL,
+    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  };
+  app.use(cors(corsOptions));
 }

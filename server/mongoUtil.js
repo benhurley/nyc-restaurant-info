@@ -1,7 +1,6 @@
 
 const MongoClient = require('mongodb').MongoClient;
-var creds = require('../db-credentials');
-const mongo_uri = `mongodb+srv://restaurantathome:${creds.password}@cluster0.536qw.mongodb.net/${creds.collection}?retryWrites=true&w=majority`;
+const monogo_uri = process.env.MONGODB_URL;
 let dbClient;
 let collection;
 
