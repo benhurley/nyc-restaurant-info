@@ -11,7 +11,7 @@ require('dotenv').config();
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
-var mongoUtil = require('./mongoUtil');
+const mongoUtil = isDev ? require('./mongoUtil') : require('/app/server/mongoUtil.js');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
