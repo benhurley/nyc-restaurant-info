@@ -1,7 +1,8 @@
 const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
-const { ifError } = require('assert');
+const fs = require('fs');
+const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
 
@@ -35,7 +36,13 @@ if (!isDev && cluster.isMaster) {
     res.send('{"message":"Hello from the custom server!"}');
   });
 
-  app.get('/api/restaurants', (req, res) => {
+app.get('/jwt', (req, res) => {
+  let privateKey = fs.readFileSync('./private.pem', 'utf8');
+  let token = jwt.sign({"body": "stuff"}, privateKey, {algorithm: 'HS256'});
+  res.send(token);
+});
+
+  app.get('/api/restaurants', isAuthorized, (req, res) => {
     mongoUtil.restaurants().find({}).toArray((err, result) => {
       if(err) {
         res.send(err)
@@ -60,6 +67,28 @@ if (!isDev && cluster.isMaster) {
   app.get('*', function(request, response) {
     response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
+
+function isAuthorized(req, res, next) {
+  if(!isDev) {
+    if(typeof req.headers.authorization !== "undefined") {
+      let token = req.headers.authorization.split(" ")[1];
+      let privateKey = fs.readFileSync('./private.pem', 'utf8');
+
+      jwt.verify(token, privateKey, {algorithm: "HS256"}, (err, decoded) => {
+          if (err) {
+              res.status(500).json({ error: "Not Authorized"});
+              throw new Error("Not Authorized");
+          }
+          return next();
+      })
+    } else {
+      res.status(500).json({error: "Not Authorized"});
+      throw new Error("Not Authorized");
+    }
+  } else {
+    next();
+  }
+}
 
   app.listen(PORT, function () {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);

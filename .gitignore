@@ -7,6 +7,7 @@ npm-debug.log
 *.dev
 .DS_Store
 db-credentials.js
+private.pem
 
 # Docker
 Dockerfile
