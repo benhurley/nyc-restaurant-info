@@ -5,6 +5,7 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
+var cors = require('cors');
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
