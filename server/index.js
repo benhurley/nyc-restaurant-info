@@ -5,13 +5,11 @@ const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
-var cors = require('cors');
+const mongoUtil = require('./mongoUtil');
 require('dotenv').config();
 
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
-
-const mongoUtil = isDev ? require('./mongoUtil') : require('/app/server/mongoUtil.js');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -99,11 +97,4 @@ if (!isDev && cluster.isMaster) {
   app.listen(PORT, function () {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);
   });
-
-  // cors origin URL - Allow inbound traffic from origin
-  // corsOptions = {
-  //   origin: process.env.HEROKU_APP_URL,
-  //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  // };
-  // app.use(cors(corsOptions));
 }
