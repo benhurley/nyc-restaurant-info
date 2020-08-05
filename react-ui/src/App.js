@@ -32,7 +32,7 @@ function App() {
     <div className="App">
       <header className="App-header">
         <h1>
-          Food Feels
+          Food Feels - test
         </h1>
         { process.env.NODE_ENV === 'production' ?
             <p>
