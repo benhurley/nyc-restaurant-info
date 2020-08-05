@@ -2,5 +2,6 @@
 if [[ -z "$QGTUNNEL_CONTENT" ]]; then
     echo "No content found for gqtunnel, moving on without static IP."
 else
+    echo "$QGTUNNEL_CONTENT" > .qgtunnel; 
     bin/qgtunnel $@
 fi
