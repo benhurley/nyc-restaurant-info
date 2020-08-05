@@ -1,3 +1,6 @@
 #!/bin/bash
-echo "$QGTUNNEL_CONTENT" > .qgtunnel
-bin/qgtunnel $@
+if [[ -z "$QGTUNNEL_CONTENT" ]]; then
+    echo "No content found for gqtunnel, moving on without static IP."
+else
+    bin/qgtunnel $@
+fi
