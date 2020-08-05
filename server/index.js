@@ -44,7 +44,7 @@ if (!isDev && cluster.isMaster) {
     res.send(token);
   });
 
-  app.get('/api/restaurants', (req, res) => {
+  app.get('/api/restaurants', isAuthorized, (req, res) => {
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().find({}).toArray((err, result) => {
         if(err) {
@@ -86,7 +86,7 @@ if (!isDev && cluster.isMaster) {
                 throw new Error("Not Authorized");
             }
             return next();
-        })
+        });
       } else {
         res.status(500).json({error: "Not Authorized"});
         throw new Error("Not Authorized");
