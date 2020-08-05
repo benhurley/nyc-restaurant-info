@@ -101,9 +101,9 @@ if (!isDev && cluster.isMaster) {
   });
 
   // cors origin URL - Allow inbound traffic from origin
-  corsOptions = {
-    origin: process.env.HEROKU_APP_URL,
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-  };
-  app.use(cors(corsOptions));
+  // corsOptions = {
+  //   origin: process.env.HEROKU_APP_URL,
+  //   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+  // };
+  // app.use(cors(corsOptions));
 }
