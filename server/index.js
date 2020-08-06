@@ -10,7 +10,7 @@ require('dotenv').config();
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
-const mongoUtil = require('./mongoUtil')
+const mongoUtil = require('./mongoUtil');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -30,6 +30,11 @@ if (!isDev && cluster.isMaster) {
 
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
+
+  // Middleware for CRUD
+  var bodyParser = require('body-parser');
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
 
   // Answer API requests.
   app.get('/api', function (req, res) {
@@ -66,6 +71,14 @@ if (!isDev && cluster.isMaster) {
         }
       });
     }
+  });
+
+  app.post("/addrestaurant", (req, res) => {
+    mongoUtil.restaurants().insertOne(req.body)
+    .then(res.redirect('/'))
+    .catch(error => {
+      console.error(error)
+    })
   });
 
   // All remaining requests return the React app, so it can handle routing.

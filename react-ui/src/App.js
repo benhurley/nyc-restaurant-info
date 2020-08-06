@@ -42,10 +42,16 @@ function App() {
               This is the developer-mode of Food Feels.
             </p>
         }
-        {isFetching
-          ? 'Fetching message from API'
-          : 'Server Status: ' + message
-        }
+
+        {/* only for testing */}
+        <form method="post" action="/addrestaurant">
+          <label>Add a Restaurant</label><br />
+          <input type="text" name="name" placeholder="Name" required /> <br />
+          <input type="text" name="playlist" placeholder="Music Playlist" required /> <br />
+          <input type="text" name="lighting" placeholder="Lighting" required /> <br />
+          <input type="text" name="scent" placeholder="Aromas" required /> <br />
+          <input type="submit" value="Submit" />
+        </form>
       </header>
     </div>
   );

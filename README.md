@@ -24,7 +24,7 @@ If you would like to contribute to the project, please reach out to me at benfro
 npm install
 
 # start the server
-npm start
+npm run start-dev
 ```
 
 ### Run the React UI

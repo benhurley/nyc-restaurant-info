@@ -7,6 +7,7 @@ let collection;
 MongoClient
   .connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, poolSize: 10 })
   .then(client => {
+    console.log('Connected to Database')
     db = client.db('restaurantathome');
     dbClient = client;
     collection = db.collection('restaurants');
