@@ -85,11 +85,14 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update a restaurant
-  app.post('api/restaurants/:id/update', (req, res) => {
+  app.post('/api/restaurants/:id/update', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    mongoUtil.restaurants().findByIdAndUpdate(mongoId, {$set: req.body}, (err, product) => {
-        if (err) return next(err);
+    mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body}).then(err => {
+      if (err) {
+        res.send(err);
+      } else {
         res.send('Restaurant info successfully udpated.');
+      }
     });
   });
 
