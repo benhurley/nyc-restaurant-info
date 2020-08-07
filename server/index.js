@@ -72,7 +72,7 @@ if (!isDev && cluster.isMaster) {
         } else {
           res.json(doc);
         }
-      })
+      });
     }
   });
 
@@ -101,9 +101,9 @@ if (!isDev && cluster.isMaster) {
           } else {
             res.send('Restaurant info successfully udpated.');
           }
-      })
+        });
       }
-    })
+    });
   });
 
   // update all restaurants
