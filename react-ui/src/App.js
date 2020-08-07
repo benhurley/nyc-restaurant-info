@@ -44,7 +44,7 @@ function App() {
         }
 
         {/* only for testing */}
-        <form method="post" action="/addrestaurant">
+        <form method="post" action="/api/restaurants/add">
           <label>Add a Restaurant</label><br />
           <input type="text" name="name" placeholder="Name" required /> <br />
           <input type="text" name="playlist" placeholder="Music Playlist" required /> <br />

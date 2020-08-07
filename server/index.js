@@ -48,6 +48,7 @@ if (!isDev && cluster.isMaster) {
     res.send(token);
   });
 
+  // get all restaurants
   app.get('/api/restaurants', isAuthorized, (req, res) => {
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().find({}).toArray((err, result) => {
@@ -60,6 +61,7 @@ if (!isDev && cluster.isMaster) {
     }
   });
 
+  // get a specific restaurant
   app.get('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
     if (mongoUtil.restaurants()){
@@ -73,12 +75,22 @@ if (!isDev && cluster.isMaster) {
     }
   });
 
-  app.post("/addrestaurant", (req, res) => {
+  // add a restaurant
+  app.post("/api/restaurants/add", (req, res) => {
     mongoUtil.restaurants().insertOne(req.body)
     .then(res.redirect('/'))
     .catch(error => {
       console.error(error)
     })
+  });
+
+  // update a restaurant
+  app.post('api/restaurants/:id/update', (req, res) => {
+    var mongoId = ObjectId(req.params.id);
+    mongoUtil.restaurants().findByIdAndUpdate(mongoId, {$set: req.body}, (err, product) => {
+        if (err) return next(err);
+        res.send('Restaurant info successfully udpated.');
+    });
   });
 
   // All remaining requests return the React app, so it can handle routing.
