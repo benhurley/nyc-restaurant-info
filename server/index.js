@@ -10,7 +10,8 @@ require('dotenv').config();
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
-const mongoUtil = require('./mongoUtil')
+const mongoUtil = require('./mongoUtil');
+const { doesNotMatch } = require('assert');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -67,11 +68,12 @@ if (!isDev && cluster.isMaster) {
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
         if(!doc) {
-          throw new Error('No record found.');
+          res.send('Error returning restaurant data. Restaurant may not exist.');
+          throw new Error('Error returning restaurant data. Restaurant may not exist.');
         } else {
           res.json(doc);
         }
-      });
+      })
     }
   });
 
@@ -85,15 +87,43 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update a restaurant
-  app.post('/api/restaurants/:id/update', (req, res) => {
+  app.post('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
     mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body}).then(err => {
       if (err) {
-        res.send(err);
+        res.send('Error updating restaurant data. Restaurant may not exist.');
+        throw new Error('Error updating restaurant data. Restaurant may not exist.');
       } else {
         res.send('Restaurant info successfully udpated.');
       }
+    })
+  });
+
+  // update all restaurants
+  app.post('/api/restaurants', (req, res) => {
+    console.log(req)
+    mongoUtil.restaurants().updateMany({}, {$set: req.body}).then(err => {
+      if (err) {
+        res.send(err);
+      } else {
+        res.send('All restaurants successfully udpated.');
+      }
     });
+  });
+
+  // delete a restaurant
+  app.delete('/api/restaurants/:id', (req, res) => {
+    var mongoId = ObjectId(req.params.id);
+    if (mongoUtil.restaurants()){
+      mongoUtil.restaurants().deleteOne({'_id': mongoId}).then(err => {
+        if(err) {
+          res.send('No record found to delete.');
+          throw new Error('No record found to delete.');
+        } else {
+          res.send('Restaurant deleted successfully.');
+        }
+      });
+    }
   });
 
   // All remaining requests return the React app, so it can handle routing.
