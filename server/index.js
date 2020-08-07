@@ -78,7 +78,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // add a restaurant
-  app.post("/api/restaurants/add", (req, res) => {
+  app.post("/api/restaurants", (req, res) => {
     mongoUtil.restaurants().insertOne(req.body)
     .then(res.redirect('/'))
     .catch(error => {
@@ -87,24 +87,35 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update a restaurant
-  app.post('/api/restaurants/:id', (req, res) => {
+  app.put('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body}).then(err => {
-      if (err) {
-        res.send('Error updating restaurant data. Restaurant may not exist.');
-        throw new Error('Error updating restaurant data. Restaurant may not exist.');
-      } else {
-        res.send('Restaurant info successfully udpated.');
-      }
-    })
+    if (mongoUtil.restaurants()){
+      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+        if(!doc) {
+          res.send('Error finding restaurant data. Restaurant may not exist.');
+          throw new Error('Error finding restaurant data. Restaurant may not exist.');
+        } else {
+          mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body})
+          .then((doc, err) => {
+            if (!doc) {
+              res.send(err);
+              throw new Error('Error updating restaurant data. Restaurant may not exist.');
+            } else {
+              res.send('Restaurant info successfully udpated.');
+            }
+        })
+        }
+      })
+    }
   });
 
   // update all restaurants
-  app.post('/api/restaurants', (req, res) => {
+  app.put('/api/restaurants', (req, res) => {
     console.log(req)
-    mongoUtil.restaurants().updateMany({}, {$set: req.body}).then(err => {
-      if (err) {
+    mongoUtil.restaurants().updateMany({}, {$set: req.body}).then((doc, err) => {
+      if (!doc) {
         res.send(err);
+        throw new Error('Error updating all restaurants data.');
       } else {
         res.send('All restaurants successfully udpated.');
       }
@@ -115,14 +126,21 @@ if (!isDev && cluster.isMaster) {
   app.delete('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
     if (mongoUtil.restaurants()){
-      mongoUtil.restaurants().deleteOne({'_id': mongoId}).then(err => {
-        if(err) {
-          res.send('No record found to delete.');
-          throw new Error('No record found to delete.');
+      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+        if(!doc) {
+          res.send('Error deleting restaurant data. Restaurant may not exist.');
+          throw new Error('Error deleting restaurant data. Restaurant may not exist.');
         } else {
-          res.send('Restaurant deleted successfully.');
+          mongoUtil.restaurants().deleteOne({'_id': mongoId}).then((doc, err) => {
+            if(!doc) {
+              res.send(err);
+              throw new Error('Could not delete record.');
+            } else {
+              res.send('Restaurant deleted successfully.');
+            }
+          });
         }
-      });
+      })
     }
   });
 
