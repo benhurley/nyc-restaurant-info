@@ -88,29 +88,26 @@ if (!isDev && cluster.isMaster) {
   // update a restaurant
   app.put('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    if (mongoUtil.restaurants()){
-      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-        if(!doc) {
-          res.send('Error finding restaurant data. Restaurant may not exist.');
-          throw new Error('Error finding restaurant data. Restaurant may not exist.');
-        } else {
-          mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body})
-          .then((doc, err) => {
-            if (!doc) {
-              res.send(err);
-              throw new Error('Error updating restaurant data. Restaurant may not exist.');
-            } else {
-              res.send('Restaurant info successfully udpated.');
-            }
-        })
-        }
+    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+      if(!doc) {
+        res.send('Error finding restaurant data. Restaurant may not exist.');
+        throw new Error('Error finding restaurant data. Restaurant may not exist.');
+      } else {
+        mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body})
+        .then((doc, err) => {
+          if (!doc) {
+            res.send(err);
+            throw new Error('Error updating restaurant data. Restaurant may not exist.');
+          } else {
+            res.send('Restaurant info successfully udpated.');
+          }
       })
-    }
+      }
+    })
   });
 
   // update all restaurants
   app.put('/api/restaurants', (req, res) => {
-    console.log(req)
     mongoUtil.restaurants().updateMany({}, {$set: req.body}).then((doc, err) => {
       if (!doc) {
         res.send(err);
@@ -124,23 +121,21 @@ if (!isDev && cluster.isMaster) {
   // delete a restaurant
   app.delete('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    if (mongoUtil.restaurants()){
-      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-        if(!doc) {
-          res.send('Error deleting restaurant data. Restaurant may not exist.');
-          throw new Error('Error deleting restaurant data. Restaurant may not exist.');
-        } else {
-          mongoUtil.restaurants().deleteOne({'_id': mongoId}).then((doc, err) => {
-            if(!doc) {
-              res.send(err);
-              throw new Error('Could not delete record.');
-            } else {
-              res.send('Restaurant deleted successfully.');
-            }
-          });
-        }
-      })
-    }
+    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+      if(!doc) {
+        res.send('Error deleting restaurant data. Restaurant may not exist.');
+        throw new Error('Error deleting restaurant data. Restaurant may not exist.');
+      } else {
+        mongoUtil.restaurants().deleteOne({'_id': mongoId}).then((doc, err) => {
+          if(!doc) {
+            res.send(err);
+            throw new Error('Could not delete record.');
+          } else {
+            res.send('Restaurant deleted successfully.');
+          }
+        });
+      }
+    })
   });
 
   // All remaining requests return the React app, so it can handle routing.
