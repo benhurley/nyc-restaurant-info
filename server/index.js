@@ -11,7 +11,6 @@ const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
 const mongoUtil = require('./mongoUtil');
-const { doesNotMatch } = require('assert');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
