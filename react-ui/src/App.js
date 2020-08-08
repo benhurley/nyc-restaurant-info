@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState, Fragment } from 'react';
 import './App.css';
 
 function App() {
@@ -36,22 +36,22 @@ function App() {
         </h1>
         { process.env.NODE_ENV === 'production' ?
             <p>
-              This is a production build of Food Feels. App coming soon!
+              Website coming soon!
             </p>
-          : <p>
-              This is the developer-mode of Food Feels.
-            </p>
+          : <Fragment>
+              <p>
+                This is the developer-mode of Food Feels.
+              </p>
+              <form method="post" action="/api/restaurants">
+              <label>Add a Restaurant</label><br />
+              <input type="text" name="name" placeholder="Name" required /> <br />
+              <input type="text" name="playlist" placeholder="Music Playlist" required /> <br />
+              <input type="text" name="lighting" placeholder="Lighting" required /> <br />
+              <input type="text" name="scent" placeholder="Aromas" required /> <br />
+              <input type="submit" value="Submit" />
+              </form>
+          </Fragment>
         }
-
-        {/* only for testing */}
-        <form method="post" action="/api/restaurants">
-          <label>Add a Restaurant</label><br />
-          <input type="text" name="name" placeholder="Name" required /> <br />
-          <input type="text" name="playlist" placeholder="Music Playlist" required /> <br />
-          <input type="text" name="lighting" placeholder="Lighting" required /> <br />
-          <input type="text" name="scent" placeholder="Aromas" required /> <br />
-          <input type="submit" value="Submit" />
-        </form>
       </header>
     </div>
   );
