@@ -10,7 +10,7 @@ require('dotenv').config();
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
 
-const mongoUtil = require('./mongoUtil')
+const mongoUtil = require('./mongoUtil');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -31,6 +31,11 @@ if (!isDev && cluster.isMaster) {
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
 
+  // Middleware for CRUD
+  var bodyParser = require('body-parser');
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
+
   // Answer API requests.
   app.get('/api', function (req, res) {
     res.set('Content-Type', 'application/json');
@@ -43,6 +48,7 @@ if (!isDev && cluster.isMaster) {
     res.send(token);
   });
 
+  // get all restaurants
   app.get('/api/restaurants', isAuthorized, (req, res) => {
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().find({}).toArray((err, result) => {
@@ -55,17 +61,81 @@ if (!isDev && cluster.isMaster) {
     }
   });
 
+  // get a specific restaurant
   app.get('/api/restaurants/:id', (req, res) => {
     var mongoId = ObjectId(req.params.id);
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
         if(!doc) {
-          throw new Error('No record found.');
+          res.send('Error returning restaurant data. Restaurant may not exist.');
+          throw new Error('Error returning restaurant data. Restaurant may not exist.');
         } else {
           res.json(doc);
         }
       });
     }
+  });
+
+  // add a restaurant
+  app.post("/api/restaurants", (req, res) => {
+    mongoUtil.restaurants().insertOne(req.body)
+    .then(res.redirect('/'))
+    .catch(error => {
+      console.error(error)
+    })
+  });
+
+  // update a restaurant
+  app.put('/api/restaurants/:id', (req, res) => {
+    var mongoId = ObjectId(req.params.id);
+    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+      if(!doc) {
+        res.send('Error finding restaurant data. Restaurant may not exist.');
+        throw new Error('Error finding restaurant data. Restaurant may not exist.');
+      } else {
+        mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body})
+        .then((doc, err) => {
+          if (!doc) {
+            res.send(err);
+            throw new Error('Error updating restaurant data. Restaurant may not exist.');
+          } else {
+            res.send('Restaurant info successfully udpated.');
+          }
+        });
+      }
+    });
+  });
+
+  // update all restaurants
+  app.put('/api/restaurants', (req, res) => {
+    mongoUtil.restaurants().updateMany({}, {$set: req.body}).then((doc, err) => {
+      if (!doc) {
+        res.send(err);
+        throw new Error('Error updating all restaurants data.');
+      } else {
+        res.send('All restaurants successfully udpated.');
+      }
+    });
+  });
+
+  // delete a restaurant
+  app.delete('/api/restaurants/:id', (req, res) => {
+    var mongoId = ObjectId(req.params.id);
+    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
+      if(!doc) {
+        res.send('Error deleting restaurant data. Restaurant may not exist.');
+        throw new Error('Error deleting restaurant data. Restaurant may not exist.');
+      } else {
+        mongoUtil.restaurants().deleteOne({'_id': mongoId}).then((doc, err) => {
+          if(!doc) {
+            res.send(err);
+            throw new Error('Could not delete record.');
+          } else {
+            res.send('Restaurant deleted successfully.');
+          }
+        });
+      }
+    })
   });
 
   // All remaining requests return the React app, so it can handle routing.
