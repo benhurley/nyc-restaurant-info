@@ -1,8 +1,7 @@
 
 const MongoClient = require('mongodb').MongoClient;
 const mongo_uri = process.env.MONGODB_URL;
-let dbClient;
-let collection;
+let dbClient, collection;
 
 MongoClient
   .connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, poolSize: 10 })

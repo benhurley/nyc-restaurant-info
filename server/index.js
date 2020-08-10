@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
-const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
@@ -37,7 +36,7 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   // Answer API requests.
-  app.get('/api', function (req, res) {
+  app.get('/api', (req, res) => {
     res.set('Content-Type', 'application/json');
     res.send('{"message":"Connected"}');
   });
@@ -139,8 +138,8 @@ if (!isDev && cluster.isMaster) {
   });
 
   // All remaining requests return the React app, so it can handle routing.
-  app.get('*', function(request, response) {
-    response.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
 
   function isAuthorized(req, res, next) {
@@ -165,7 +164,7 @@ if (!isDev && cluster.isMaster) {
     }
   }
 
-  app.listen(PORT, function () {
+  app.listen(PORT, () => {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);
   });
 }
