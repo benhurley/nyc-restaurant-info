@@ -2,6 +2,7 @@
 import React, {useState, useCallback, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { NavLink } from 'react-router-dom'
 
 const filter = createFilterOptions();
 
@@ -17,7 +18,6 @@ function Search() {
         return response.json();
       })
       .then(json => {
-        console.log("json ", json)
         setRestaurants(json);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
@@ -38,7 +38,8 @@ function Search() {
             name: newValue.inputValue,
           });
         } else {
-          setValue(newValue);
+          setValue(newValue);         
+          console.log("Selected Value: ", newValue);
         }
       }}
       filterOptions={(options, params) => {
