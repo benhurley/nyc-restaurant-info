@@ -27,7 +27,5 @@
     "not op_mini all"
   ],
   "proxy": "http://localhost:5000",
-  "devDependencies": {
-    "babel-eslint": "^10.1.0"
-  }
+  "devDependencies": {}
 }

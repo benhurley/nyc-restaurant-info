@@ -1,7 +1,7 @@
-import React, { useCallback, useEffect, useState, Fragment } from 'react';
+import React from 'react';
 import './New-Restaurant.css';
 
-export default function NewRestaurant(props) {
+export const NewRestaurant = () => {
     return (
         <div className="NewRestaurant">
             <form method="post" action="/api/restaurants">

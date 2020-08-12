@@ -1,12 +1,11 @@
 /* eslint-disable no-use-before-define */
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { NavLink } from 'react-router-dom'
 
 const filter = createFilterOptions();
 
-function Search() {
+export const Search = ({setSearchRestaurant}) => {
   const [value, setValue] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 
@@ -24,6 +23,10 @@ function Search() {
       })
   }, []);
 
+  useEffect(() => {
+    value && setSearchRestaurant(value)
+  }, [value]);
+
   return (
     <Autocomplete
       value={value}
@@ -38,8 +41,7 @@ function Search() {
             name: newValue.inputValue,
           });
         } else {
-          setValue(newValue);         
-          console.log("Selected Value: ", newValue);
+          setValue(newValue);
         }
       }}
       filterOptions={(options, params) => {
@@ -76,11 +78,9 @@ function Search() {
       style={{ width: 300 }}
       freeSolo
       renderInput={(params) => (
-        <TextField {...params} label="Search for a restaurant" variant="outlined" />
+        <TextField {...params} label="Search for a restaurant" variant="outlined"/>
       )}
     />
   );
 }
-
-export default Search;
 
