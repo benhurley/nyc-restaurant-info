@@ -76,9 +76,17 @@ export const Search = ({setSearchRestaurant}) => {
       }}
       renderOption={(option) => option.name}
       style={{ width: 300 }}
-      freeSolo
       renderInput={(params) => (
-        <TextField {...params} label="Search for a restaurant" variant="outlined"/>
+        <TextField 
+          {...params} 
+          label="Search for a restaurant" 
+          variant="outlined"
+          onKeyDown={e => {
+            if (e.keyCode === 13 && e.target.value) {
+              value && setValue(value);
+            }
+          }
+        }/>
       )}
     />
   );

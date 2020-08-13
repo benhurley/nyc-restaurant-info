@@ -1,10 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Home-page.css';
 import { Search } from '../Search/Search';
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const [searchRestaurant, setSearchRestaurant] = useState({});
+
+  useEffect(() => {
+    if (searchRestaurant._id) {
+      window.location.assign(`${window.location}restaurant/${searchRestaurant._id}`)
+    }
+  }, [searchRestaurant]);
 
   return (
       <div className="Home">
@@ -15,11 +21,6 @@ export default function HomePage() {
             : <p> This is the developer-mode of Food Feels. </p>
           }
           <Search setSearchRestaurant={setSearchRestaurant} />
-          <div style={{"marginTop": "10px"}}>
-            <Link to={`/restaurant/${searchRestaurant._id}`}>
-              <button>Submit</button>
-            </Link>
-          </div>
           <div style={{"marginTop": "150px"}}>
             <Link to='/add'>
               <button>Add New Restaurant</button>
