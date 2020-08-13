@@ -5,7 +5,7 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 
 const filter = createFilterOptions();
 
-export const Search = ({setSearchRestaurant}) => {
+export const Search = () => {
   const [value, setValue] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
 
@@ -24,7 +24,10 @@ export const Search = ({setSearchRestaurant}) => {
   }, []);
 
   useEffect(() => {
-    value && setSearchRestaurant(value)
+    if (value && value._id){
+      const newURL = window.location + `restaurant/${value._id}`
+      window.location.assign(newURL)
+    }
   }, [value]);
 
   return (
