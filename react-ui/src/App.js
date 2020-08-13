@@ -1,19 +1,21 @@
-import React, { Fragment } from 'react';
-import './App.css';
-import HomePage from "./components/Home-page/Home-page";
-import RestaurantInfo from './components/Restaurant-info/Restaurant-info';
+import React from 'react';
+import { HomePage } from "./components/Home-page/Home-page";
+import { RestaurantInfo } from './components/Restaurant-info/Restaurant-info';
+import { NewRestaurant } from './components/New-Restaurant/New-Restaurant';
 import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
 } from "react-router-dom";
 
 function App() {
   return (
     <Router>
-      <Route exact path="/" component={HomePage} />
-      <Route path="/restaurant" component={RestaurantInfo}/>
+      <Switch>
+        <Route exact path="/" component={HomePage} />
+        <Route path="/restaurants/:id" component={RestaurantInfo}/>
+        <Route path="/add" component={NewRestaurant}/>
+      </Switch>
     </Router>
   );
 
