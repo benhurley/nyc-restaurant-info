@@ -2,7 +2,7 @@ import React from 'react';
 import './Home-page.css';
 import { Search } from '../Search/Search';
 
-export default function HomePage() {
+export const HomePage = () => {
   return (
       <div className="Home">
         <header className="Home-header">
