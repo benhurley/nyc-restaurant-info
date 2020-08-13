@@ -25,7 +25,7 @@ export const Search = () => {
 
   useEffect(() => {
     if (value && value._id){
-      const newURL = window.location + `restaurant/${value._id}`
+      const newURL = window.location + `restaurants/${value._id}`
       window.location.assign(newURL)
     }
   }, [value]);
