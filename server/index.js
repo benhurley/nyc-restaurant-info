@@ -61,7 +61,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // get a specific restaurant
-  app.get('/api/restaurants/:id', (req, res) => {
+  app.get('/api/restaurants/:id', isAuthorized, (req, res) => {
     var mongoId = ObjectId(req.params.id);
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {

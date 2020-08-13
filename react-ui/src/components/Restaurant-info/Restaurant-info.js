@@ -3,11 +3,12 @@ import Button from '@material-ui/core/Button';
 import { Link } from 'react-router-dom'
 import './Restaurant-info.css';
 
-export const RestaurantInfo = () => {
+export const RestaurantInfo = (props) => {
+    const {id} = props.match.params
     const [details, setDetails] = useState({})
 
     useEffect(() => {
-        fetch('/api/' + window.location.pathname).then(response => {
+        fetch(`/api/restaurants/${id}`).then(response => {
             if (!response.ok) {
               throw new Error(`status ${response.status}`);
             }
