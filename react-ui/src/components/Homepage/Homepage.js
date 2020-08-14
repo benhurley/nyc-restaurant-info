@@ -1,7 +1,7 @@
 import React from 'react';
-import './Home-page.css';
+import './Homepage.css';
 import { Link } from 'react-router-dom'
-import { LocationSearch } from '../Location-Search/Location-Search';
+import { LocationSearch } from '../Search/LocationSearch';
 
 export const HomePage = () => {
   return (
