@@ -11,7 +11,7 @@ export const LocationSearch = () => {
 
   useEffect(() => {
     if (value && value.location){
-      const newURL = window.location + `restaurants/location/${value.location}`
+      const newURL = window.location.origin + `/restaurants/location/${value.location}`
       window.location.assign(newURL)
     }
   }, [value]);
