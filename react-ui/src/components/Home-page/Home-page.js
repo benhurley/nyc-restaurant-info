@@ -1,6 +1,6 @@
 import React from 'react';
 import './Home-page.css';
-import { Search } from '../Search/Search';
+import { Location } from '../Location/Location';
 
 export const HomePage = () => {
   return (
@@ -8,8 +8,8 @@ export const HomePage = () => {
         <header className="Home-header">
           <h1> Food Feels </h1>
         </header>
-        <div className="searchBar">
-          <Search />
+        <div className="locationBar">
+          <Location />
         </div>
       </div>
   );

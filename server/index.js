@@ -75,6 +75,21 @@ if (!isDev && cluster.isMaster) {
     }
   });
 
+  // get restaurants in a particular location
+  app.get('/api/restaurants/:location', isAuthorized, (req, res) => {
+    var place = ObjectId(req.params.id);
+    if (mongoUtil.restaurants()){
+      mongoUtil.restaurants().findOne({'location': place}).then(doc => {
+        if(!doc) {
+          res.send('Error returning location data. Location may not exist.');
+          throw new Error('Error returning location data. Location may not exist.');
+        } else {
+          res.json(doc);
+        }
+      });
+    }
+  });
+
   // add a restaurant
   app.post("/api/restaurants", (req, res) => {
     mongoUtil.restaurants().insertOne(req.body)
