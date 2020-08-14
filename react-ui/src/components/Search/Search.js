@@ -48,17 +48,7 @@ export const Search = () => {
         }
       }}
       filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            name: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+        return filter(options, params);
       }}
       selectOnFocus
       clearOnBlur
