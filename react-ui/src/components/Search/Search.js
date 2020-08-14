@@ -8,9 +8,6 @@ const filter = createFilterOptions();
 export const Search = ({location}) => {
   const [value, setValue] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
-  const label = (location)
-    ? `Search ${location}`
-    : "Search globally for a restaurant" 
 
   useEffect(() => {
     let request;
@@ -62,17 +59,7 @@ export const Search = ({location}) => {
         }
       }}
       filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            name: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+        return filter(options, params);
       }}
       selectOnFocus
       clearOnBlur
@@ -96,7 +83,7 @@ export const Search = ({location}) => {
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label={label}
+          label={"Search"}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {

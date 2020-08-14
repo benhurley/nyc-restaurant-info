@@ -20,7 +20,8 @@
     font-variant: normal; 
     font-weight: 400; 
     line-height: 26.4px; 
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+    text-decoration: none;
   } 
   
   h3 { 
@@ -48,4 +49,13 @@
     font-size: calc(10px + 2vmin);
     color: black;
     margin-bottom: 20px;
+  }
+
+  .topText {
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+
+  .bottomText {
+    margin-bottom: 30px;
   }

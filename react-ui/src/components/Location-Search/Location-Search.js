@@ -7,6 +7,7 @@ const filter = createFilterOptions();
 
 export const LocationSearch = () => {
   const [value, setValue] = useState(null);
+  const locations = [{location: "New York City"}, {location: "Dallas"}, {location: "Tampa"}]
 
   useEffect(() => {
     if (value && value.location){
@@ -33,17 +34,7 @@ export const LocationSearch = () => {
         }
       }}
       filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            location: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+        return filter(options, params);
       }}
       selectOnFocus
       clearOnBlur
@@ -64,17 +55,18 @@ export const LocationSearch = () => {
       }}
       renderOption={(option) => option.location}
       style={{ width: 300 }}
-      freeSolo
       renderInput={(params) => (
-        <TextField {...params} label="Select your location" variant="outlined" onKeyDown={e => {
-          if (e.keyCode === 13 && e.target.value) {
-            value && setValue(value);
-          }}
+        <TextField 
+          {...params} 
+          label="Select your Location"
+          variant="outlined"
+          onKeyDown={e => {
+            if (e.keyCode === 13 && e.target.value) {
+              value && setValue(value);
+            }
+          }
         }/>
       )}
     />
   );
 }
-
-// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
-const locations = [{location: "New York City"}, {location: "Dallas"}]
