@@ -34,6 +34,12 @@ export const RestaurantInfo = (props) => {
                             <div className="result">{details.name}</div>
                         </div>}
                     </div>
+                    <div>{details.location && 
+                        <div className="lineItem">
+                            <div className="title">Location</div>
+                            <div className="result">{details.location}</div>
+                        </div>}
+                    </div>
                     <div className="lineItem">{details.playlist && 
                         <div>
                             <div className="title">Music Playlist</div>
