@@ -8,6 +8,8 @@ export const HomePage = () => {
         <header className="Home-header">
           <h1> Food Feels </h1>
         </header>
+        <p className="topText">Bring the restaurant experience home!</p>
+        <p className="bottomText">Search for your favorite restaurant to get information on how to replicate their experience during your takeout meal.</p>
         <div className="searchBar">
           <Search />
         </div>

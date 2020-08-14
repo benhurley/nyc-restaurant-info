@@ -25,13 +25,8 @@ export const RestaurantInfo = (props) => {
         <div className="Home">
             <header className="Home-header">
                 <h1> Food Feels </h1>
+                    <p>To best replicate the dining experience at <b>{details.name}</b>, we recommend:</p>
                     <div className="results">
-                        <div>{details.name && 
-                            <div className="lineItem">
-                                <div className="title">Restaurant Name</div>
-                                <div className="result">{details.name}</div>
-                            </div>}
-                        </div>
                         <div className="lineItem">{details.playlist && 
                             <div>
                                 <div className="title">Music Playlist</div>
