@@ -48,17 +48,7 @@ export const Search = () => {
         }
       }}
       filterOptions={(options, params) => {
-        const filtered = filter(options, params);
-
-        // Suggest the creation of a new value
-        if (params.inputValue !== '') {
-          filtered.push({
-            inputValue: params.inputValue,
-            name: `Add "${params.inputValue}"`,
-          });
-        }
-
-        return filtered;
+        return filter(options, params);
       }}
       selectOnFocus
       clearOnBlur
@@ -77,12 +67,20 @@ export const Search = () => {
         // Regular option
         return option.name;
       }}
-      renderOption={(option) => option.name}
+      renderOption={(option) => ( 
+        <React.Fragment>
+          <div>{option.name} <br />
+            <div style={{"fontWeight": "bold", "fontSize": "12px"}}>
+              {option.city + ", " + option.state}
+            </div>
+          </div>
+        </React.Fragment>
+      )}
       style={{ width: 300 }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label="Search for a restaurant" 
+          label="Search for a Restaurant" 
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
