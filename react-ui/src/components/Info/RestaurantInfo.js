@@ -58,10 +58,23 @@ export const RestaurantInfo = (props) => {
                             <div className="result">{details.lighting}</div>
                         </div>}
                     </div>
-                    <Link to={'/'} style={{ textDecoration: 'none', color: "black" }} >
+                    <Link 
+                        to={`/restaurants/location/${details.location}`} 
+                        style={{ textDecoration: 'none', color: "black",flexDirection:"row" }}
+                    >
                         <div className="button">
                             <Button variant="contained" color="primary">
-                                New Search
+                                Back
+                            </Button>
+                        </div>
+                    </Link>
+                    <Link 
+                        to={'/'} 
+                        style={{ textDecoration: 'none', color: "black",flexDirection:"row" }} 
+                    >
+                        <div className="button">
+                            <Button variant="contained" color="primary">
+                                New Location
                             </Button>
                         </div>
                     </Link>
