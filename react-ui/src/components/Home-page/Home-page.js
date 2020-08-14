@@ -1,6 +1,7 @@
 import React from 'react';
 import './Home-page.css';
-import { Location } from '../Location/Location';
+import { Search } from '../Search/Search'
+import { LocationSearch } from '../Location-Search/Location-Search';
 
 export const HomePage = () => {
   return (
@@ -8,8 +9,12 @@ export const HomePage = () => {
         <header className="Home-header">
           <h1> Food Feels </h1>
         </header>
+        <div className="searchBar">
+          <Search />
+        </div>
+        <p>You can also narrow your search by location</p>
         <div className="locationBar">
-          <Location />
+          <LocationSearch />
         </div>
       </div>
   );

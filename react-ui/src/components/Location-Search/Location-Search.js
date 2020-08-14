@@ -1,45 +1,16 @@
 /* eslint-disable no-use-before-define */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
 const filter = createFilterOptions();
 
-export const Search = ({location}) => {
+export const LocationSearch = () => {
   const [value, setValue] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
-  const label = (location)
-    ? `Search ${location}`
-    : "Search globally for a restaurant" 
 
   useEffect(() => {
-    let request;
-    if (location) {
-      request = `/api/restaurants/location/${location}`;
-    } else {
-      request = '/api/restaurants';
-    }
-
-    fetch(request).then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(json => {
-        if(!(json instanceof Array)){
-          json = [json];
-       }
-        setRestaurants(json);
-      }).catch(e => {
-        throw new Error(`Search Options API call failed: ${e}`);
-      })
-      
-  }, []);
-
-  useEffect(() => {
-    if (value && value._id){
-      const newURL = window.location.origin + `/restaurants/${value._id}`
+    if (value && value.location){
+      const newURL = window.location + `restaurants/location/${value.location}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -50,12 +21,12 @@ export const Search = ({location}) => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            name: newValue,
+            location: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            name: newValue.inputValue,
+            location: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -68,7 +39,7 @@ export const Search = ({location}) => {
         if (params.inputValue !== '') {
           filtered.push({
             inputValue: params.inputValue,
-            name: `Add "${params.inputValue}"`,
+            location: `Add "${params.inputValue}"`,
           });
         }
 
@@ -77,8 +48,8 @@ export const Search = ({location}) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="global-search"
-      options={restaurants}
+      id="location-search"
+      options={locations}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -89,23 +60,21 @@ export const Search = ({location}) => {
           return option.inputValue;
         }
         // Regular option
-        return option.name;
+        return option.location;
       }}
-      renderOption={(option) => option.name}
+      renderOption={(option) => option.location}
       style={{ width: 300 }}
+      freeSolo
       renderInput={(params) => (
-        <TextField 
-          {...params} 
-          label={label}
-          variant="outlined"
-          onKeyDown={e => {
-            if (e.keyCode === 13 && e.target.value) {
-              value && setValue(value);
-            }
-          }
+        <TextField {...params} label="Select your location" variant="outlined" onKeyDown={e => {
+          if (e.keyCode === 13 && e.target.value) {
+            value && setValue(value);
+          }}
         }/>
       )}
     />
   );
 }
 
+// Top 100 films as rated by IMDb users. http://www.imdb.com/chart/top
+const locations = [{location: "New York City"}, {location: "Dallas"}]

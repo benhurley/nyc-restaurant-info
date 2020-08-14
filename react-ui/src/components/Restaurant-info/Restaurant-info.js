@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import './Restaurant-info.css';
 
 export const RestaurantInfo = (props) => {
+    debugger
     const {id} = props.match.params
     const [details, setDetails] = useState({})
 

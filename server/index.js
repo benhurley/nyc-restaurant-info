@@ -76,8 +76,8 @@ if (!isDev && cluster.isMaster) {
   });
 
   // get restaurants in a particular location
-  app.get('/api/restaurants/:location', isAuthorized, (req, res) => {
-    var place = ObjectId(req.params.id);
+  app.get('/api/restaurants/location/:location', isAuthorized, (req, res) => {
+    var place = req.params.location;
     if (mongoUtil.restaurants()){
       mongoUtil.restaurants().findOne({'location': place}).then(doc => {
         if(!doc) {
