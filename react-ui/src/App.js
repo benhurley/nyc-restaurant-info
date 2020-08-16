@@ -1,7 +1,7 @@
 import React from 'react';
-import { HomePage } from "./components/Home-page/Home-page";
-import { RestaurantInfo } from './components/Restaurant-info/Restaurant-info';
-import { NewRestaurant } from './components/New-Restaurant/New-Restaurant';
+import { Search } from './components/Search/Search';
+import { SearchResults } from './components/Search_Results/Search_Results';
+import { NewRestaurant } from './components/New_Restaurant/New_Restaurant';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,8 +12,8 @@ function App() {
   return (
     <Router>
       <Switch>
-        <Route exact path="/" component={HomePage} />
-        <Route path="/restaurants/:id" component={RestaurantInfo}/>
+        <Route exact path="/" component={Search} />
+        <Route path="/restaurants/:id" component={SearchResults}/>
         <Route path="/add" component={NewRestaurant}/>
       </Switch>
     </Router>
