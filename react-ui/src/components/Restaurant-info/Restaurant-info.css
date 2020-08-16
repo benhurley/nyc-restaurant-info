@@ -1,5 +1,8 @@
 .results {
+    font-size: 14px;
     text-align: center;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .lineItem {
@@ -10,6 +13,7 @@
 .result {
     margin-top: 10px;
     margin-bottom: 10px;
+    text-transform:capitalize;
 }
 
 .title {
@@ -18,4 +22,5 @@
 
 .button {
     margin-top: 50px;
+    margin-bottom: 50px;
 }

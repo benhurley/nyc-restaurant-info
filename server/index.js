@@ -76,7 +76,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // add a restaurant
-  app.post("/api/restaurants", (req, res) => {
+  app.post("/api/restaurants", isAuthorized, (req, res) => {
     mongoUtil.restaurants().insertOne(req.body)
     .then(res.redirect('/'))
     .catch(error => {
@@ -85,7 +85,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update a restaurant
-  app.put('/api/restaurants/:id', (req, res) => {
+  app.put('/api/restaurants/:id', isAuthorized, (req, res) => {
     var mongoId = ObjectId(req.params.id);
     mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
       if(!doc) {
@@ -106,7 +106,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update all restaurants
-  app.put('/api/restaurants', (req, res) => {
+  app.put('/api/restaurants', isAuthorized, (req, res) => {
     mongoUtil.restaurants().updateMany({}, {$set: req.body}).then((doc, err) => {
       if (!doc) {
         res.send(err);
@@ -118,7 +118,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // delete a restaurant
-  app.delete('/api/restaurants/:id', (req, res) => {
+  app.delete('/api/restaurants/:id', isAuthorized, (req, res) => {
     var mongoId = ObjectId(req.params.id);
     mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
       if(!doc) {
