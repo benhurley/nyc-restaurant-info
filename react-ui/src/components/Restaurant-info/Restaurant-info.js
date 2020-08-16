@@ -64,6 +64,11 @@ export const RestaurantInfo = (props) => {
                             <div className="result">{details.items}</div>
                         </div>}
                     </div>
+                    <div className="lineItem">{details.referralUrl && 
+                        <Button href={details.referralUrl} variant="outlined" color="primary">
+                            Order Now on Caviar 
+                        </Button>}
+                    </div>
                     <Link to={'/'} style={{ textDecoration: 'none'}} >
                         <div className="button">
                             <Button variant="contained" color="primary">
