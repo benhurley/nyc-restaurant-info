@@ -8,6 +8,7 @@ require('dotenv').config();
 
 // create mongoose client
 let mongoose = require('mongoose');
+let validator = require('validator')
 const mongo_uri = process.env.MONGODB_URL;
 
 // connect to mongodb
@@ -24,11 +25,15 @@ const RestaurantModel = mongoose.model("restaurant", {
   city: String,
   state: { type: String, enum: ['NY', 'FL', 'TX'] },
   playlist: String,
-  playlistUrl: String,
+  playlistUrl: { type: String, validate: (value) => {
+    return validator.isUrl(value)
+  }},
   scent: String,
   lights: { type: String, enum: ['dim', 'normal', 'bright'] },
   items: Array,
-  referralUrl: String
+  referralUrl:  { type: String, validate: (value) => {
+    return validator.isUrl(value)
+  }}
 });
 
 // listen for the signal interruption (ctrl-c)
