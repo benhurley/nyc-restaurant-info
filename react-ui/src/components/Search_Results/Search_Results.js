@@ -60,8 +60,10 @@ export const SearchResults = (props) => {
                     </div>
                     <div className="lineItem">{details.items && 
                         <div>
-                            <div className="title">Important Items</div>
-                            <div className="result">{details.items}</div>
+                            <div className="title">Items for the Table</div>
+                            <div className="result">{details.items.map((item, index) => 
+                                <div key={index}>{item}</div>
+                            )}</div>
                         </div>}
                     </div>
                     <div className="lineItem">{details.referralUrl && 
