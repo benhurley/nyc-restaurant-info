@@ -8,7 +8,6 @@ require('dotenv').config();
 
 // create mongoose client
 let mongoose = require('mongoose');
-let validator = require('validator')
 const mongo_uri = process.env.MONGODB_URL;
 
 // connect to mongodb
@@ -19,22 +18,9 @@ db.once('open', function() {
   console.log("Connected to MongoDB");
 });
 
-// restaurant model for mongodb
-const RestaurantModel = mongoose.model("restaurant", {
-  name: String,
-  city: String,
-  state: { type: String, enum: ['NY', 'FL', 'TX'] },
-  playlist: String,
-  playlistUrl: { type: String, validate: (value) => {
-    return validator.isUrl(value)
-  }},
-  scent: String,
-  lights: { type: String, enum: ['dim', 'normal', 'bright'] },
-  items: Array,
-  referralUrl:  { type: String, validate: (value) => {
-    return validator.isUrl(value)
-  }}
-});
+// restaurant schema and model for mongodb
+const restaurantSchema = require('./restaurantSchema.js');
+const RestaurantModel = mongoose.model("restaurant", restaurantSchema);
 
 // listen for the signal interruption (ctrl-c)
 process.on('SIGINT', () => {
