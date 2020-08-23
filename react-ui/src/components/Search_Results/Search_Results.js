@@ -52,10 +52,10 @@ export const SearchResults = (props) => {
                             <div className="result">{details.scent}</div>
                         </div>}
                     </div>
-                    <div className="lineItem">{details.light && 
+                    <div className="lineItem">{details.lights && 
                         <div>
                             <div className="title">Lights</div>
-                            <div className="result">{details.light}</div>
+                            <div className="result">{details.lights}</div>
                         </div>}
                     </div>
                     <div className="lineItem">{details.items && 

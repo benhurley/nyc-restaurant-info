@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Search } from './components/Search/Search';
 import { SearchResults } from './components/Search_Results/Search_Results';
 import { NewRestaurant } from './components/New_Restaurant/New_Restaurant';
+import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import {
   BrowserRouter as Router,
   Switch,
@@ -11,11 +12,14 @@ import {
 function App() {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/" component={Search} />
-        <Route path="/restaurants/:id" component={SearchResults}/>
-        <Route path="/add" component={NewRestaurant}/>
-      </Switch>
+      <Fragment>
+        <ScrollToTop />
+        <Switch>
+          <Route exact path="/" component={Search} />
+          <Route path="/restaurants/:id" component={SearchResults}/>
+          <Route path="/add" component={NewRestaurant}/>
+        </Switch>
+      </Fragment>
     </Router>
   );
 
