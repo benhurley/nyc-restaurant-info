@@ -6,10 +6,30 @@ const { ObjectId } = require('mongodb');
 const numCPUs = require('os').cpus().length;
 require('dotenv').config();
 
+// create mongoose client
+let mongoose = require('mongoose');
+const mongo_uri = process.env.MONGODB_URL;
+
+// connect to mongodb
+mongoose.connect(mongo_uri, { useNewUrlParser: true, useUnifiedTopology: true, poolSize: 10 })
+let db = mongoose.connection
+db.on('error', console.error.bind(console, 'Connection Error:'));
+db.once('open', function() {
+  console.log("Connected to MongoDB");
+});
+
+// restaurant schema and model for mongodb
+const restaurantSchema = require('./restaurantSchema.js');
+const RestaurantModel = mongoose.model("restaurant", restaurantSchema);
+
+// listen for the signal interruption (ctrl-c)
+process.on('SIGINT', () => {
+  mongoose.connection.close();
+  process.exit();
+});
+
 const isDev = process.env.NODE_ENV !== 'production';
 const PORT = process.env.PORT || 5000;
-
-const mongoUtil = require('./mongoUtil');
 
 // Multi-process to utilize all CPU cores.
 if (!isDev && cluster.isMaster) {
@@ -35,12 +55,6 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  // Answer API requests.
-  app.get('/api', (req, res) => {
-    res.set('Content-Type', 'application/json');
-    res.send('{"message":"Connected"}');
-  });
-
   app.get('/jwt', (req, res) => {
     let privateKey = process.env.PRIVATE_KEY
     let token = jwt.sign({"body": "stuff"}, privateKey, {algorithm: 'HS256'});
@@ -48,93 +62,59 @@ if (!isDev && cluster.isMaster) {
   });
 
   // get all restaurants
-  app.get('/api/restaurants', isAuthorized, (req, res) => {
-    if (mongoUtil.restaurants()){
-      mongoUtil.restaurants().find({}).toArray((err, result) => {
-        if(err) {
-          res.send(err);
-        } else {
-          res.json(result);
-        }
-      });
+  app.get('/api/restaurants', isAuthorized, async (req, res) => {
+    try {
+      const result = await RestaurantModel.find().exec();
+      res.send(result);
+    } catch (error) {
+      res.status(500).send(error);
     }
   });
 
   // get a specific restaurant
-  app.get('/api/restaurants/:id', isAuthorized, (req, res) => {
-    var mongoId = ObjectId(req.params.id);
-    if (mongoUtil.restaurants()){
-      mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-        if(!doc) {
-          res.send('Error returning restaurant data. Restaurant may not exist.');
-          throw new Error('Error returning restaurant data. Restaurant may not exist.');
-        } else {
-          res.json(doc);
-        }
-      });
+  app.get('/api/restaurants/:id', isAuthorized, async (req, res) => {
+    const mongoId = ObjectId(req.params.id);
+    try {
+      const restaurant = await RestaurantModel.findById(mongoId).exec();
+      res.send(restaurant);
+    } catch (error) {
+      res.status(500).send(error);
     }
   });
 
   // add a restaurant
-  app.post("/api/restaurants", isAuthorized, (req, res) => {
-    mongoUtil.restaurants().insertOne(req.body)
-    .then(res.redirect('/'))
-    .catch(error => {
-      console.error(error)
-    })
+  app.post("/api/restaurants", isAuthorized, async (req, res) => {
+    try {
+      const restaurant = new RestaurantModel(req.body);
+      const result = await restaurant.save();
+      res.send(result);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   });
 
   // update a restaurant
-  app.put('/api/restaurants/:id', isAuthorized, (req, res) => {
+  app.put('/api/restaurants/:id', isAuthorized, async (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-      if(!doc) {
-        res.send('Error finding restaurant data. Restaurant may not exist.');
-        throw new Error('Error finding restaurant data. Restaurant may not exist.');
-      } else {
-        mongoUtil.restaurants().updateOne({'_id': mongoId}, {$set: req.body})
-        .then((doc, err) => {
-          if (!doc) {
-            res.send(err);
-            throw new Error('Error updating restaurant data. Restaurant may not exist.');
-          } else {
-            res.send('Restaurant info successfully udpated.');
-          }
-        });
-      }
-    });
-  });
-
-  // update all restaurants
-  app.put('/api/restaurants', isAuthorized, (req, res) => {
-    mongoUtil.restaurants().updateMany({}, {$set: req.body}).then((doc, err) => {
-      if (!doc) {
-        res.send(err);
-        throw new Error('Error updating all restaurants data.');
-      } else {
-        res.send('All restaurants successfully udpated.');
-      }
-    });
+    try {
+      let restaurant = await RestaurantModel.findById(mongoId).exec();
+      restaurant.set(req.body);
+      const result = await restaurant.save();
+      res.send(result);
+    } catch (error) {
+        res.status(500).send(error);
+    }
   });
 
   // delete a restaurant
-  app.delete('/api/restaurants/:id', isAuthorized, (req, res) => {
+  app.delete('/api/restaurants/:id', isAuthorized, async (req, res) => {
     var mongoId = ObjectId(req.params.id);
-    mongoUtil.restaurants().findOne({'_id': mongoId}).then(doc => {
-      if(!doc) {
-        res.send('Error deleting restaurant data. Restaurant may not exist.');
-        throw new Error('Error deleting restaurant data. Restaurant may not exist.');
-      } else {
-        mongoUtil.restaurants().deleteOne({'_id': mongoId}).then((doc, err) => {
-          if(!doc) {
-            res.send(err);
-            throw new Error('Could not delete record.');
-          } else {
-            res.send('Restaurant deleted successfully.');
-          }
-        });
-      }
-    })
+    try {
+      const result = await RestaurantModel.deleteOne({ _id: mongoId }).exec();
+      res.send(result);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   });
 
   // All remaining requests return the React app, so it can handle routing.

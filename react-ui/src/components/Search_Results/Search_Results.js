@@ -52,16 +52,18 @@ export const SearchResults = (props) => {
                             <div className="result">{details.scent}</div>
                         </div>}
                     </div>
-                    <div className="lineItem">{details.light && 
+                    <div className="lineItem">{details.lights && 
                         <div>
                             <div className="title">Lights</div>
-                            <div className="result">{details.light}</div>
+                            <div className="result">{details.lights}</div>
                         </div>}
                     </div>
                     <div className="lineItem">{details.items && 
                         <div>
-                            <div className="title">Important Items</div>
-                            <div className="result">{details.items}</div>
+                            <div className="title">Items for the Table</div>
+                            <div className="result">{details.items.map((item, index) => 
+                                <div key={index}>{item}</div>
+                            )}</div>
                         </div>}
                     </div>
                     <div className="lineItem">{details.referralUrl && 
