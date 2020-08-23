@@ -4,7 +4,6 @@ module.exports = {
     name: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, enum: ['NY', 'FL', 'TX'], required: true },
-    playlist: { type: String },
     playlistUrl: { type: String, validate: (value) => {
       return validator.isUrl(value)
     }},
