@@ -55,14 +55,8 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
-  app.get('/jwt', (req, res) => {
-    let privateKey = process.env.PRIVATE_KEY
-    let token = jwt.sign({"body": "stuff"}, privateKey, {algorithm: 'HS256'});
-    res.send(token);
-  });
-
   // get all restaurants
-  app.get('/api/restaurants', isAuthorized, async (req, res) => {
+  app.get('/api/restaurants', async (req, res) => {
     try {
       const result = await RestaurantModel.find().exec();
       res.send(result);
@@ -72,7 +66,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // get a specific restaurant
-  app.get('/api/restaurants/:id', isAuthorized, async (req, res) => {
+  app.get('/api/restaurants/:id', async (req, res) => {
     const mongoId = ObjectId(req.params.id);
     try {
       const restaurant = await RestaurantModel.findById(mongoId).exec();
@@ -83,7 +77,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // add a restaurant
-  app.post("/api/restaurants", isAuthorized, async (req, res) => {
+  app.post("/api/restaurants", async (req, res) => {
     try {
       const restaurant = new RestaurantModel(req.body);
       const result = await restaurant.save();
@@ -94,7 +88,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // update a restaurant
-  app.put('/api/restaurants/:id', isAuthorized, async (req, res) => {
+  app.put('/api/restaurants/:id', async (req, res) => {
     var mongoId = ObjectId(req.params.id);
     try {
       let restaurant = await RestaurantModel.findById(mongoId).exec();
@@ -107,7 +101,7 @@ if (!isDev && cluster.isMaster) {
   });
 
   // delete a restaurant
-  app.delete('/api/restaurants/:id', isAuthorized, async (req, res) => {
+  app.delete('/api/restaurants/:id', async (req, res) => {
     var mongoId = ObjectId(req.params.id);
     try {
       const result = await RestaurantModel.deleteOne({ _id: mongoId }).exec();
@@ -121,28 +115,6 @@ if (!isDev && cluster.isMaster) {
   app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../react-ui/build', 'index.html'));
   });
-
-  function isAuthorized(req, res, next) {
-    if(!isDev) {
-      if(typeof req.headers.authorization !== "undefined") {
-        let token = req.headers.authorization.split(" ")[1];
-        let privateKey = process.env.PRIVATE_KEY
-
-        jwt.verify(token, privateKey, {algorithm: "HS256"}, (err, decoded) => {
-            if (err) {
-                res.status(500).json({ error: "Not Authorized"});
-                throw new Error("Not Authorized");
-            }
-            return next();
-        });
-      } else {
-        res.status(500).json({error: "Not Authorized"});
-        throw new Error("Not Authorized");
-      }
-    } else {
-      next();
-    }
-  }
 
   app.listen(PORT, () => {
     console.error(`Node ${isDev ? 'dev server' : 'cluster worker '+process.pid}: listening on port ${PORT}`);
