@@ -1,6 +1,6 @@
 import React from 'react';
 import './Search.css';
-import { SearchBar } from '../Search_Bar/Search_Bar';
+import { LocationSearchBar } from '../Search_Bars/Location_Search_Bar';
 import { Link } from 'react-router-dom'
 
 export const Search = () => {
@@ -8,18 +8,15 @@ export const Search = () => {
       <div className="Home">
         <header className="Home-header">
           <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-            <h1> Food Feels </h1>
+            <h1> food feels </h1>
           </Link>
         </header>
-        <p className="topText">Take the restaurant home with you!</p>
+        <p className="topText">The official source of nyc dining information during covid-19</p>
         <div className="bottomText">
-          Whether it's date night, a family meal, 
-          or if your city closed indoor dining in the wake of Covid-19, 
-          Food Feels helps you replicate your favorite restaurant's 
-          experience at home.
+          select a borough to see nearby restaurants and their outdoor dining statuses (information updates daily)
         </div>
         <div className="searchBar">
-          <SearchBar/>
+          <LocationSearchBar/>
         </div>
       </div>
   );

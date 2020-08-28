@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Search } from './components/Search/Search';
 import { SearchResults } from './components/Search_Results/Search_Results';
 import { NewRestaurant } from './components/New_Restaurant/New_Restaurant';
+import { Browse } from './components/Browse/Browse';
 import ScrollToTop from './components/ScrollToTop/ScrollToTop';
 import {
   BrowserRouter as Router,
@@ -16,7 +17,8 @@ function App() {
         <ScrollToTop />
         <Switch>
           <Route exact path="/" component={Search} />
-          <Route path="/restaurants/:id" component={SearchResults}/>
+          <Route exact path="/location/:borough" component={Browse} />
+          <Route path="/restaurant/:restaurantname" component={SearchResults}/>
           <Route path="/add" component={NewRestaurant}/>
         </Switch>
       </Fragment>

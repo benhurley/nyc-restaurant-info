@@ -2,30 +2,33 @@
 import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
 
 const filter = createFilterOptions();
 
-export const SearchBar = () => {
+export const RestaurantSearchBar = ({ borough }) => {
   const [value, setValue] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
+  const [restaurantNames, setRestaurantNames] = useState([]);
+
+  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
 
   useEffect(() => {
-    fetch('/api/restaurants').then(response => {
+    fetch(nycCompliantRestaurantApi).then(response => {
         if (!response.ok) {
           throw new Error(`status ${response.status}`);
         }
         return response.json();
       })
       .then(json => {
-        setRestaurants(json);
+        setRestaurantNames(json);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
   }, []);
 
   useEffect(() => {
-    if (value && value._id){
-      const newURL = window.location + `restaurants/${value._id}`
+    if (value && value.restaurantname){
+      const newURL = window.location.origin + `/restaurant/${value.restaurantname}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -36,12 +39,12 @@ export const SearchBar = () => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            name: newValue,
+            restaurantname: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            name: newValue.inputValue,
+            restaurantname: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -53,8 +56,8 @@ export const SearchBar = () => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={restaurants}
+      id="restaurant-search-bar"
+      options={restaurantNames}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -65,22 +68,19 @@ export const SearchBar = () => {
           return option.inputValue;
         }
         // Regular option
-        return option.name;
+        return option.restaurantname;
       }}
       renderOption={(option) => ( 
         <React.Fragment>
-          <div>{option.name} <br />
-            <div style={{"fontWeight": "bold", "fontSize": "12px"}}>
-              {option.city + ", " + option.state}
-            </div>
+          <div style={{textTransform: "lowercase"}}>{option.restaurantname} <br />
           </div>
         </React.Fragment>
       )}
-      style={{ width: 300 }}
+      style={{ width: 200 }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label="Search for a Restaurant" 
+          label={<div style={{textTransform: "lowercase"}}>restaurant name</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
@@ -92,4 +92,3 @@ export const SearchBar = () => {
     />
   );
 }
-

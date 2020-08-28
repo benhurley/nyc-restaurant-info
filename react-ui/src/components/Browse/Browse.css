@@ -24,3 +24,29 @@
     margin-top: 50px;
     margin-bottom: 50px;
 }
+
+table {
+    width: 100%;
+    text-align: left;
+}
+
+html {
+    scroll-behavior: smooth;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+
+h2 {
+    text-transform: lowercase;
+
+}
+
+.open {
+    color: green;
+    font-weight: bold;
+}
+
+.closed {
+    color: red;
+    font-weight: bold;
+}
