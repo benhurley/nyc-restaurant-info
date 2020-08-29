@@ -50,3 +50,7 @@ h2 {
     color: red;
     font-weight: bold;
 }
+
+h3 {
+    text-transform: lowercase;
+}

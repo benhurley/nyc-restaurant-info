@@ -11,7 +11,7 @@ export const SearchResults = (props) => {
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json';
 
     useEffect(() => {
-        fetch(nycCompliantRestaurantApi + `?restaurantname=${restaurantname}`).then(response => {
+        fetch(nycCompliantRestaurantApi + `?restaurantname=${restaurantname}&$order=inspectedon DESC`).then(response => {
             if (!response.ok) {
               throw new Error(`status ${response.status}`);
             }

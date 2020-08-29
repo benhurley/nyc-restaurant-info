@@ -18,8 +18,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Search} />
           <Route exact path="/location/:borough" component={Browse} />
-          <Route path="/restaurant/:restaurantname" component={SearchResults}/>
-          <Route path="/add" component={NewRestaurant}/>
+          <Route exact path="/restaurant/:restaurantname" component={SearchResults}/>
         </Switch>
       </Fragment>
     </Router>
