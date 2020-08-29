@@ -2,8 +2,6 @@
 import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
-import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
-import _ from 'lodash';
 
 const filter = createFilterOptions();
 

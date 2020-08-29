@@ -38,14 +38,12 @@ export const Browse = (props) => {
 
     return (
         <div className="Home">
-
             <header className="Home-header">
                 <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
                     <h1> food feels </h1>
                 </Link>
                 <h3>Location: {borough}</h3>
             </header>
-
             <div className="results">
                 <table>
                   <thead>
@@ -76,7 +74,6 @@ export const Browse = (props) => {
                   </tbody>
                 </table>
             </div>
-
             <div className="button">
             <Button variant="contained" color="primary" onClick={handleClick}>
                 show more

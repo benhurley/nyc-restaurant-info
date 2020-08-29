@@ -20,7 +20,7 @@ export const RestaurantSearchBar = ({ borough }) => {
         return response.json();
       })
       .then(json => {
-        setRestaurantNames(json);
+        setRestaurantNames(massageApiResponse(json));
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
