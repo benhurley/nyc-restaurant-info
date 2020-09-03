@@ -1,8 +1,12 @@
 .results {
     font-size: 14px;
     text-align: center;
-    padding-left: 20px;
-    padding-right: 20px;
+    padding-left: 5em;
+    padding-right: 5em;
+}
+
+.mobileResults {
+    font-size: 14px;
 }
 
 .lineItem {
@@ -28,6 +32,7 @@
 table {
     width: 100%;
     text-align: left;
+    border-collapse:collapse;
 }
 
 html {
@@ -54,3 +59,37 @@ h2 {
 h3 {
     text-transform: lowercase;
 }
+
+p {
+    font-weight: bold;
+    font-size: small;
+}
+
+table{
+    table-layout: fixed;
+    width: 100%;
+  }
+
+  thead th:nth-child(1) {
+    width: 40%;
+  }
+  
+  thead th:nth-child(2) {
+    width: 20%;
+  }
+  
+  thead th:nth-child(3) {
+    width: 25%;
+  }
+  
+  thead th:nth-child(4) {
+    width: 30%;
+  }
+
+  thead th:nth-child(5) {
+    width: 30%;
+  }
+
+  tr.result td {
+    border-bottom: 3px double grey;
+  }

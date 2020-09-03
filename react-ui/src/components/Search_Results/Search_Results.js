@@ -34,9 +34,10 @@ export const SearchResults = (props) => {
                 <h2> {details.restaurantname + " (" + details.borough + ", ny)"}</h2>
                 <div className="lineItem">
                         <div>
-                            <div className="title">outdoor dining status</div>
+                            <div className="title">dining status</div>
                             <div className="result">
-                            {details.isroadwaycompliant === "Cease and Desist"
+                            {details.isroadwaycompliant === "Cease and Desist" ||
+                                details.skippedreason === "No Seating"
                                 ? <div className="closed">Closed</div>
                                 : details.isroadwaycompliant === "Compliant"
                                     ? <div className="open">Open</div>
@@ -53,7 +54,7 @@ export const SearchResults = (props) => {
                     </div>
                     <div className="lineItem">{details.isroadwaycompliant &&
                         <div>
-                            <div className="title">most-recent compliance status</div>
+                            <div className="title">compliance status</div>
                             <div className="result">{details.isroadwaycompliant}</div>
                         </div>}
                     </div>
@@ -65,13 +66,13 @@ export const SearchResults = (props) => {
                     </div>
                     <div className="lineItem">{details.seatingchoice && 
                         <div>
-                            <div className="title">outdoor seating configuration</div>
+                            <div className="title">seating</div>
                     <div className="result">
                         { details.seatingchoice === "both"
-                            ? "sidewalk and roadwalk seating"
+                            ? "sidewalk and roadway"
                             : details.seatingchoice === "sidewalk"
-                                ? "sidewalk seating only"
-                                : "roadwalk seating only"
+                                ? "sidewalk only"
+                                : "roadway only"
                         }</div>
                     </div>}
                 </div>

@@ -7,7 +7,6 @@ const filter = createFilterOptions();
 
 export const LocationSearchBar = () => {
   const [value, setValue] = useState(null);
-  const [input, setInput] = useState(boroughs);
 
   useEffect(() => {
     if (value && value.borough){
@@ -40,7 +39,7 @@ export const LocationSearchBar = () => {
       clearOnBlur
       handleHomeEndKeys
       id="free-solo-with-text-demo"
-      options={input}
+      options={boroughs}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -58,11 +57,11 @@ export const LocationSearchBar = () => {
           <div style={{"textTransform": "lowercase"}}>{option.borough} <br /></div>
         </React.Fragment>
       )}
-      style={{ width: 300 }}
+      style={{ width: 200 }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label="select a nyc borough" 
+          label="nyc boroughs" 
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {

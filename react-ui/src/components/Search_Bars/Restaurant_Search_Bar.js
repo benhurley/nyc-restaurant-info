@@ -6,9 +6,10 @@ import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
 
 const filter = createFilterOptions();
 
-export const RestaurantSearchBar = ({ borough }) => {
+export const RestaurantSearchBar = ({ borough, isMobile }) => {
   const [value, setValue] = useState(null);
   const [restaurantNames, setRestaurantNames] = useState([]);
+  const width = isMobile ? 150 : 200
 
   const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
 
@@ -76,11 +77,11 @@ export const RestaurantSearchBar = ({ borough }) => {
           </div>
         </React.Fragment>
       )}
-      style={{ width: 200 }}
+      style={{ width }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label={<div style={{textTransform: "lowercase"}}>restaurant name</div>}
+          label={<div style={{textTransform: "lowercase"}}>{isMobile ? "restaurants" : "restaurants search"}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
