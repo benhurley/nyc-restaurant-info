@@ -85,7 +85,7 @@ export const Browse = (props) => {
                       <h1> food feels </h1>
                   </Link>
                   <h3>Location: {borough}</h3>
-                  <p>(sorted by most-recent inspections)</p>
+                  <div className="subheader">(sorted by most-recent inspections)</div>
               </header>
               <div className="results">
                   <table>

@@ -31,7 +31,8 @@ export const SearchResults = (props) => {
                     <h1> food feels </h1>
                 </Link>
                 <div className="results">
-                <h2> {details.restaurantname + " (" + details.borough + ", ny)"}</h2>
+                <h2> {details.restaurantname}</h2>
+                <div className="result">{details.businessaddress}</div>
                 <div className="lineItem">
                         <div>
                             <div className="title">dining status</div>
@@ -64,7 +65,8 @@ export const SearchResults = (props) => {
                             <div className="result">{details.skippedreason}</div>
                         </div>}
                     </div>
-                    <div className="lineItem">{details.seatingchoice && 
+                    <div className="lineItem">{details.seatingchoice 
+                        && details.skippedreason !== "No Seating" &&
                         <div>
                             <div className="title">seating</div>
                     <div className="result">
