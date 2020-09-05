@@ -81,7 +81,7 @@ export const RestaurantSearchBar = ({ borough, isMobile }) => {
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label={<div style={{textTransform: "lowercase"}}>{isMobile ? "restaurants" : "restaurants search"}</div>}
+          label={<div style={{textTransform: "lowercase"}}>{isMobile ? "restaurants" : "restaurant search"}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {

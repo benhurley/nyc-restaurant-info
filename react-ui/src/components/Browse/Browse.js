@@ -34,9 +34,14 @@ export const Browse = (props) => {
           })
       }, []);
 
+    const handleRestaurant = (name) => {
+      const newURL = window.location.origin + `/restaurant/${name}`
+      window.location.assign(newURL)
+    }
+
     const handleClick = () => {
-        setShowMoreVal(showMoreVal + 20);
-        window.scrollTo(0, window.scrollY - 140)
+      setShowMoreVal(showMoreVal + 20);
+      window.scrollTo(0, window.scrollY - 140)
     }
 
     return (
@@ -47,19 +52,19 @@ export const Browse = (props) => {
                 <h1> food feels </h1>
             </Link>
             <h3>Location: {borough}</h3>
-            <p>(sorted by most-recent inspections)</p>
+            <p>(most-recent inspections)</p>
         </header>
         <div className="mobileResults">
             <table>
-              <thead>
+              <thead className="header">
                 <tr>{mobileHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
               </thead>
               <tbody>
               {results.slice(0, showMoreVal).map((result, index) => {
                 return (
                   <tr className="result" key={index}>
-                    <td>{result.restaurantname}</td>
-                    <td>{result.isroadwaycompliant === "Cease and Desist"  ||
+                    <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
+                    <td>{result.isroadwaycompliant === "Cease and Desist" ||
                             result.skippedreason === "No Seating"
                             ? <div className="closed">Closed</div>
                             : result.isroadwaycompliant === "Compliant"
@@ -89,14 +94,14 @@ export const Browse = (props) => {
               </header>
               <div className="results">
                   <table>
-                    <thead>
+                    <thead className="header">
                       <tr>{desktopHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
                     </thead>
                     <tbody>
                     {results.slice(0, showMoreVal).map((result, index) => {
                       return (
                         <tr className="result" key={index}>
-                          <td>{result.restaurantname}</td>
+                          <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
                           <td>{result.isroadwaycompliant === "Cease and Desist"  ||
                                   result.skippedreason === "No Seating"
                                   ? <div className="closed">Closed</div>
