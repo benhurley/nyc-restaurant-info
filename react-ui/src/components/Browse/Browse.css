@@ -43,6 +43,9 @@ thead th:nth-child(5) {
 tr.result td {
   border-bottom: 3px double grey;
 }
+tr.result {
+  cursor: pointer;
+}
 
 td {
     padding-top: 5px;
@@ -53,23 +56,13 @@ th {
   padding-bottom: 10px;
 }
 
-button {
-  background-color: Transparent;
-  background-repeat:no-repeat;
-  border: none;
-  cursor:pointer;
-  overflow: hidden;
-  outline:none;
-  text-transform: lowercase;
-  text-align: left;
-}
 .open {
-  color: green;
+  color: seagreen;
   font-weight: bold;
 }
 
 .closed {
-  color: red;
+  color: lightcoral;
   font-weight: bold;
 }
 
@@ -79,7 +72,7 @@ button {
 
 .subheader {
     font-weight: bold;
-    font-size: x-small;
+    font-size: small;
     margin-bottom: 15px;
 }
 

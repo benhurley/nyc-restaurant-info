@@ -11,12 +11,18 @@ export const Home = () => {
             <h1> food feels </h1>
           </Link>
         </header>
-        <p className="topText">The official source of nyc dining information during covid-19</p>
+        <p className="topText">the semi-official source of nyc outdoor dining information during covid-19</p>
         <div className="bottomText">
-          select a borough to see nearby restaurants and their outdoor dining statuses (information updates daily from <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>)
+          select a nyc borough to get started
         </div>
         <div className="searchBar">
           <LocationSearchBar/>
+        </div>
+        <div className="">
+          data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
+        </div>
+        <div className="footer">
+          food feels™ 2020. all rights reserved.
         </div>
       </div>
   );

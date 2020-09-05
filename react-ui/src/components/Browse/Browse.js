@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
+import Typography from '@material-ui/core/Typography';
+import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom'
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { useWindowSize } from '../../helpers/Window_Helper'
@@ -10,15 +13,12 @@ export const Browse = (props) => {
     const [results, setResults] = useState([])
     const [showMoreVal, setShowMoreVal] = useState(40);
     const windowSize = useWindowSize() 
-    const isMobile = windowSize.width < 1000;
+    const isMobile = windowSize.width < 1050;
     
     // nyc request requires capital names
     let {borough} = props.match.params
     borough = mapBorough(borough)
     const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
-
-    const desktopHeader = [<RestaurantSearchBar borough={borough} isMobile={false} />, "dining status", "inspection date", "compliance status", "seating"];
-    const mobileHeader = [<RestaurantSearchBar borough={borough} isMobile={true} />, "dining status"];
 
     useEffect(() => {
         fetch(nycCompliantRestaurantApi).then(response => {
@@ -40,9 +40,19 @@ export const Browse = (props) => {
     }
 
     const handleClick = () => {
-      setShowMoreVal(showMoreVal + 20);
-      window.scrollTo(0, window.scrollY - 140)
+      setShowMoreVal(showMoreVal + 40);
+      window.scrollTo(0, window.scrollY - 200)
     }
+
+    const HtmlTooltip = withStyles((theme) => ({
+      tooltip: {
+        backgroundColor: '#f5f5f9',
+        color: 'rgba(0, 0, 0, 0.87)',
+        maxWidth: 300,
+        fontSize: theme.typography.pxToRem(12),
+        border: '1px solid #dadde9',
+      },
+    }))(Tooltip);
 
     return (
       <div className="Home">
@@ -51,19 +61,22 @@ export const Browse = (props) => {
                 <h1> food feels </h1>
             </Link>
             <h3>Location: {borough}</h3>
-            {!isMobile && <div class="subheader">(results are sorted by inspection date in descending order)</div>}
+            {!isMobile && <div class="subheader">browse all recent inspections or search for a specific restaurant</div>}
         </header>
       { isMobile ? 
         <div className="mobileResults">
             <table>
               <thead>
-                <tr>{mobileHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
+                <tr>
+                  <th><RestaurantSearchBar borough={borough} isMobile={true} /></th>
+                  <th>dining status</th>
+                </tr>
               </thead>
               <tbody>
               {results.slice(0, showMoreVal).map((result, index) => {
                 return (
-                  <tr className="result" key={index}>
-                    <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
+                  <tr className="result" key={index} onClick={() => handleRestaurant(result.restaurantname)}>
+                    <td>{result.restaurantname}</td>
                     <td>{result.isroadwaycompliant === "Cease and Desist" ||
                             result.skippedreason === "No Seating"
                             ? <div className="closed">Closed</div>
@@ -81,13 +94,50 @@ export const Browse = (props) => {
         <div className="results">
             <table>
               <thead>
-                <tr>{desktopHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
+                <tr>
+                  <th>
+                    <RestaurantSearchBar borough={borough} isMobile={false} />
+                  </th>
+                  <HtmlTooltip
+                    title={
+                      <React.Fragment>
+                        <b>{"open: "}</b>{"inspection yielded a compliant rating"}<br />
+                        <b>{"closed: "}</b>{"cease and desist has been issued or there were no outdoor seating options reported"}<br />
+                        <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
+                      </React.Fragment>
+                    }
+                  >
+                  <th>dining status  <img width={12} src={require("./question.png")}></img></th>
+                  </HtmlTooltip>
+                  <HtmlTooltip
+                    title={
+                      <React.Fragment>
+                        {"showing results for all nyc inspections, sorted by inspection date in descending order"}
+                      </React.Fragment>
+                    }
+                  >
+                  <th>inspection date  <img width={12} src={require("./question.png")}></img></th>
+                  </HtmlTooltip>
+                  <th>inspection status</th>
+                  <HtmlTooltip
+                    title={
+                      <React.Fragment>
+                        <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br />
+                        <b>{"roadway only: "}</b>{"outdoor seating in a protective barrier on the street"}<br />
+                        <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br />
+                        <b>{"no seating: "}</b>{"recent inspection was skipped due to no seating options"}
+                      </React.Fragment>
+                    }
+                  >
+                  <th>seating  <img width={12} src={require("./question.png")}></img></th>
+                  </HtmlTooltip>
+                </tr>
               </thead>
               <tbody>
               {results.slice(0, showMoreVal).map((result, index) => {
                 return (
-                  <tr className="result" key={index}>
-                    <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
+                  <tr className="result" key={index} onClick={() => handleRestaurant(result.restaurantname)}>
+                    <td>{result.restaurantname}</td>
                     <td>{result.isroadwaycompliant === "Cease and Desist"  ||
                             result.skippedreason === "No Seating"
                             ? <div className="closed">Closed</div>
@@ -113,9 +163,15 @@ export const Browse = (props) => {
         </div>
         }
           <div className="button">
-          <Button variant="contained" color="primary" onClick={handleClick}>
+          <Button variant="contained" onClick={handleClick}>
               show more
           </Button>
+          </div>
+          <div>
+            data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
+          </div>
+          <div className="footer">
+            food feels™ 2020. all rights reserved.
           </div>
       </div>
     )

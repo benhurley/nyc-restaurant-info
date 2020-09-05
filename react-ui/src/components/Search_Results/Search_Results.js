@@ -30,6 +30,7 @@ export const SearchResults = (props) => {
                 <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
                     <h1> food feels </h1>
                 </Link>
+                <p className="subTitle">most-recent inspection results</p>
                 <div className="results">
                 <h2> {details.restaurantname}</h2>
                 <div className="result">{details.businessaddress}</div>
@@ -55,7 +56,7 @@ export const SearchResults = (props) => {
                     </div>
                     <div className="lineItem">{details.isroadwaycompliant &&
                         <div>
-                            <div className="title">compliance status</div>
+                            <div className="title">inspection status</div>
                             <div className="result">{details.isroadwaycompliant}</div>
                         </div>}
                     </div>
