@@ -1,15 +1,14 @@
 # Food Feels
 
-## Are you missing indoor dining as much as I am?
+## How you found it difficult to see if your favorite nyc restaurants are open?
 
-In the wake of Covid-19, delivery and takeout food orders have replaced indoor dining in many parts of the US. A major component as to why a customer chooses a particular restaurant is the <i> experience </i>, where the actual meal may only play a minor role. Popular delivery and takeout apps are missing a crucial component to the dining experience, which is the atmosphere while you are eating.
+You're not alone. In the wake of Covid-19, restaurant statuses are changing daily. Statuses on widely-reputable platforms are all showing outdated information. 
 
-This project is a POC to help recreate (as much as possible) the vibe at some of your favorite restaurants while we wait for indoor dining to return. With data such as how to set your table, lighting, music, etc. you can get closer than ever before. If nothing else, it serves as an idea for date-night or a family meal.
+In mid-August, we discovered a new API on [NYC Open Data](https://opendata.cityofnewyork.us/) that allows us to see near-real-time inspections of restaurants in all 5 boroughs. 
 
-There are two ways we can begin aggregating restaurant data:
+We have created a test [dashboard](https://food-feels-staging.herokuapp.com/) to browse restaurants in your area to see their current inspection status, seating configurations, and if they are open for outdoor dining. You can also search for a specific restaurant to get more information.
 
-1. Web-scraping positive online reviews
-2. Allowing the restaurant to submit a form so customers can recreate the experience at home
+Data updates daily.
 
 ## Contact
 
