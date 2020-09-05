@@ -45,18 +45,18 @@ export const Browse = (props) => {
     }
 
     return (
-      isMobile 
-        ? <div className="Home">
+      <div className="Home">
         <header className="Home-header">
             <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
                 <h1> food feels </h1>
             </Link>
             <h3>Location: {borough}</h3>
-            <p>(most-recent inspections)</p>
+            {!isMobile && <div class="subheader">(results are sorted by inspection date in descending order)</div>}
         </header>
+      { isMobile ? 
         <div className="mobileResults">
             <table>
-              <thead className="header">
+              <thead>
                 <tr>{mobileHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
               </thead>
               <tbody>
@@ -77,59 +77,46 @@ export const Browse = (props) => {
               </tbody>
             </table>
         </div>
-        <div className="button">
-        <Button variant="contained" color="primary" onClick={handleClick}>
-            show more
-        </Button>
-        </div>
-    </div>
         :
-          <div className="Home">
-              <header className="Home-header">
-                  <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-                      <h1> food feels </h1>
-                  </Link>
-                  <h3>Location: {borough}</h3>
-                  <div className="subheader">(sorted by most-recent inspections)</div>
-              </header>
-              <div className="results">
-                  <table>
-                    <thead className="header">
-                      <tr>{desktopHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
-                    </thead>
-                    <tbody>
-                    {results.slice(0, showMoreVal).map((result, index) => {
-                      return (
-                        <tr className="result" key={index}>
-                          <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
-                          <td>{result.isroadwaycompliant === "Cease and Desist"  ||
-                                  result.skippedreason === "No Seating"
-                                  ? <div className="closed">Closed</div>
-                                  : result.isroadwaycompliant === "Compliant"
-                                      ? <div className="open">Open</div>
-                                      : "Unknown"
-                          }</td>
-                          <td>{result.inspectedon.slice(0,10)}</td>
-                          <td>{result.isroadwaycompliant}</td>
-                          <td>{result.skippedreason === "No Seating"
-                                ? "no seating"
-                                : result.seatingchoice === "both"
-                                  ? "sidewalk and roadway"
-                                  : result.seatingchoice === "sidewalk"
-                                      ? "sidewalk only"
-                                      : "roadway only"
-                          }</td>
-                      </tr>
-                      );
-                    })}
-                    </tbody>
-                  </table>
-              </div>
-              <div className="button">
-              <Button variant="contained" color="primary" onClick={handleClick}>
-                  show more
-              </Button>
-              </div>
+        <div className="results">
+            <table>
+              <thead>
+                <tr>{desktopHeader.map((h, index) => <th key={index}>{h}</th>)}</tr>
+              </thead>
+              <tbody>
+              {results.slice(0, showMoreVal).map((result, index) => {
+                return (
+                  <tr className="result" key={index}>
+                    <td><button onClick={() => handleRestaurant(result.restaurantname)}>{result.restaurantname}</button></td>
+                    <td>{result.isroadwaycompliant === "Cease and Desist"  ||
+                            result.skippedreason === "No Seating"
+                            ? <div className="closed">Closed</div>
+                            : result.isroadwaycompliant === "Compliant"
+                                ? <div className="open">Open</div>
+                                : "Unknown"
+                    }</td>
+                    <td>{result.inspectedon.slice(0,10)}</td>
+                    <td>{result.isroadwaycompliant}</td>
+                    <td>{result.skippedreason === "No Seating"
+                          ? "no seating"
+                          : result.seatingchoice === "both"
+                            ? "sidewalk and roadway"
+                            : result.seatingchoice === "sidewalk"
+                                ? "sidewalk only"
+                                : "roadway only"
+                    }</td>
+                </tr>
+                );
+              })}
+              </tbody>
+            </table>
+        </div>
+        }
+          <div className="button">
+          <Button variant="contained" color="primary" onClick={handleClick}>
+              show more
+          </Button>
           </div>
+      </div>
     )
 }

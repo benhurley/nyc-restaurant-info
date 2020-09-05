@@ -1,38 +1,8 @@
-.results {
-    font-size: 14px;
-    text-align: center;
-    padding-left: 5em;
-    padding-right: 5em;
-}
-
-.mobileResults {
-    font-size: 14px;
-}
-
-.lineItem {
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-.result {
-    margin-top: 10px;
-    margin-bottom: 10px;
-    text-transform: lowercase;
-}
-
-.title {
-    font-weight: bold;
-}
-
-.button {
-    margin-top: 50px;
-    margin-bottom: 50px;
-}
-
 table {
     width: 100%;
     text-align: left;
     border-collapse:collapse;
+    table-layout: fixed;
 }
 
 html {
@@ -46,18 +16,65 @@ h2 {
 
 }
 
+h3 {
+    text-transform: lowercase;
+}
+
+thead th:nth-child(1) {
+  width: 40%;
+}
+
+thead th:nth-child(2) {
+  width: 20%;
+}
+
+thead th:nth-child(3) {
+  width: 25%;
+}
+
+thead th:nth-child(4) {
+  width: 30%;
+}
+
+thead th:nth-child(5) {
+  width: 30%;
+}
+
+tr.result td {
+  border-bottom: 3px double grey;
+}
+
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+th {
+  padding-bottom: 10px;
+}
+
+button {
+  background-color: Transparent;
+  background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  text-transform: lowercase;
+  text-align: left;
+}
 .open {
-    color: green;
-    font-weight: bold;
+  color: green;
+  font-weight: bold;
 }
 
 .closed {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
 
-h3 {
-    text-transform: lowercase;
+.title {
+  font-weight: bold;
 }
 
 .subheader {
@@ -66,50 +83,30 @@ h3 {
     margin-bottom: 15px;
 }
 
-table{
-    table-layout: fixed;
-    width: 100%;
-  }
+.results {
+  font-size: 14px;
+  text-align: center;
+  padding-left: 5em;
+  padding-right: 5em;
+}
 
-  thead th:nth-child(1) {
-    width: 40%;
-  }
-  
-  thead th:nth-child(2) {
-    width: 20%;
-  }
-  
-  thead th:nth-child(3) {
-    width: 25%;
-  }
-  
-  thead th:nth-child(4) {
-    width: 30%;
-  }
+.result {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-transform: lowercase;
+}
 
-  thead th:nth-child(5) {
-    width: 30%;
-  }
+.mobileResults {
+  padding-top: 20px;
+  font-size: 14px;
+}
 
-  tr.result td {
-    border-bottom: 3px double grey;
-  }
+.lineItem {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
 
-  td {
-      padding-top: 5px;
-      padding-bottom: 5px;
-  }
-
-  th {
-    padding-bottom: 10px;
-  }
-
-  button {
-    background-color: Transparent;
-    background-repeat:no-repeat;
-    border: none;
-    cursor:pointer;
-    overflow: hidden;
-    outline:none;
-    text-transform: lowercase;
+.button {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
