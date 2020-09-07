@@ -5,27 +5,12 @@ import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete
 
 const filter = createFilterOptions();
 
-export const SearchBar = () => {
+export const LocationSearchBar = () => {
   const [value, setValue] = useState(null);
-  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    fetch('/api/restaurants').then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(json => {
-        setRestaurants(json);
-      }).catch(e => {
-        throw new Error(`API call failed: ${e}`);
-      })
-  }, []);
-
-  useEffect(() => {
-    if (value && value._id){
-      const newURL = window.location + `restaurants/${value._id}`
+    if (value && value.borough){
+      const newURL = window.location + `location/${value.borough}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -36,12 +21,12 @@ export const SearchBar = () => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            name: newValue,
+            borough: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            name: newValue.inputValue,
+            borough: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -53,8 +38,8 @@ export const SearchBar = () => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="free-solo-with-text-demo"
-      options={restaurants}
+      id="location-search-bar"
+      options={boroughs}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -65,22 +50,18 @@ export const SearchBar = () => {
           return option.inputValue;
         }
         // Regular option
-        return option.name;
+        return option.borough;
       }}
       renderOption={(option) => ( 
         <React.Fragment>
-          <div>{option.name} <br />
-            <div style={{"fontWeight": "bold", "fontSize": "12px"}}>
-              {option.city + ", " + option.state}
-            </div>
-          </div>
+          <div style={{"textTransform": "lowercase"}}>{option.borough} <br /></div>
         </React.Fragment>
       )}
-      style={{ width: 300 }}
+      style={{ width: 200 }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label="Search for a Restaurant" 
+          label="select a nyc borough" 
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
@@ -93,3 +74,20 @@ export const SearchBar = () => {
   );
 }
 
+const boroughs = [
+  {
+      "borough": "bronx"
+  },
+  {
+      "borough": "brooklyn"
+  },
+  {
+      "borough": "manhattan"
+  },
+  {
+      "borough": "queens"
+  },
+  {
+      "borough": "staten island"
+  },
+]

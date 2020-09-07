@@ -1,0 +1,108 @@
+table {
+    width: 100%;
+    text-align: left;
+    border-collapse:collapse;
+    table-layout: fixed;
+}
+
+html {
+    scroll-behavior: smooth;
+    margin-left: 40px;
+    margin-right: 40px;
+  }
+
+h2 {
+    text-transform: lowercase;
+}
+
+h3 {
+    text-transform: lowercase;
+}
+
+h4 {
+  text-transform: lowercase;
+}
+
+thead th:nth-child(1) {
+  width: 40%;
+}
+
+thead th:nth-child(2) {
+  width: 20%;
+}
+
+thead th:nth-child(3) {
+  width: 25%;
+}
+
+thead th:nth-child(4) {
+  width: 30%;
+}
+
+thead th:nth-child(5) {
+  width: 30%;
+}
+
+tr.result td {
+  border-bottom: 3px double grey;
+}
+
+tr.result {
+  cursor: pointer;
+}
+
+td {
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+th {
+  padding-bottom: 10px;
+}
+
+.open {
+  color: seagreen;
+  font-weight: bold;
+}
+
+.closed {
+  color: lightcoral;
+  font-weight: bold;
+}
+
+.title {
+  font-weight: bold;
+}
+
+.subheader {
+    font-size: small;
+    margin-bottom: 15px;
+}
+
+.results {
+  font-size: 14px;
+  text-align: center;
+  padding-left: 5em;
+  padding-right: 5em;
+}
+
+.result {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  text-transform: lowercase;
+}
+
+.mobileResults {
+  padding-top: 20px;
+  font-size: 14px;
+}
+
+.lineItem {
+  margin-top: 30px;
+  margin-bottom: 30px;
+}
+
+.button {
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
