@@ -1,5 +1,15 @@
 import { useState, useEffect } from 'react';
 
+export const detectMobile = () => {
+    const windowSize = useWindowSize() 
+    return windowSize.width < 800;
+}
+
+export const detectTablet = () => {
+    const windowSize = useWindowSize() 
+    return windowSize.width < 1100 && windowSize.width >= 700;
+}
+
 export const useWindowSize = () => {
     // Initialize state with undefined width/height so server and client renders match
     // Learn more here: https://joshwcomeau.com/react/the-perils-of-rehydration/
@@ -29,4 +39,4 @@ export const useWindowSize = () => {
     }, []); // Empty array ensures that effect is only run on mount
   
     return windowSize;
-  }
+}

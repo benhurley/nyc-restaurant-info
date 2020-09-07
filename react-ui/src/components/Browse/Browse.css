@@ -47,6 +47,7 @@ thead th:nth-child(5) {
 tr.result td {
   border-bottom: 3px double grey;
 }
+
 tr.result {
   cursor: pointer;
 }

@@ -4,15 +4,14 @@ import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
-import { useWindowSize } from '../../helpers/Window_Helper'
+import { detectMobile } from '../../helpers/Window_Helper'
 import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
 import './Browse.css';
 
 export const Browse = (props) => {    
     const [results, setResults] = useState([])
     const [showMoreVal, setShowMoreVal] = useState(40);
-    const windowSize = useWindowSize() 
-    const isMobile = windowSize.width < 700;
+    const isMobile = detectMobile();
     
     // nyc request requires capital names
     let {borough} = props.match.params
