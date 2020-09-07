@@ -38,7 +38,7 @@ export const LocationSearchBar = () => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="free-solo-with-text-demo"
+      id="location-search-bar"
       options={boroughs}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input

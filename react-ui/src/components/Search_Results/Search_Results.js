@@ -30,7 +30,7 @@ export const SearchResults = (props) => {
         <div className="Home">
             <header className="Home-header">
                 <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-                    <h1> food feels </h1>
+                    <h1> nyc restaurant info </h1>
                 </Link>
             </header>
 
@@ -136,7 +136,7 @@ export const SearchResults = (props) => {
             data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
           </div>
           <div className="footer">
-            food feels™ 2020. all rights reserved.
+            nyc restaurant info™ 2020, all rights reserved
           </div>
         </div>
     )

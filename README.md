@@ -1,14 +1,10 @@
-# Food Feels
+# Tracking NYC Outdoor Dining Statuses
 
-## How you found it difficult to see if your favorite nyc restaurants are open?
+Have you found it difficult to see if your favorite nyc restaurants are open? You're not alone. In the wake of Covid-19, restaurant statuses are changing daily. Statuses on widely-reputable platforms are all showing outdated information.
 
-You're not alone. In the wake of Covid-19, restaurant statuses are changing daily. Statuses on widely-reputable platforms are all showing outdated information. 
+In mid-August, we discovered a new API on [NYC Open Data](https://opendata.cityofnewyork.us/) that allows us to see near-real-time inspections of restaurants in all 5 boroughs.
 
-In mid-August, we discovered a new API on [NYC Open Data](https://opendata.cityofnewyork.us/) that allows us to see near-real-time inspections of restaurants in all 5 boroughs. 
-
-We have created a test [dashboard](https://food-feels-staging.herokuapp.com/) to browse restaurants in your area to see their current inspection status, seating configurations, and if they are open for outdoor dining. You can also search for a specific restaurant to get more information.
-
-Data updates daily.
+We have created an [application](https://nycrestaurants.info) to browse restaurants in your area to see their current inspection status, seating configurations, and if they are open for outdoor dining. You can also search for a specific restaurant to get the most-recent information available.
 
 ## Contact
 

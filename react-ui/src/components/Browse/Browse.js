@@ -9,13 +9,13 @@ import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
 import './Browse.css';
 
 export const Browse = (props) => {    
-    const [results, setResults] = useState([])
+    const [results, setResults] = useState([]);
     const [showMoreVal, setShowMoreVal] = useState(40);
     const isMobile = detectMobile();
     
     // nyc request requires capital names
-    let {borough} = props.match.params
-    borough = mapBorough(borough)
+    let {borough} = props.match.params;
+    borough = mapBorough(borough);
     const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
 
     useEffect(() => {
@@ -33,23 +33,23 @@ export const Browse = (props) => {
       }, []);
 
     const handleRestaurant = (name) => {
-      const newURL = window.location.origin + `/restaurant/${name}`
-      window.location.assign(newURL)
+      const newURL = window.location.origin + `/restaurant/${name}`;
+      window.location.assign(newURL);
     }
 
-    const handleClick = () => {
+    const handleShowMoreClick = () => {
       setShowMoreVal(showMoreVal + 40);
-      window.scrollTo(0, window.scrollY - 200)
+      window.scrollTo(0, window.scrollY - 200);
     }
 
     return (
       <div className="Home">
         <header className="Home-header">
             <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-                <h1> food feels </h1>
+              <h1> nyc restaurant info </h1>
             </Link>
             <h4>Location: {borough}</h4>
-            {isMobile ?
+            { isMobile ?
               <HtmlTooltip
               title={
                 <Fragment>
@@ -64,16 +64,16 @@ export const Browse = (props) => {
                   <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                 </div>
             </HtmlTooltip>
-            : <div className="subheader">click on a record below or search for a restaurant 
-            to find up-to-date inspection details</div>
+              : <div className="subheader">click on a record below or search for a restaurant 
+              to find up-to-date inspection details</div>
             }
-       </header>
-      { isMobile ? 
-        <div className="mobileResults">
+        </header>
+        { isMobile ? 
+          <div className="mobileResults">
             <table>
               <thead>
                 <tr>
-                  <th><RestaurantSearchBar borough={borough} isMobile={true} /></th>
+                  <th><RestaurantSearchBar borough={borough} /></th>
                   <th>status </th>
                 </tr>
               </thead>
@@ -94,14 +94,13 @@ export const Browse = (props) => {
               })}
               </tbody>
             </table>
-        </div>
-        :
-        <div className="results">
+          </div>
+          : <div className="results">
             <table>
               <thead>
                 <tr>
                   <th>
-                    <RestaurantSearchBar borough={borough} isMobile={false} />
+                    <RestaurantSearchBar borough={borough} />
                   </th>
                   <HtmlTooltip
                     title={
@@ -157,7 +156,7 @@ export const Browse = (props) => {
                 return (
                   <tr className="result" key={index} onClick={() => handleRestaurant(result.restaurantname)}>
                     <td>{result.restaurantname}</td>
-                    <td>{result.isroadwaycompliant === "Cease and Desist"  ||
+                    <td>{result.isroadwaycompliant === "Cease and Desist" ||
                             result.skippedreason === "No Seating"
                             ? <div className="closed">Closed</div>
                             : result.isroadwaycompliant === "Compliant"
@@ -182,15 +181,15 @@ export const Browse = (props) => {
         </div>
         }
           <div className="button">
-          <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleClick}>
+            <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
               show more
-          </Button>
+            </Button>
           </div>
           <div>
             data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
           </div>
           <div className="footer">
-            food feels™ 2020. all rights reserved.
+            nyc restaurant info™ 2020, all rights reserved
           </div>
       </div>
     )
