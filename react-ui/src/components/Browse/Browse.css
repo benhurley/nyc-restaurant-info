@@ -20,6 +20,10 @@ h3 {
     text-transform: lowercase;
 }
 
+h4 {
+  text-transform: lowercase;
+}
+
 thead th:nth-child(1) {
   width: 40%;
 }
@@ -71,7 +75,6 @@ th {
 }
 
 .subheader {
-    font-weight: bold;
     font-size: small;
     margin-bottom: 15px;
 }

@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
-import Tooltip from '@material-ui/core/Tooltip';
+import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import Typography from '@material-ui/core/Typography';
-import { withStyles, makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom'
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { useWindowSize } from '../../helpers/Window_Helper'
@@ -13,7 +12,7 @@ export const Browse = (props) => {
     const [results, setResults] = useState([])
     const [showMoreVal, setShowMoreVal] = useState(40);
     const windowSize = useWindowSize() 
-    const isMobile = windowSize.width < 1050;
+    const isMobile = windowSize.width < 700;
     
     // nyc request requires capital names
     let {borough} = props.match.params
@@ -44,32 +43,39 @@ export const Browse = (props) => {
       window.scrollTo(0, window.scrollY - 200)
     }
 
-    const HtmlTooltip = withStyles((theme) => ({
-      tooltip: {
-        backgroundColor: '#f5f5f9',
-        color: 'rgba(0, 0, 0, 0.87)',
-        maxWidth: 300,
-        fontSize: theme.typography.pxToRem(12),
-        border: '1px solid #dadde9',
-      },
-    }))(Tooltip);
-
     return (
       <div className="Home">
         <header className="Home-header">
             <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
                 <h1> food feels </h1>
             </Link>
-            <h3>Location: {borough}</h3>
-            {!isMobile && <div class="subheader">browse all recent inspections or search for a specific restaurant</div>}
-        </header>
+            <h4>Location: {borough}</h4>
+            {isMobile ?
+              <HtmlTooltip
+              title={
+                <Fragment>
+                  <Typography>outdoor dining status</Typography><br />
+                  <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
+                  <b>{"closed: "}</b>{"cease and desist issued or no outdoor seating options available"}<br /><br />
+                  <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
+                </Fragment>
+              }>
+                <div className="subheader">click on a record below or search for a restaurant 
+                  to find up-to-date inspection details &nbsp;
+                  <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+                </div>
+            </HtmlTooltip>
+            : <div className="subheader">click on a record below or search for a restaurant 
+            to find up-to-date inspection details</div>
+            }
+       </header>
       { isMobile ? 
         <div className="mobileResults">
             <table>
               <thead>
                 <tr>
                   <th><RestaurantSearchBar borough={borough} isMobile={true} /></th>
-                  <th>dining status</th>
+                  <th>status </th>
                 </tr>
               </thead>
               <tbody>
@@ -100,36 +106,50 @@ export const Browse = (props) => {
                   </th>
                   <HtmlTooltip
                     title={
-                      <React.Fragment>
-                        <b>{"open: "}</b>{"inspection yielded a compliant rating"}<br />
-                        <b>{"closed: "}</b>{"cease and desist has been issued or there were no outdoor seating options reported"}<br />
-                        <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
-                      </React.Fragment>
+                      <Fragment>
+                      <Typography>outdoor dining status</Typography><br />
+                      <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
+                      <b>{"closed: "}</b>{"cease and desist issued or no outdoor seating options available"}<br /><br />
+                      <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
+                      </Fragment>
                     }
                   >
-                  <th>dining status  <img width={12} src={require("./question.png")}></img></th>
+                  <th>status  <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></th>
+                  </HtmlTooltip>
+                  <HtmlTooltip
+                    title={ 
+                        <Fragment>
+                            <Typography>inspection date</Typography><br />
+                            {"showing results for all nyc inspections, sorted by inspection date in descending order"}
+                        </Fragment>
+                    }>
+                  <th>date  <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></th>
                   </HtmlTooltip>
                   <HtmlTooltip
                     title={
                       <React.Fragment>
-                        {"showing results for all nyc inspections, sorted by inspection date in descending order"}
+                        <Typography>inspection results</Typography><br />
+                        <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
+                        <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
+                        <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
+                        <b>{"skipped inspection: "}</b>{"inspection could not be performed (usually due to lack of seating options)"}
                       </React.Fragment>
                     }
                   >
-                  <th>inspection date  <img width={12} src={require("./question.png")}></img></th>
+                  <th>compliancy  <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></th>
                   </HtmlTooltip>
-                  <th>inspection status</th>
                   <HtmlTooltip
                     title={
                       <React.Fragment>
-                        <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br />
-                        <b>{"roadway only: "}</b>{"outdoor seating in a protective barrier on the street"}<br />
-                        <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br />
-                        <b>{"no seating: "}</b>{"recent inspection was skipped due to no seating options"}
+                        <Typography>outdoor seating options</Typography><br />
+                        <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br /><br />
+                        <b>{"roadway only: "}</b>{"outdoor seating available on the street in a protective barrier"}<br /><br />
+                        <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br /><br />
+                        <b>{"no seating: "}</b>{"inspection was skipped due to lack of seating options"}
                       </React.Fragment>
                     }
                   >
-                  <th>seating  <img width={12} src={require("./question.png")}></img></th>
+                  <th>seating  <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></th>
                   </HtmlTooltip>
                 </tr>
               </thead>
@@ -163,7 +183,7 @@ export const Browse = (props) => {
         </div>
         }
           <div className="button">
-          <Button variant="contained" onClick={handleClick}>
+          <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleClick}>
               show more
           </Button>
           </div>

@@ -12,9 +12,6 @@ export const Home = () => {
           </Link>
         </header>
         <p className="topText">the semi-official source of nyc outdoor dining information during covid-19</p>
-        <div className="bottomText">
-          select a nyc borough to get started
-        </div>
         <div className="searchBar">
           <LocationSearchBar/>
         </div>

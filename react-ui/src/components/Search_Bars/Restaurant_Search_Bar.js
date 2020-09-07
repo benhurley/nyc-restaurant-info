@@ -3,13 +3,17 @@ import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
+import { useWindowSize } from '../../helpers/Window_Helper'
 
 const filter = createFilterOptions();
 
-export const RestaurantSearchBar = ({ borough, isMobile }) => {
+export const RestaurantSearchBar = ({ borough }) => {
   const [value, setValue] = useState(null);
   const [restaurantNames, setRestaurantNames] = useState([]);
-  const width = isMobile ? 150 : 200
+  const windowSize = useWindowSize() 
+  const isMobile = windowSize.width < 800;
+  const isTablet = windowSize.width < 1100 && windowSize.width >= 700;
+  const width = isMobile ? 125 : isTablet ? 150 : 225
 
   const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
 
@@ -81,7 +85,7 @@ export const RestaurantSearchBar = ({ borough, isMobile }) => {
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label={<div style={{textTransform: "lowercase"}}>{isMobile ? "restaurants" : "restaurant search"}</div>}
+          label={<div style={{textTransform: "lowercase"}}>{windowSize.width < 1100 ? "restaurants" : "restaurant search"}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {

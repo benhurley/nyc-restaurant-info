@@ -61,7 +61,7 @@ export const LocationSearchBar = () => {
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label="nyc boroughs" 
+          label="select a nyc borough" 
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
