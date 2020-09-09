@@ -1,13 +1,22 @@
 .searchResults {
-    font-size: 14px;
     text-align: center;
-    padding-left: 20px;
-    padding-right: 20px;
+}
+
+.subTitle {
+    margin-top: 20px;
+}
+
+.resultsCard {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
 }
 
 .lineItem {
     margin-top: 30px;
     margin-bottom: 30px;
+    margin-left: 30px;
+    margin-right: 30px;
 }
 
 .result {
@@ -17,14 +26,32 @@
 }
 
 .title {
-    font-weight: bold;
+    font-size: 14px;
+    text-transform: lowercase;
+}
+
+.title .open {
+    display:inline;
+}
+
+.title .closed {
+    display:inline;
 }
 
 .button {
-    margin-top: 50px;
-    margin-bottom: 50px;
+    text-align: center;
 }
 
 .subTitle {
+    font-weight: bold;
+}
+
+.open {
+    color: seagreen;
+    font-weight: bold;
+}
+  
+.closed {
+    color: lightcoral;
     font-weight: bold;
 }
