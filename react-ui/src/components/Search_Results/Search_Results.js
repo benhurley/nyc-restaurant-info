@@ -52,61 +52,61 @@ export const SearchResults = (props) => {
                 alignItems="center"
                 justify="center"
                 >
-                <Grid item md={12}>
-                <Card>
-                    <div className="lineItem">
-                        <div className="title">
-                            <RestaurantOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
-                            { details.restaurantname }
+                  <Grid item md={12}>
+                    <Card>
+                        <div className="lineItem">
+                            <div className="title">
+                                <RestaurantOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                                { details.restaurantname }
+                            </div>
                         </div>
-                    </div>
-                    <div className="lineItem">
-                        <div className="title">
-                            <RoomOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
-                            { details.businessaddress }
+                        <div className="lineItem">
+                            <div className="title">
+                                <RoomOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                                { details.businessaddress }
+                            </div>
                         </div>
-                    </div>
-                    <div className="lineItem">
-                        <div className="title">
-                            <ThumbsUpDownOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
-                            {details.isroadwaycompliant === "Cease and Desist" ||
-                                details.skippedreason === "No Seating"
-                                ? <div className="closed">closed</div>
-                                : details.isroadwaycompliant === "Compliant"
-                                    ? <div className="open">open</div>
-                                    : "unknown"
-                            }
-                        </div>
-                    </div>
-                    <div className="lineItem">
-                        <div className="title">
-                            <AssignmentOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
-                            { details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10) +
-                                " due to " + details.skippedreason
-                            }
-                            { details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
-                                details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10)
-                            }
-                        </div>
-                    </div>
-                    <div className="lineItem">
-                        <div className="title">{ details.seatingchoice && !details.skippedreason &&
-                            <Fragment>
-                                <AirlineSeatReclineNormalOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
-                                {details.seatingchoice && details.skippedreason !== "No Seating" &&
-                                    details.seatingchoice === "both"
-                                        ? "sidewalk and roadway"
-                                        : details.seatingchoice === "sidewalk"
-                                            ? "sidewalk only"
-                                            : "roadway only"
+                        <div className="lineItem">
+                            <div className="title">
+                                <ThumbsUpDownOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                                {details.isroadwaycompliant === "Cease and Desist" ||
+                                    details.skippedreason === "No Seating"
+                                    ? <div className="closed">closed</div>
+                                    : details.isroadwaycompliant === "Compliant"
+                                        ? <div className="open">open</div>
+                                        : "unknown"
                                 }
-                            </Fragment>
-                            }
+                            </div>
                         </div>
-                    </div>
-                </Card>  
-                </Grid>
+                        <div className="lineItem">
+                            <div className="title">
+                                <AssignmentOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
+                                { details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                    details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10) +
+                                    " due to " + details.skippedreason
+                                }
+                                { details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                    details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10)
+                                }
+                            </div>
+                        </div>
+                        <div className="lineItem">
+                            <div className="title">{ details.seatingchoice && !details.skippedreason &&
+                                <Fragment>
+                                    <AirlineSeatReclineNormalOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
+                                    {details.seatingchoice && details.skippedreason !== "No Seating" &&
+                                        details.seatingchoice === "both"
+                                            ? "sidewalk and roadway"
+                                            : details.seatingchoice === "sidewalk"
+                                                ? "sidewalk only"
+                                                : "roadway only"
+                                    }
+                                </Fragment>
+                                }
+                            </div>
+                        </div>
+                    </Card>  
+                  </Grid>
                 </Grid>
                 <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
                     <div className="button">
