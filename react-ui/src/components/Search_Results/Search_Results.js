@@ -1,14 +1,22 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
-import { Link } from 'react-router-dom'
-import { mapBorough, massageSearchResponse } from '../../helpers/NYC_Data_Massaging'
-import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
+import { Card } from '@material-ui/core';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import { Link } from 'react-router-dom'
+import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging'
+import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import './Search_Results.css';
+import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
+import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
+import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
+import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
 
 export const SearchResults = (props) => {
-    const {restaurantname} = props.match.params
-    const [details, setDetails] = useState({})
+    let {restaurantname} = props.match.params;
+    restaurantname = encodeRestaurantName(restaurantname);
+    const [details, setDetails] = useState({});
 
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json';
 
@@ -27,103 +35,79 @@ export const SearchResults = (props) => {
       }, []);
 
     return (
-        <div className="Home">
-            <header className="Home-header">
-                <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-                    <h1> nyc restaurant info </h1>
-                </Link>
-            </header>
-
-                <div className="searchResults">
-                <h2> {details.restaurantname}</h2>
-                <div className="result">{details.businessaddress}</div>
-                <div className="lineItem">
-                        <div>
-                            <HtmlTooltip
-                                title={
-                                    <Fragment>
-                                        <Typography>outdoor dining status</Typography><br />
-                                        <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
-                                        <b>{"closed: "}</b>{"cease and desist issued or no outdoor seating options available"}<br /><br />
-                                        <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
-                                    </Fragment>
-                                }>
-                                  <div className="title">status <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></div>
-                            </HtmlTooltip>
-                            <div className="result">
-                            {details.isroadwaycompliant === "Cease and Desist" ||
-                                details.skippedreason === "No Seating"
-                                ? <div className="closed">Closed</div>
-                                : details.isroadwaycompliant === "Compliant"
-                                    ? <div className="open">Open</div>
-                                    : "Unknown"
-                            }
-                            </div>
+        <Fragment>
+            <div className="Home">
+                <header className="Home-header">
+                    <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
+                        <h1> nyc restaurant info </h1>
+                    </Link>
+                    <h4 className="subTitle">search results</h4>
+                </header>
+            </div>
+            <div className="resultsCard">
+              <Grid
+                container
+                spacing={0}
+                direction="column"
+                alignItems="center"
+                justify="center"
+                >
+                <Grid item md={12}>
+                <Card>
+                    <div className="lineItem">
+                        <div className="title">
+                            <RestaurantOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                            { details.restaurantname }
                         </div>
                     </div>
-                    <div className="lineItem">{details.inspectedon &&
-                        <div>
-                            <HtmlTooltip
-                                title={ 
-                                    <Fragment>
-                                        <Typography>inspection date</Typography><br />
-                                        {"most-recent inspection date for this restaurant"}
-                                    </Fragment>
-                                }>
-                                <div className="title">date <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></div>
-                            </HtmlTooltip>
-                            <div className="result">{details.inspectedon.slice(0,10)}</div>
-                        </div>}
+                    <div className="lineItem">
+                        <div className="title">
+                            <RoomOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                            { details.businessaddress }
+                        </div>
                     </div>
-                    <div className="lineItem">{details.isroadwaycompliant &&
-                        <div>
-                            <HtmlTooltip
-                                title={
-                                <React.Fragment>
-                                    <Typography>inspection results</Typography><br />
-                                    <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
-                                    <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
-                                    <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
-                                    <b>{"skipped inspection: "}</b>{"inspection could not be performed (usually due to lack of seating options)"}
-                                </React.Fragment>
+                    <div className="lineItem">
+                        <div className="title">
+                            <ThumbsUpDownOutlinedIcon style={{fontSize: "large"}} /> &nbsp;
+                            {details.isroadwaycompliant === "Cease and Desist" ||
+                                details.skippedreason === "No Seating"
+                                ? <div className="closed">closed</div>
+                                : details.isroadwaycompliant === "Compliant"
+                                    ? <div className="open">open</div>
+                                    : "unknown"
+                            }
+                        </div>
+                    </div>
+                    <div className="lineItem">
+                        <div className="title">
+                            <AssignmentOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
+                            { details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10) +
+                                " due to " + details.skippedreason
+                            }
+                            { details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10)
+                            }
+                        </div>
+                    </div>
+                    <div className="lineItem">
+                        <div className="title">{ details.seatingchoice && !details.skippedreason &&
+                            <Fragment>
+                                <AirlineSeatReclineNormalOutlinedIcon style={{fontSize: "large"}}/> &nbsp;
+                                {details.seatingchoice && details.skippedreason !== "No Seating" &&
+                                    details.seatingchoice === "both"
+                                        ? "sidewalk and roadway"
+                                        : details.seatingchoice === "sidewalk"
+                                            ? "sidewalk only"
+                                            : "roadway only"
                                 }
-                            >
-                              <div className="title">compliancy <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></div>
-                            </HtmlTooltip>
-                            <div className="result">{details.isroadwaycompliant}</div>
-                        </div>}
+                            </Fragment>
+                            }
+                        </div>
                     </div>
-                    <div className="lineItem">{details.skippedreason &&
-                        <div>
-                            <div className="title">skipped reason</div>
-                            <div className="result">{details.skippedreason}</div>
-                        </div>}
-                    </div>
-                    <div className="lineItem">{details.seatingchoice 
-                        && details.skippedreason !== "No Seating" &&
-                        <div>
-                            <HtmlTooltip
-                                title={
-                                <React.Fragment>
-                                    <Typography>outdoor seating options</Typography><br />
-                                    <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br /><br />
-                                    <b>{"roadway only: "}</b>{"outdoor seating available on the street in a protective barrier"}<br /><br />
-                                    <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br /><br />
-                                    <b>{"no seating: "}</b>{"inspection was skipped due to lack of seating options"}
-                                </React.Fragment>
-                                }
-                            >
-                                <div className="title">seating <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img></div>
-                            </HtmlTooltip>
-                    <div className="result">
-                        { details.seatingchoice === "both"
-                            ? "sidewalk and roadway"
-                            : details.seatingchoice === "sidewalk"
-                                ? "sidewalk only"
-                                : "roadway only"
-                        }</div>
-                    </div>}
-                </div>
+                </Card>  
+                </Grid>
+                </Grid>
                 <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
                     <div className="button">
                         <Button variant="outlined" style={{textTransform: "lowercase"}}>
@@ -131,13 +115,15 @@ export const SearchResults = (props) => {
                         </Button>
                     </div>
                 </Link>
+            </div>
+            <div className="searchResults">
+                <div>
+                    data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
                 </div>
-            <div>
-            data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
-          </div>
-          <div className="footer">
-            nyc restaurant info™ 2020, all rights reserved
-          </div>
-        </div>
+                <div className="footer">
+                    nyc restaurant info™ 2020, all rights reserved
+                </div>
+            </div>
+        </Fragment>
     )
 }

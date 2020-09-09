@@ -34,3 +34,10 @@ export const mapBorough = (name) => {
     else if (name === "Queens") return "queens";
     else if (name === "Brooklyn") return "brooklyn";
 }
+
+export const encodeRestaurantName = (name) => {
+    if (name.includes('&')) {
+        name = name.replace('&', '%26');
+    }
+    return name;
+}
