@@ -13,6 +13,7 @@ import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
+import { Footer } from '../Footer/Footer';
 
 export const SearchResults = (props) => {
     let {restaurantname} = props.match.params;
@@ -118,14 +119,7 @@ export const SearchResults = (props) => {
                     </div>
                 </Link>
             </div>
-            <div className="searchResults">
-                <div>
-                    data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
-                </div>
-                <div className="footer">
-                    nyc restaurant info™ 2020, all rights reserved
-                </div>
-            </div>
+          <Footer />
         </Fragment>
     )
 }

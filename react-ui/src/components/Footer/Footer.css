@@ -1,0 +1,25 @@
+.footer {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.mainLine {
+    font-size: small;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.updateLine {
+    font-size: 12px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.disclaimer {
+    font-weight: bold;
+    text-align: left;
+    font-size: 10px;
+    margin-bottom: 15px;
+}

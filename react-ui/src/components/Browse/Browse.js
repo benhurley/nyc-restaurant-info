@@ -7,6 +7,7 @@ import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
 import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
 import { AdBanner } from '../Banners/Ad_Banner';
+import { Footer } from '../Footer/Footer';
 import './Browse.css';
 
 export const Browse = (props) => {    
@@ -56,19 +57,21 @@ export const Browse = (props) => {
                 <HtmlTooltip
                 title={
                   <Fragment>
-                    <Typography>outdoor dining status</Typography><br />
+                    <Typography>what are these results?</Typography><br />
+                      these are all of the recent {mapBorough(borough)} inspections, sorted by inspection date in descending order. more info is available on desktop. <br /><br />
+                    <Typography>how is outdoor dining status calculated?</Typography><br />
                     <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
-                    <b>{"closed: "}</b>{"cease and desist issued or no outdoor seating options available"}<br /><br />
+                    <b>{"closed: "}</b>{"cease and desist issued or a skipped inspection due to no seating available"}<br /><br />
                     <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                   </Fragment>
                 }>
                   <div className="subheader">click on a record below or search for a restaurant 
-                    to find up-to-date inspection details &nbsp;
+                    to find up-to-date inspection details** &nbsp;
                     <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                   </div>
               </HtmlTooltip>
                 : <div className="subheader">click on a record below or search for a restaurant 
-                to find up-to-date inspection details</div>
+                to find up-to-date inspection details**</div>
               }
           </header>
           { isMobile ? 
@@ -108,9 +111,9 @@ export const Browse = (props) => {
                     <HtmlTooltip
                       title={
                         <Fragment>
-                        <Typography>outdoor dining status</Typography><br />
+                        <Typography>how is outdoor dining status calculated?</Typography><br />
                         <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
-                        <b>{"closed: "}</b>{"cease and desist issued or no outdoor seating options available"}<br /><br />
+                        <b>{"closed: "}</b>{"closed: cease and desist issued or a skipped inspection due to no seating available"}<br /><br />
                         <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                         </Fragment>
                       }
@@ -133,7 +136,7 @@ export const Browse = (props) => {
                           <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
                           <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
                           <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
-                          <b>{"skipped inspection: "}</b>{"inspection could not be performed (usually due to lack of seating options)"}
+                          <b>{"skipped inspection: "}</b>{"inspection could not be performed"}
                         </React.Fragment>
                       }
                     >
@@ -183,17 +186,12 @@ export const Browse = (props) => {
               </table>
           </div>
           }
-            <div className="button">
-              <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
-                show more
-              </Button>
-            </div>
-            <div>
-              data updates daily via <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>
-            </div>
-            <div className="footer">
-              nyc restaurant info™ 2020, all rights reserved
-            </div>
+          <div className="button">
+            <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
+              show more
+            </Button>
+          </div>
+         <Footer />
         </div>
       </Fragment>
     )
