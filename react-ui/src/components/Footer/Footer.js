@@ -5,10 +5,7 @@ export const Footer = () => {
     return (
         <div className="footer">
           <div className="mainLine">
-              nyc restaurant info™ 2020. all rights reserved.
-          </div>
-          <div className="updateLine">
-            if you would like us to update incorrect results for your restaurant, please <a href="mailto:benfromtech@gmail.com">contact us</a>. 
+              nyc restaurant info™ 2020. all rights reserved. <a href="mailto:benfromtech@gmail.com">contact us</a>
           </div>
           <div className="disclaimer">
             ** disclaimer: the information contained in this website is provided for informational purposes only, and should not be construed as legal advice on any matter. 
