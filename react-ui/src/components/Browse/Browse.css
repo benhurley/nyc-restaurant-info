@@ -7,9 +7,7 @@ table {
 
 html {
     scroll-behavior: smooth;
-    margin-left: 40px;
-    margin-right: 40px;
-  }
+}
 
 h2 {
     text-transform: lowercase;

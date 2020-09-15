@@ -2,6 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
 import { Card } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
+import { AdBanner } from '../Banners/Ad_Banner';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging'
@@ -36,6 +37,7 @@ export const SearchResults = (props) => {
 
     return (
         <Fragment>
+            <AdBanner />
             <div className="Home">
                 <header className="Home-header">
                     <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
