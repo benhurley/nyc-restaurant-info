@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const axios = require('axios');
 const numCPUs = require('os').cpus().length;
+var CronJob = require('cron').CronJob;
 require('dotenv').config();
 
 // create mongoose client
@@ -23,7 +24,16 @@ db.once('open', function() {
 const restaurantSchema = require('./restaurantSchema.js');
 const RestaurantModel = mongoose.model("nyc_restaurant", restaurantSchema);
 
-const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json';
+const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1000';
+
+// Persistence Cron Job
+const job = new CronJob('00 00 00 * * *', function() {
+	const d = new Date();
+  console.log('Midnight:', d);
+  persistData();
+});
+job.start();
+console.log('persistence cron job created');
 
 // listen for the signal interruption (ctrl-c)
 process.on('SIGINT', () => {
@@ -59,23 +69,32 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.get('/api/persist/nyc', async (req, res) => {
-    let data;
-    axios.get(nycApiEndpoint)
-      .then((response) => {
+    persistData();
+  });
+
+  function persistData() {
+    console.log('Starting daily persistence');
+    var today = new Date()
+    today.setDate(today.getDate() - 1)
+    today = today.toISOString().split("T")[0];
+    const query = `&$where=inspectedon between '${today}T00:00:00' and '${today}T23:59:59'&$order=inspectedon DESC`;
+    axios.get(`${nycApiEndpoint}${query}`)
+      .then((response) => {       
+        console.log('Number of records to persist: ' + response.data.length);
+        const ids = response.data.map(restaurant => parseInt(restaurant.restaurantinspectionid));
+        db.collection('nyc_restaurants').deleteMany({restaurantinspectionid: {$in: ids}});
         response.data.forEach(restaurant => {
           try {
             const restaurantToBeSaved = new RestaurantModel(restaurant);
             const result = restaurantToBeSaved.save();
-            console.log(restaurant.restaurantinspectionid);
+            console.log('Persisting restaurant ID: ' + restaurant.restaurantinspectionid);
           } catch(error) {
-            console.log('issue persisting restaurant ID: ' + restaurant.restaurantinspectionid);
-            console.log(error);
+            console.log('Error persisting restaurant ID: ' + restaurant.restaurantinspectionid + ", error: " + error);
           }
-
-        })
+        });
         res.send(response.data);
       })
-  });
+  }
 
   // get all restaurants
   app.get('/api/restaurants', async (req, res) => {
@@ -90,6 +109,7 @@ if (!isDev && cluster.isMaster) {
   // get a specific restaurant
   app.get('/api/restaurants/:id', async (req, res) => {
     const mongoId = ObjectId(req.params.id);
+    console.log(req.params.id);
     try {
       const restaurant = await RestaurantModel.findById(mongoId).exec();
       res.send(restaurant);
