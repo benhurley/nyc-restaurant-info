@@ -19,9 +19,10 @@ export const Browse = (props) => {
     // nyc request requires capital names
     let {borough} = props.match.params;
     borough = mapBorough(borough);
-    const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
 
     useEffect(() => {
+        let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=${showMoreVal}&$order=inspectedon DESC`;
+
         fetch(nycCompliantRestaurantApi).then(response => {
             if (!response.ok) {
               throw new Error(`status ${response.status}`);
@@ -40,12 +41,46 @@ export const Browse = (props) => {
       window.location.assign(newURL);
     }
 
-    const handleShowMoreClick = () => {
-      setShowMoreVal(showMoreVal + 40);
-      if (showMoreVal > results.length) {
-        setAllRecordsShown(true);
-      }
-      window.scrollTo(0, window.scrollY - 200);
+    const handleShowMoreClick = () => {      
+      let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=${showMoreVal + 40}&$order=inspectedon DESC`;
+      let lastPayloadSize = results.length;
+
+      fetch(nycCompliantRestaurantApi).then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        if (json.length === lastPayloadSize) {
+          setAllRecordsShown(true);
+        } else {
+          window.scrollTo(0, window.scrollY - 100);   
+        }
+        setShowMoreVal(showMoreVal + 40);
+        setResults(json);
+      }).catch(e => {
+        throw new Error(`API call failed: ${e}`);
+      })   
+
+    }
+
+    const handleShowAllClick = () => {      
+      let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
+      setAllRecordsShown(true);
+
+      fetch(nycCompliantRestaurantApi).then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(json => {
+        setShowMoreVal(json.length);
+        setResults(json);
+      }).catch(e => {
+        throw new Error(`API call failed: ${e}`);
+      })      
     }
 
     return (
@@ -88,10 +123,10 @@ export const Browse = (props) => {
                   </tr>
                 </thead>
                 <tbody>
-                {results.slice(0, showMoreVal).map((result, index) => {
+                {results.map((result, index) => {
                   return (
                     <tr className="result" key={index} onClick={() => handleRestaurant(result.restaurantname)}>
-                      <td>{result.restaurantname}</td>
+                      <td>{index +1  + ". " + result.restaurantname}</td>
                       <td>{result.isroadwaycompliant === "Cease and Desist" ||
                               result.skippedreason === "No Seating"
                               ? <div className="closed">Closed</div>
@@ -165,7 +200,7 @@ export const Browse = (props) => {
                 {results.slice(0, showMoreVal).map((result, index) => {
                   return (
                     <tr className="result" key={index} onClick={() => handleRestaurant(result.restaurantname)}>
-                      <td>{result.restaurantname}</td>
+                      <td>{index +1  + ". " + result.restaurantname}</td>
                       <td>{result.isroadwaycompliant === "Cease and Desist" ||
                               result.skippedreason === "No Seating"
                               ? <div className="closed">Closed</div>
@@ -193,14 +228,17 @@ export const Browse = (props) => {
           { allRecordsShown 
             ?
               <div className="button">
-                all inspection records shown
+                showing all records...
               </div>
             :
-            <div className="button">
-              <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
-                show more
-              </Button>
-            </div> 
+              <div className="button">
+                <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
+                  show more
+                </Button> &nbsp;
+                <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowAllClick}>
+                  show all
+                </Button>
+              </div> 
           }
          <Footer />
         </div>
