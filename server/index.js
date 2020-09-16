@@ -3,6 +3,7 @@ const path = require('path');
 const cluster = require('cluster');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
+const axios = require('axios');
 const numCPUs = require('os').cpus().length;
 require('dotenv').config();
 
@@ -20,7 +21,9 @@ db.once('open', function() {
 
 // restaurant schema and model for mongodb
 const restaurantSchema = require('./restaurantSchema.js');
-const RestaurantModel = mongoose.model("restaurant", restaurantSchema);
+const RestaurantModel = mongoose.model("nyc_restaurant", restaurantSchema);
+
+const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json';
 
 // listen for the signal interruption (ctrl-c)
 process.on('SIGINT', () => {
@@ -54,6 +57,25 @@ if (!isDev && cluster.isMaster) {
   var bodyParser = require('body-parser');
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
+
+  app.get('/api/persist/nyc', async (req, res) => {
+    let data;
+    axios.get(nycApiEndpoint)
+      .then((response) => {
+        response.data.forEach(restaurant => {
+          try {
+            const restaurantToBeSaved = new RestaurantModel(restaurant);
+            const result = restaurantToBeSaved.save();
+            console.log(restaurant.restaurantinspectionid);
+          } catch(error) {
+            console.log('issue persisting restaurant ID: ' + restaurant.restaurantinspectionid);
+            console.log(error);
+          }
+
+        })
+        res.send(response.data);
+      })
+  });
 
   // get all restaurants
   app.get('/api/restaurants', async (req, res) => {
