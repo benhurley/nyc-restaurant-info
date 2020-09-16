@@ -1,18 +1,19 @@
-.footer {
-    margin-left: 40px;
-    margin-right: 40px;
-}
-
 .mainLine {
     font-size: small;
     font-weight: bold;
     text-align: center;
     margin-bottom: 30px;
+    margin-left: 40px;
+    margin-right: 40px;
 }
 
 .disclaimer {
+    border-top: 1px solid rgb(192, 192, 192);
     font-weight: bold;
     text-align: left;
     font-size: 10px;
+    padding-top: 15px;
+    padding-left: 40px;
+    padding-right: 40px;
     margin-bottom: 15px;
 }
