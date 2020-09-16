@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import './Footer.css'
 
 export const Footer = () => {
     return (
-        <div className="footer">
+        <Fragment>
           <div className="mainLine">
               nyc restaurant info™ 2020. all rights reserved. <a href="mailto:benfromtech@gmail.com">contact us</a>
           </div>
@@ -17,6 +17,6 @@ export const Footer = () => {
                 unknown: cannot determine based on given data (may be non-compliant but still operating) <br /><br />
             the nyc restaurant info™ algorithm is an on-going work in progess, may be incorrect, and does not assume responsibility for providing the correct status of a restaurant in NYC. 
           </div>
-        </div>
+        </Fragment>
     )
 }

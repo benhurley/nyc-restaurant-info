@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React from 'react';
 import './Ad_Banner.css'
 
 export const AdBanner = () => {
