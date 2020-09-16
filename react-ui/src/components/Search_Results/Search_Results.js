@@ -3,17 +3,15 @@ import Button from '@material-ui/core/Button';
 import { Card } from '@material-ui/core';
 import Grid from '@material-ui/core/Grid';
 import { AdBanner } from '../Banners/Ad_Banner';
-import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging'
-import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
-import './Search_Results.css';
 import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
 import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
 import { Footer } from '../Footer/Footer';
+import './Search_Results.css';
 
 export const SearchResults = (props) => {
     let {restaurantname} = props.match.params;
