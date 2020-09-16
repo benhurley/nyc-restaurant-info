@@ -14,6 +14,7 @@ export const Browse = (props) => {
     const [results, setResults] = useState([]);
     const [showMoreVal, setShowMoreVal] = useState(40);
     const isMobile = detectMobile();
+    const [allRecordsShown, setAllRecordsShown] = useState(false);
     
     // nyc request requires capital names
     let {borough} = props.match.params;
@@ -41,6 +42,9 @@ export const Browse = (props) => {
 
     const handleShowMoreClick = () => {
       setShowMoreVal(showMoreVal + 40);
+      if (showMoreVal > results.length) {
+        setAllRecordsShown(true);
+      }
       window.scrollTo(0, window.scrollY - 200);
     }
 
@@ -186,11 +190,18 @@ export const Browse = (props) => {
               </table>
           </div>
           }
-          <div className="button">
-            <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
-              show more
-            </Button>
-          </div>
+          { allRecordsShown 
+            ?
+              <div className="button">
+                all inspection records shown
+              </div>
+            :
+            <div className="button">
+              <Button variant="outlined" style={{textTransform: "lowercase"}} onClick={handleShowMoreClick}>
+                show more
+              </Button>
+            </div> 
+          }
          <Footer />
         </div>
       </Fragment>
