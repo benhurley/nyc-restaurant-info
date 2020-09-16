@@ -240,8 +240,8 @@ export const Browse = (props) => {
                 </Button>
               </div> 
           }
-         <Footer />
         </div>
+        <Footer />
       </Fragment>
     )
 }
