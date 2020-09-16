@@ -24,7 +24,7 @@ db.once('open', function() {
 const restaurantSchema = require('./restaurantSchema.js');
 const RestaurantModel = mongoose.model("nyc_restaurant", restaurantSchema);
 
-const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1000';
+const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=10000';
 
 // Persistence Cron Job
 const job = new CronJob('00 00 00 * * *', function() {
@@ -72,12 +72,17 @@ if (!isDev && cluster.isMaster) {
     persistData();
   });
 
-  function persistData() {
+  async function persistData() {
     console.log('Starting daily persistence');
+
     var today = new Date()
     today.setDate(today.getDate() - 1)
     today = today.toISOString().split("T")[0];
+
+    // Query for everything updated yesterday
     const query = `&$where=inspectedon between '${today}T00:00:00' and '${today}T23:59:59'&$order=inspectedon DESC`;
+    
+    // Deletes all unique ids before adding the updated records
     axios.get(`${nycApiEndpoint}${query}`)
       .then((response) => {       
         console.log('Number of records to persist: ' + response.data.length);
@@ -92,7 +97,7 @@ if (!isDev && cluster.isMaster) {
             console.log('Error persisting restaurant ID: ' + restaurant.restaurantinspectionid + ", error: " + error);
           }
         });
-        res.send(response.data);
+        return response.data;
       })
   }
 
