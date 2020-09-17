@@ -1,12 +1,14 @@
 const express = require('express');
 const path = require('path');
 const cluster = require('cluster');
+var _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const { ObjectId } = require('mongodb');
 const axios = require('axios');
 const numCPUs = require('os').cpus().length;
 var CronJob = require('cron').CronJob;
 require('dotenv').config();
+const { getCoordinatesFromAddress } = require('./google-maps-api')
 
 // create mongoose client
 let mongoose = require('mongoose');
@@ -23,8 +25,10 @@ db.once('open', function() {
 // restaurant schema and model for mongodb
 const restaurantSchema = require('./restaurantSchema.js');
 const RestaurantModel = mongoose.model("nyc_restaurant", restaurantSchema);
+const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=100000000';
 
-const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=10000';
+// Lodash Utilities
+var merge = _.spread(_.partial(_.merge, {}));
 
 // Persistence Cron Job
 const job = new CronJob('00 00 00 * * *', function() {
@@ -68,8 +72,14 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
 
+  app.get('/api/coordinates', async (req, res) => {
+    if(!req.query.address) res.status(400).send('Missing <address> query param');
+    var location = await getCoordinatesFromAddress(req.query.address);
+    res.send(merge(location.data.results).geometry.location);
+  });
+
   app.get('/api/persist/nyc', async (req, res) => {
-    persistData();
+    res.send(persistData());
   });
 
   async function persistData() {
@@ -84,12 +94,20 @@ if (!isDev && cluster.isMaster) {
     
     // Deletes all unique ids before adding the updated records
     axios.get(`${nycApiEndpoint}${query}`)
-      .then((response) => {       
+      .then(response => {       
         console.log('Number of records to persist: ' + response.data.length);
-        const ids = response.data.map(restaurant => parseInt(restaurant.restaurantinspectionid));
-        db.collection('nyc_restaurants').deleteMany({restaurantinspectionid: {$in: ids}});
+        // const ids = response.data.map(restaurant => parseInt(restaurant.restaurantinspectionid));
+        // db.collection('nyc_restaurants').deleteMany({restaurantinspectionid: {$in: ids}});
         response.data.forEach(restaurant => {
           try {
+            // Need to figure out how to wait for this to finish
+            // var coordinates = await getCoordinatesFromAddress(restaurant.businessaddress);
+            // coordinates = merge(coordinates.data.results).geometry.location
+            // if(coordinates.lat && coordinates.lng) {
+            //   console.log(coordinates);
+            //   restaurant.latitude = coordinates.lat;
+            //   restaurant.longitude = coordinates.lng;
+            // }
             const restaurantToBeSaved = new RestaurantModel(restaurant);
             const result = restaurantToBeSaved.save();
             console.log('Persisting restaurant ID: ' + restaurant.restaurantinspectionid);

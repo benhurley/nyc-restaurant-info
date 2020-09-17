@@ -58,6 +58,11 @@ th {
   padding-bottom: 10px;
 }
 
+.Browse {
+  padding-left: 5em;
+  padding-right: 5em;
+}
+
 .open {
   color: seagreen;
   font-weight: bold;
