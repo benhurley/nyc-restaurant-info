@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Home } from './components/Home/Home';
-import { SearchResults } from './components/Search_Results/Search_Results';
+import { RestaurantDeatil } from './components/Restaurant_Detail/Restaurant_Detail';
 import { Browse } from './components/Browse/Browse';
 import {
   BrowserRouter as Router,
@@ -15,7 +15,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={Home} />
           <Route exact path="/location/:borough" component={Browse} />
-          <Route exact path="/restaurant/:restaurantname" component={SearchResults}/>
+          <Route exact path="/restaurant/:restaurantname" component={RestaurantDeatil}/>
         </Switch>
       </Fragment>
     </Router>

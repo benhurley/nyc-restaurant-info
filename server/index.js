@@ -73,9 +73,25 @@ if (!isDev && cluster.isMaster) {
   app.use(bodyParser.urlencoded({ extended: true }));
 
   app.get('/api/coordinates', async (req, res) => {
-    if(!req.query.address) res.status(400).send('Missing <address> query param');
-    var location = await getCoordinatesFromAddress(req.query.address);
-    res.send(merge(location.data.results).geometry.location);
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+    // Request methods you wish to allow
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+    // Request headers you wish to allow
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+    // Set to true if you need the website to include cookies in the requests sent
+    // to the API (e.g. in case you use sessions)
+    res.setHeader('Access-Control-Allow-Credentials', true);
+
+    if(!req.query.address) {
+      res.status(400).send('Missing <address> query param');
+    }
+
+    await getCoordinatesFromAddress(req.query.address).then(response => {
+      res.send(merge(response.data.results).geometry.location);
+    });
   });
 
   app.get('/api/persist/nyc', async (req, res) => {
