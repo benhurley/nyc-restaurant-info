@@ -1,4 +1,4 @@
-const geoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json?key=AIzaSyC65bEHVmjXKeD9ZQfDVApRyUhNUSZwgFg&address=';
+const geoLocationUrl = 'https://maps.googleapis.com/maps/api/geocode/json?address=';
 const axios = require('axios');
 const { default: Axios } = require('axios');
 
