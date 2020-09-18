@@ -8,5 +8,6 @@ export const HtmlTooltip = withStyles((theme) => ({
       maxWidth: 200,
       fontSize: theme.typography.pxToRem(12),
       border: '1px solid #dadde9',
+      verticalAlign: 'text-bottom',
     },
   }))(Tooltip);

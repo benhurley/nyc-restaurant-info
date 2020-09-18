@@ -1,7 +1,4 @@
 table {
-    width: 100%;
-    text-align: left;
-    border-collapse:collapse;
     table-layout: fixed;
 }
 
@@ -21,32 +18,8 @@ h4 {
   text-transform: lowercase;
 }
 
-thead th:nth-child(1) {
-  width: 40%;
-}
-
-thead th:nth-child(2) {
-  width: 20%;
-}
-
-thead th:nth-child(3) {
-  width: 25%;
-}
-
-thead th:nth-child(4) {
-  width: 30%;
-}
-
-thead th:nth-child(5) {
-  width: 30%;
-}
-
 tr.result td {
   border-bottom: 3px double grey;
-}
-
-tr.result {
-  cursor: pointer;
 }
 
 td {
@@ -76,8 +49,6 @@ th {
 .results {
   font-size: 14px;
   text-align: center;
-  padding-left: 5em;
-  padding-right: 5em;
 }
 
 .result {
@@ -96,7 +67,60 @@ th {
   margin-bottom: 30px;
 }
 
-.button {
-  margin-top: 50px;
-  margin-bottom: 100px;
+.browse {
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.desktopTable {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.mobileTableHeader {
+  font-weight: bold;
+  display: inline-block;
+}
+
+.mobileTable {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-transform: lowercase;
+}
+
+tr:hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.MuiTableSortLabel-root {
+  font-weight: bold;
+}
+
+.MuiToolbar-root {
+  display: flex;
+  position: fixed;
+  align-items: center;
+}
+
+.mobileSearch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  padding-top: 20px;
+  padding-bottom: 25px;
+  text-transform: lowercase;
+}
+
+.desktopSearch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  padding-bottom: 30px;
+  text-transform: lowercase;
 }

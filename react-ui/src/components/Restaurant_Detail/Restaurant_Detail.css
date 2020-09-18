@@ -1,0 +1,92 @@
+.subTitle {
+    margin-top: 20px;
+}
+
+.resultsCard {
+    margin-top: 10px;
+    font-size: 14px;
+    text-align: left;
+    text-transform: lowercase;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.result {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform: lowercase;
+}
+
+.title {
+    font-size: 14px;
+    text-transform: lowercase;
+    font-weight: bold;
+}
+
+.title .open {
+    display:inline;
+}
+
+.title .closed {
+    display:inline;
+}
+
+.button {
+    text-align: center;
+}
+
+.subTitle {
+    font-weight: bold;
+}
+
+.open {
+    color: seagreen;
+    font-weight: bold;
+}
+  
+.closed {
+    color: lightcoral;
+    font-weight: bold;
+}
+
+.results {
+    vertical-align: top;
+    display: inline-flex;
+    justify-self: left;
+}
+
+.icon {
+    font-size: 14px;
+    text-align: center;
+    padding-right: 10px;
+}
+
+.standard-padding {
+    padding: 8px;
+}
+
+.card-container {
+    padding: 24px;
+    border-radius: 6px;
+}
+
+.result {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-transform:capitalize;
+}
+
+.button {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.details {
+    vertical-align: top;
+    display: inline-flex;
+    justify-self: left;
+}
+
+.backArrow {
+    text-align: left;
+}

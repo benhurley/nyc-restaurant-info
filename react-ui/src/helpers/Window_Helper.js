@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 export const detectMobile = () => {
     const windowSize = useWindowSize();
-    return windowSize.width < 800;
+    return windowSize.width < 900;
 }
 
 export const detectTablet = () => {

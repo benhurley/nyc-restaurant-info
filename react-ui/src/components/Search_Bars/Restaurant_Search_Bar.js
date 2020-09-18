@@ -80,11 +80,11 @@ export const RestaurantSearchBar = ({ borough }) => {
           </div>
         </React.Fragment>
       )}
-      style={{ width: isMobile ? 125 : isTablet ? 150 : 225 }}
+      style={{ width: isMobile ? 250 : 325 }}
       renderInput={(params) => (
         <TextField 
           {...params} 
-          label={<div style={{textTransform: "lowercase"}}>{useWindowSize().width < 1100 ? "restaurants" : "restaurant search"}</div>}
+          label={<div style={{textTransform: "lowercase"}}>{"search restaurants"}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
