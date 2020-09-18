@@ -39,7 +39,12 @@ export const RestaurantDetail = (props) => {
     const isMobile = detectMobile();
 
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1';
-    const coordinatesUrl = `http://localhost:5000/api/coordinates`;
+    const coordinatesUrl = process.env.NODE_ENV === 'production' 
+        ?  '/api/coordinates'
+        :  'http://localhost:5000/api/coordinates'
+
+    debugger
+
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(',')); 
     const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',')+2); 
 
