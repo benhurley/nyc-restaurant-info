@@ -18,8 +18,7 @@ export const Home = () => {
         <div className="searchBar">
           <LocationSearchBar/>
         </div>
-      </div>
-      
+      </div> 
     </Fragment>
   );
 }

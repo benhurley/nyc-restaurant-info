@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment, createRef } from 'react';
 import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
@@ -284,8 +284,9 @@ export const Browse = (props) => {
     const [orderBy, setOrderBy] = React.useState('inspectedon');
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(5);
-    
+    const [rowsPerPage, setRowsPerPage] = React.useState(20);
+    const tableRef = createRef();
+
     // nyc request requires capital names
     let {borough} = props.match.params;
     borough = mapBorough(borough);
@@ -315,6 +316,7 @@ export const Browse = (props) => {
 
     const handleChangePage = (event, newPage) => {
       setPage(newPage);
+      tableRef.current.scrollTop = 0;
     };
   
     const handleChangeRowsPerPage = (event) => {
@@ -337,7 +339,7 @@ export const Browse = (props) => {
         <div className="Home browse">
           <header className="Home-header">
             <Link to={'/'} style={{ textDecoration: 'none'}} >
-              <div class="backArrow">
+              <div className="backArrow">
                   <ArrowBackIcon />
               </div>
             </Link>
@@ -393,35 +395,41 @@ export const Browse = (props) => {
                       rowCount={results.length}
                       isMobile={true}
                     />
-                    <TableBody>
-                    {stableSort(results, getComparator(order, orderBy))                
-                      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                      .map((result) => (
-                      <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                        <StyledTableCell component="th" scope="row">{result.restaurantname}
-                        </StyledTableCell>
-                        <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                    result.skippedreason === "No Seating"
-                                    ? <div className="closed">Closed</div>
-                                    : result.isroadwaycompliant === "Compliant"
-                                        ? <div className="open">Open</div>
-                                        : "unknown"
-                        }</StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                    </TableBody>
                   </Table>
                 </TableContainer>
-                  <TablePagination
-                    rowsPerPageOptions={[]}
-                    component="div"
-                    count={results.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                  />
+                <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
+                  <TableContainer>
+                    <Table style={{tableLayout: 'fixed'}}>
+                      <TableBody>
+                      {stableSort(results, getComparator(order, orderBy))                
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((result) => (
+                        <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
+                          <StyledTableCell component="th" scope="row">{result.restaurantname}
+                          </StyledTableCell>
+                          <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
+                                      result.skippedreason === "No Seating"
+                                      ? <div className="closed">Closed</div>
+                                      : result.isroadwaycompliant === "Compliant"
+                                          ? <div className="open">Open</div>
+                                          : "unknown"
+                          }</StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                </div>
+                <TablePagination
+                  rowsPerPageOptions={[]}
+                  component="div"
+                  count={results.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  onChangePage={handleChangePage}
+                  onChangeRowsPerPage={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                />
                 </Paper>
               </div>
             </Fragment>
@@ -442,37 +450,43 @@ export const Browse = (props) => {
                         rowCount={results.length}
                         isMobile={false}
                     />
-                  <TableBody>
-                  {stableSort(results, getComparator(order, orderBy))                
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((result) => (
-                    <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                      <StyledTableCell component="th" scope="row">{result.restaurantname}
-                      </StyledTableCell>
-                      <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                  result.skippedreason === "No Seating"
-                                  ? <div className="closed">Closed</div>
-                                  : result.isroadwaycompliant === "Compliant"
-                                      ? <div className="open">Open</div>
-                                      : "Unknown"
-                      }</StyledTableCell>
-                      <StyledTableCell align="left">{result.inspectedon.slice(0,10)}</StyledTableCell>
-                      <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
-                      <StyledTableCell align="left">{result.skippedreason === "No Seating"
-                                ? "no seating"
-                                : result.seatingchoice === "both"
-                                  ? "sidewalk and roadway"
-                                  : result.seatingchoice === "sidewalk"
-                                      ? "sidewalk only"
-                                      : "roadway only"}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                  </TableBody>
                 </Table>
               </TableContainer>
+              <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
+                <TableContainer>
+                    <Table style={{tableLayout: 'fixed'}}>
+                      <TableBody>
+                      {stableSort(results, getComparator(order, orderBy))                
+                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                        .map((result) => (
+                        <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
+                          <StyledTableCell component="th" scope="row">{result.restaurantname}
+                          </StyledTableCell>
+                          <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
+                                      result.skippedreason === "No Seating"
+                                      ? <div className="closed">Closed</div>
+                                      : result.isroadwaycompliant === "Compliant"
+                                          ? <div className="open">Open</div>
+                                          : "Unknown"
+                          }</StyledTableCell>
+                          <StyledTableCell align="left">{result.inspectedon.slice(0,10)}</StyledTableCell>
+                          <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
+                          <StyledTableCell align="left">{result.skippedreason === "No Seating"
+                                    ? "no seating"
+                                    : result.seatingchoice === "both"
+                                      ? "sidewalk and roadway"
+                                      : result.seatingchoice === "sidewalk"
+                                          ? "sidewalk only"
+                                          : "roadway only"}
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+              </div>
               <TablePagination
-                rowsPerPageOptions={[5, 10, 50, 100]}
+                rowsPerPageOptions={[20, 50, 100]}
                 component="div"
                 count={results.length}
                 rowsPerPage={rowsPerPage}
