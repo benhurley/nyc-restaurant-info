@@ -1,7 +1,4 @@
 table {
-    width: 100%;
-    text-align: left;
-    border-collapse:collapse;
     table-layout: fixed;
 }
 
@@ -21,32 +18,8 @@ h4 {
   text-transform: lowercase;
 }
 
-thead th:nth-child(1) {
-  width: 40%;
-}
-
-thead th:nth-child(2) {
-  width: 20%;
-}
-
-thead th:nth-child(3) {
-  width: 25%;
-}
-
-thead th:nth-child(4) {
-  width: 30%;
-}
-
-thead th:nth-child(5) {
-  width: 30%;
-}
-
 tr.result td {
   border-bottom: 3px double grey;
-}
-
-tr.result {
-  cursor: pointer;
 }
 
 td {
@@ -56,11 +29,6 @@ td {
 
 th {
   padding-bottom: 10px;
-}
-
-.Browse {
-  padding-left: 5em;
-  padding-right: 5em;
 }
 
 .open {
@@ -104,4 +72,57 @@ th {
 .button {
   margin-top: 50px;
   margin-bottom: 100px;
+}
+
+.browse {
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.desktopTable {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  cursor: pointer;
+  text-transform: lowercase;
+}
+
+.mobileTable {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  text-transform: lowercase;
+}
+
+tr:hover {
+  background-color: rgb(250, 250, 250);
+}
+
+.MuiTableSortLabel-root {
+  font-weight: bold;
+}
+
+.MuiToolbar-root {
+  display: flex;
+  position: fixed;
+  align-items: center;
+}
+
+.mobileSearch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  padding-top: 20px;
+  padding-bottom: 25px;
+  text-transform: lowercase;
+}
+
+.desktopSearch {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: calc(10px + 2vmin);
+  color: black;
+  padding-bottom: 30px;
+  text-transform: lowercase;
 }

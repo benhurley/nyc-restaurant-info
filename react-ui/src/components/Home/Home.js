@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { LocationSearchBar } from '../Search_Bars/Location_Search_Bar';
 import { AdBanner } from '../Banners/Ad_Banner';
-import { Footer } from '../Footer/Footer';
 import { Link } from 'react-router-dom'
 import './Home.css';
 
@@ -20,7 +19,7 @@ export const Home = () => {
           <LocationSearchBar/>
         </div>
       </div>
-      <Footer />
+      
     </Fragment>
   );
 }

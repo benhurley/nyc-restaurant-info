@@ -6,6 +6,9 @@
     margin-top: 10px;
     font-size: 14px;
     text-align: left;
+    text-transform: lowercase;
+    margin-left: 20px;
+    margin-right: 20px;
 }
 
 .lineItem {

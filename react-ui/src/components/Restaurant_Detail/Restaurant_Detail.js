@@ -5,12 +5,10 @@ import Grid from '@material-ui/core/Grid';
 import { AdBanner } from '../Banners/Ad_Banner';
 import { Link } from 'react-router-dom'
 import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging'
-import RestaurantOutlinedIcon from '@material-ui/icons/RestaurantOutlined';
 import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
-import { Footer } from '../Footer/Footer';
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
@@ -31,7 +29,7 @@ const defaultMapProps = {
 
 const LocationMapIcon = () => <LocationOnIcon style={{fill: "red"}}></LocationOnIcon>
 
-export const RestaurantDeatil = (props) => {
+export const RestaurantDetail = (props) => {
     let {restaurantname} = props.match.params;
     restaurantname = encodeRestaurantName(restaurantname);
     const [details, setDetails] = useState({});
@@ -157,7 +155,7 @@ export const RestaurantDeatil = (props) => {
                         >
                         <LocationMapIcon
                             lat={coordinates.lat}
-                            lng={coordinates.lng}
+                            lng={coordinates.lng}x
                             text="My Marker"
                         />
                         </GoogleMapReact>
@@ -170,7 +168,7 @@ export const RestaurantDeatil = (props) => {
                     </div>
                 </Link>
             </div>
-          <Footer />
+          
         </Fragment>
     )
 }
