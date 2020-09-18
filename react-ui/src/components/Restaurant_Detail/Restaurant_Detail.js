@@ -62,7 +62,6 @@ export const RestaurantDetail = (props) => {
     }
 
     const getCoordinates = (data) => {
-        console.log(data);
         fetch(coordinatesUrl + `?address=${data.businessaddress}`).then(response => {
             if (!response.ok) {
                 throw new Error(`status ${response.status}`);
@@ -70,7 +69,6 @@ export const RestaurantDetail = (props) => {
             return response.json();
         }).then(json => {
             setCoordinates(json);
-            console.log(json);
         }).catch(e => {
             throw new Error(`API call failed: ${e}`);
         });

@@ -300,7 +300,6 @@ export const Browse = (props) => {
             return response.json();
           })
           .then(json => {
-            console.log(json);
             setResults(json);
           }).catch(e => {
             throw new Error(`API call failed: ${e}`);
