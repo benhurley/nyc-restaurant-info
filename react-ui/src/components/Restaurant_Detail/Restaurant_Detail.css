@@ -20,6 +20,7 @@
 .title {
     font-size: 14px;
     text-transform: lowercase;
+    font-weight: bold;
 }
 
 .title .open {
@@ -73,10 +74,6 @@
     margin-top: 10px;
     margin-bottom: 10px;
     text-transform:capitalize;
-}
-
-.title {
-    font-weight: bold;
 }
 
 .button {

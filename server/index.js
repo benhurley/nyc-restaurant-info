@@ -7,8 +7,8 @@ const { ObjectId } = require('mongodb');
 const axios = require('axios');
 const numCPUs = require('os').cpus().length;
 var CronJob = require('cron').CronJob;
-require('dotenv').config();
 const { getCoordinatesFromAddress } = require('./google-maps-api')
+require('dotenv').config();
 
 // create mongoose client
 let mongoose = require('mongoose');
@@ -36,7 +36,10 @@ const job = new CronJob('00 00 00 * * *', function() {
   console.log('Midnight:', d);
   persistData();
 });
-job.start();
+
+// commenting out the start of the cron job until we are ready to
+// do nightly syncs to mongodb
+//job.start();
 console.log('persistence cron job created');
 
 // listen for the signal interruption (ctrl-c)
