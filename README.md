@@ -1,4 +1,4 @@
-# NYC Restaurant Info
+# NYC Restaurant Info™
 
 ## Tracking Outdoor Dining Statuses during Covid-19
 

@@ -84,6 +84,11 @@ th {
   text-transform: lowercase;
 }
 
+.mobileTableHeader {
+  font-weight: bold;
+  display: inline-block;
+}
+
 .mobileTable {
   margin-top: 20px;
   margin-bottom: 40px;

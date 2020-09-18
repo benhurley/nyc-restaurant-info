@@ -26,7 +26,7 @@ const defaultMapProps = {
       lat: 40.74,
       lng: -73.98
     },
-    zoom: 12
+    zoom: 11
 };
 
 const LocationMapIcon = () => <LocationOnIcon style={{fill: "red"}}></LocationOnIcon>
@@ -42,8 +42,6 @@ export const RestaurantDetail = (props) => {
     const coordinatesUrl = process.env.NODE_ENV === 'production' 
         ?  '/api/coordinates'
         :  'http://localhost:5000/api/coordinates'
-
-    debugger
 
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(',')); 
     const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',')+2); 
@@ -93,7 +91,7 @@ export const RestaurantDetail = (props) => {
                      </div>
                  </Link>
                  <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-                        <h1> nyc restaurant info </h1>
+                        <h1> nyc restaurant info™ </h1>
                     </Link>
                 </header>
             </div>
@@ -137,20 +135,31 @@ export const RestaurantDetail = (props) => {
                                     <AssignmentOutlinedIcon className="icon"/> &nbsp;
                                     <span className="details">
                                         {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10) +
+                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10) +
                                             ", " + details.skippedreason
-                                        }
-                                        { details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
-                                            details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10)
-                                        }    
+                                        }   
+                                    </span>
+                                    <span className="details">
+                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10)
+                                        } 
+                                    </span>
+                                    <span className="details">
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                            details.isroadwaycompliant
+                                        } 
+                                        <br />
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                            " as of " + details.inspectedon.slice(0,10)
+                                        } 
                                     </span>
                                     <span className="details">
                                         {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant + " on "
+                                            details.isroadwaycompliant
                                         }
                                         <br />
-                                        {isMobile &&  details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.inspectedon.slice(0,10) + ", " + details.skippedreason
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            " as of " + details.inspectedon.slice(0,10)
                                         }
                                     </span>
                                 </CardContent>

@@ -71,7 +71,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'status' },
+  { id: 'status', numeric: false, disablePadding: false, label: 'dining status' },
   { id: 'inspectedon', numeric: true, disablePadding: false, label: 'date' },
   { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
   { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
@@ -79,7 +79,7 @@ const headCells = [
 
 const mobileHeadCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'status' },
+  { id: 'status', numeric: false, disablePadding: false, label: 'dining status' },
 ];
 
 function EnhancedTableHead(props) {
@@ -100,7 +100,8 @@ function EnhancedTableHead(props) {
             padding={headCell.disablePadding ? 'none' : 'default'}
             sortDirection={orderBy === headCell.id ? order : false}
           >
-            <TableSortLabel
+            {!isMobile && headCell.id !== 'status' &&
+              <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -111,7 +112,19 @@ function EnhancedTableHead(props) {
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </span>
               ) : null}
-            </TableSortLabel> &nbsp;
+            </TableSortLabel> 
+            }
+            {isMobile &&
+              <div className="mobileTableHeader">
+                {headCell.label}
+              </div>
+            }
+            {!isMobile && headCell.id === 'status' &&
+              <div className="mobileTableHeader">
+                {headCell.label}
+              </div>
+            }
+            &nbsp;
             {headCell.id === 'status' &&
               <HtmlTooltip
               title={
@@ -122,7 +135,7 @@ function EnhancedTableHead(props) {
                 <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                 </Fragment>
               }>
-            <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+            <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
             </HtmlTooltip> }
             {headCell.id === 'inspectedon' &&
               <HtmlTooltip
@@ -132,7 +145,7 @@ function EnhancedTableHead(props) {
                   {"showing results for all nyc inspections, sorted by inspection date in descending order"}
                 </Fragment>
               }>
-            <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+            <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
             </HtmlTooltip> }
             {headCell.id === 'isroadwaycompliant' &&
               <HtmlTooltip
@@ -145,7 +158,7 @@ function EnhancedTableHead(props) {
                   <b>{"skipped inspection: "}</b>{"inspection could not be performed"}
                 </Fragment>
               }>
-            <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+            <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
             </HtmlTooltip> }
             {headCell.id === 'seatingchoice' &&
               <HtmlTooltip
@@ -158,7 +171,7 @@ function EnhancedTableHead(props) {
                   <b>{"no seating: "}</b>{"inspection was skipped due to lack of seating options"}
                 </Fragment>
               }>
-            <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+            <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
             </HtmlTooltip> }
           </TableCell>
         ))}
@@ -329,7 +342,7 @@ export const Browse = (props) => {
               </div>
             </Link>
            <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-             <h1> nyc restaurant info </h1>
+             <h1> nyc restaurant info™ </h1>
            </Link>
            <h4>Location: {borough}</h4>
            { isMobile ?
@@ -341,12 +354,12 @@ export const Browse = (props) => {
                   title={
                     <Fragment>
                       <Typography>what are the records below?</Typography><br />
-                        all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order.<br /><br />
-                        more infomation and sorting options are available on desktop. <br /><br />
+                        all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
+                        more infomation and sorting options are available on destop <br /><br />
                     </Fragment> 
                   }>
-                  <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info** &nbsp;
-                    <img width={12} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+                  <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info* &nbsp;
+                    <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                   </div>
               </HtmlTooltip>
             </Fragment>
@@ -356,7 +369,7 @@ export const Browse = (props) => {
                   <RestaurantSearchBar borough={borough} />
                 </div>
                 <div className="subheader">
-                  search above for a restaurant or click on a record below to get up-to-date outdoor dining info**
+                  search above for a restaurant or click on a record below to get up-to-date outdoor dining info*
                 </div>
               </Fragment>
             }
@@ -392,7 +405,7 @@ export const Browse = (props) => {
                                     ? <div className="closed">Closed</div>
                                     : result.isroadwaycompliant === "Compliant"
                                         ? <div className="open">Open</div>
-                                        : "Need More Info"
+                                        : "unknown"
                         }</StyledTableCell>
                       </StyledTableRow>
                     ))}
@@ -441,7 +454,7 @@ export const Browse = (props) => {
                                   ? <div className="closed">Closed</div>
                                   : result.isroadwaycompliant === "Compliant"
                                       ? <div className="open">Open</div>
-                                      : "Need More Info"
+                                      : "Unknown"
                       }</StyledTableCell>
                       <StyledTableCell align="left">{result.inspectedon.slice(0,10)}</StyledTableCell>
                       <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
