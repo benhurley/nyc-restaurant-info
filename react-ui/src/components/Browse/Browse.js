@@ -283,7 +283,6 @@ export const Browse = (props) => {
     const [order, setOrder] = React.useState('desc');
     const [orderBy, setOrderBy] = React.useState('inspectedon');
     const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(20);
     const tableRef = createRef();
 
@@ -322,10 +321,6 @@ export const Browse = (props) => {
     const handleChangeRowsPerPage = (event) => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
-    };
-
-    const handleChangeDense = (event) => {
-      setDense(event.target.checked);
     };
 
     const handleRestaurant = (name) => {
@@ -384,7 +379,7 @@ export const Browse = (props) => {
                 <TableContainer>
                   <Table 
                     className={classes.mobileTable}
-                    size={dense ? 'small' : 'medium'}
+                    size={'medium'}
                     aria-label="restaurantInspectionTable"
                   >
                     <EnhancedTableHead
@@ -439,7 +434,7 @@ export const Browse = (props) => {
               <TableContainer>
                 <Table
                   className={classes.desktopTable}
-                  size={dense ? 'small' : 'medium'}
+                  size={'medium'}
                   aria-label="restaurantInspectionTable"
                 >
                     <EnhancedTableHead
@@ -496,10 +491,6 @@ export const Browse = (props) => {
                 ActionsComponent={TablePaginationActions}
               />
             </Paper>
-            <FormControlLabel
-              control={<Switch checked={dense} onChange={handleChangeDense} />}
-              label="Dense padding"
-            />
           </div>
           }
         </div>
