@@ -15,6 +15,8 @@ import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import GoogleMapReact from 'google-map-react';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import { detectMobile } from '../../helpers/Window_Helper'
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import './Restaurant_Detail.css';
 
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
@@ -24,7 +26,7 @@ const defaultMapProps = {
       lat: 40.74,
       lng: -73.98
     },
-    zoom: 11
+    zoom: 12
 };
 
 const LocationMapIcon = () => <LocationOnIcon style={{fill: "red"}}></LocationOnIcon>
@@ -34,10 +36,12 @@ export const RestaurantDetail = (props) => {
     restaurantname = encodeRestaurantName(restaurantname);
     const [details, setDetails] = useState({});
     const [coordinates, setCoordinates] = useState({});
+    const isMobile = detectMobile();
 
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1';
-
     const coordinatesUrl = `http://localhost:5000/api/coordinates`;
+    const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(',')); 
+    const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',')+2); 
 
     const getDetails = () => {
         fetch(nycCompliantRestaurantApi + `&restaurantname=${restaurantname}&$order=inspectedon DESC`).then(response => {
@@ -73,17 +77,19 @@ export const RestaurantDetail = (props) => {
         getDetails();
       }, []);
 
-
-
     return (
         <Fragment>
             <AdBanner />
             <div className="Home">
                 <header className="Home-header">
-                    <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
+                 <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
+                     <div class="backArrow">
+                        <ArrowBackIcon />
+                     </div>
+                 </Link>
+                 <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
                         <h1> nyc restaurant info </h1>
                     </Link>
-                    {/* <h4 className="subTitle">search results</h4> */}
                 </header>
             </div>
             <div className="resultsCard">
@@ -98,10 +104,18 @@ export const RestaurantDetail = (props) => {
                     <Box paddingY="2%">
                         <Container maxWidth="md" >
                             <Card className="card-container">
-                                <Typography variant="h5" className="standard-padding" gutterBottom>{details.restaurantname}</Typography>
+                                <Typography variant="h5" className="standard-padding" gutterBottom>
+                                    {details.restaurantname}
+                                </Typography>
                                 <CardContent>
                                     <RoomOutlinedIcon className="icon"/> &nbsp;
-                                    <span className="details">{details.businessaddress}</span>
+                                    <span className="details">
+                                        {!isMobile && details.businessaddress}
+                                    </span>
+                                    <span className="details">
+                                        { isMobile && addressLine1 }<br />
+                                        { isMobile && addressLine2 }
+                                    </span>
                                 </CardContent>
                                 <CardContent>
                                 <ThumbsUpDownOutlinedIcon className="icon"/> &nbsp;
@@ -117,13 +131,22 @@ export const RestaurantDetail = (props) => {
                                 <CardContent>
                                     <AssignmentOutlinedIcon className="icon"/> &nbsp;
                                     <span className="details">
-                                        { details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
                                             details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10) +
-                                            " due to " + details.skippedreason
+                                            ", " + details.skippedreason
                                         }
                                         { details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
                                             details.isroadwaycompliant + " on " + details.inspectedon.slice(0,10)
                                         }    
+                                    </span>
+                                    <span className="details">
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            details.isroadwaycompliant + " on "
+                                        }
+                                        <br />
+                                        {isMobile &&  details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            details.inspectedon.slice(0,10) + ", " + details.skippedreason
+                                        }
                                     </span>
                                 </CardContent>
                                 <CardContent>
@@ -137,9 +160,6 @@ export const RestaurantDetail = (props) => {
                                                     : "roadway only"
                                         }
                                     </span>
-                                </CardContent>
-                                <CardContent>
-                                    
                                 </CardContent>
                             </Card>
                         </Container>

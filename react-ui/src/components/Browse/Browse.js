@@ -24,6 +24,7 @@ import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import './Browse.css';
 
 const StyledTableCell = withStyles((theme) => ({
@@ -322,6 +323,11 @@ export const Browse = (props) => {
         <AdBanner />
         <div className="Home browse">
           <header className="Home-header">
+            <Link to={'/'} style={{ textDecoration: 'none'}} >
+              <div class="backArrow">
+                  <ArrowBackIcon />
+              </div>
+            </Link>
            <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
              <h1> nyc restaurant info </h1>
            </Link>

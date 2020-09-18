@@ -7,15 +7,8 @@
     font-size: 14px;
     text-align: left;
     text-transform: lowercase;
-    margin-left: 20px;
     margin-right: 20px;
-}
-
-.lineItem {
-    margin-top: 30px;
-    margin-bottom: 30px;
-    margin-left: 30px;
-    margin-right: 30px;
+    margin-left: 20px;
 }
 
 .result {
@@ -62,20 +55,13 @@
 }
 
 .icon {
-    padding-right: 8px;
     font-size: 14px;
     text-align: center;
-    padding-left: 20px;
-    padding-right: 20px;
-}
-
-.lineItem {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    padding-right: 10px;
 }
 
 .standard-padding {
-    padding: 16px;
+    padding: 8px;
 }
 
 .card-container {
@@ -99,8 +85,11 @@
 }
 
 .details {
-    padding-right: 5em;
     vertical-align: top;
     display: inline-flex;
     justify-self: left;
+}
+
+.backArrow {
+    text-align: left;
 }

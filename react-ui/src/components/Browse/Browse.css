@@ -49,8 +49,6 @@ th {
 .results {
   font-size: 14px;
   text-align: center;
-  padding-left: 5em;
-  padding-right: 5em;
 }
 
 .result {
@@ -75,8 +73,8 @@ th {
 }
 
 .browse {
-  padding-left: 1em;
-  padding-right: 1em;
+  margin-left: 40px;
+  margin-right: 40px;
 }
 
 .desktopTable {
