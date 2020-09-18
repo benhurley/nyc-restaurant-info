@@ -96,17 +96,14 @@ export const RestaurantDetail = (props) => {
                 </header>
             </div>
             <div className="resultsCard">
-              <Grid
-                container
-                spacing={0}
-                direction="column"
-                alignItems="center"
-                justify="center"
-                >
-                  <Grid item md={12}>
                     <Box paddingY="2%">
                         <Container maxWidth="md" >
                             <Card className="card-container">
+                            <Grid
+                                container
+                                spacing={3}
+                            >
+                              <Grid item xs={12} sm={6}>
                                 <Typography variant="h5" className="standard-padding" gutterBottom>
                                     {details.restaurantname}
                                 </Typography>
@@ -135,9 +132,21 @@ export const RestaurantDetail = (props) => {
                                     <AssignmentOutlinedIcon className="icon"/> &nbsp;
                                     <span className="details">
                                         {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10) +
-                                            ", " + details.skippedreason
+                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10) + ", "
                                         }   
+                                        <br />
+                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            details.skippedreason
+                                        }   
+                                    </span>
+                                    <span className="details">
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            details.isroadwaycompliant
+                                        }
+                                        <br />
+                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                            " as of " + details.inspectedon.slice(0,10)
+                                        }
                                     </span>
                                     <span className="details">
                                         {!isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
@@ -153,15 +162,6 @@ export const RestaurantDetail = (props) => {
                                             " as of " + details.inspectedon.slice(0,10)
                                         } 
                                     </span>
-                                    <span className="details">
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant
-                                        }
-                                        <br />
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            " as of " + details.inspectedon.slice(0,10)
-                                        }
-                                    </span>
                                 </CardContent>
                                 <CardContent>
                                 <AirlineSeatReclineNormalOutlinedIcon className="icon" /> &nbsp;
@@ -175,34 +175,35 @@ export const RestaurantDetail = (props) => {
                                         }
                                     </span>
                                 </CardContent>
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                <div style={{ height: '300px', width: '100%' }}>
+                                    <GoogleMapReact
+                                        bootstrapURLKeys={{ key: googleApiKey }}
+                                        defaultCenter={defaultMapProps.center}
+                                        defaultZoom={defaultMapProps.zoom}
+                                        yesIWantToUseGoogleMapApiInternals
+                                    >
+                                    <LocationMapIcon
+                                        lat={coordinates.lat}
+                                        lng={coordinates.lng}x
+                                        text="My Marker"
+                                    />
+                                    </GoogleMapReact>
+                                </div>
+                                </Grid>
+                                </Grid>
                             </Card>
                         </Container>
                     </Box>
-                  </Grid>
-                </Grid>
-                <div style={{ height: '100vh', width: '100%', paddingTop: '25px'}}>
-                        <GoogleMapReact
-                        bootstrapURLKeys={{ key: googleApiKey }}
-                        defaultCenter={defaultMapProps.center}
-                        defaultZoom={defaultMapProps.zoom}
-                        yesIWantToUseGoogleMapApiInternals
-                        >
-                        <LocationMapIcon
-                            lat={coordinates.lat}
-                            lng={coordinates.lng}x
-                            text="My Marker"
-                        />
-                        </GoogleMapReact>
-                    </div>
-                <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
+            </div>
+            <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
                     <div className="button">
                         <Button variant="outlined" style={{textTransform: "lowercase"}}>
                             back
                         </Button>
                     </div>
-                </Link>
-            </div>
-          
+            </Link>
         </Fragment>
     )
 }
