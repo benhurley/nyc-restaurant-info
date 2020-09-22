@@ -8,7 +8,6 @@ const axios = require('axios');
 const numCPUs = require('os').cpus().length;
 var CronJob = require('cron').CronJob;
 const { getCoordinatesFromAddress } = require('./google-maps-api')
-const compression = require('compression');
 require('dotenv').config();
 
 // create mongoose client
@@ -67,7 +66,6 @@ if (!isDev && cluster.isMaster) {
 
 } else {
   const app = express();
-  app.use(compression());
 
   // Priority serve any static files.
   app.use(express.static(path.resolve(__dirname, '../react-ui/build')));
