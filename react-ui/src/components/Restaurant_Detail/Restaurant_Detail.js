@@ -1,5 +1,4 @@
 import React, { useState, useEffect, Fragment, Suspense, lazy } from 'react';
-import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import { Link } from 'react-router-dom'
 import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
@@ -22,6 +21,7 @@ import './Restaurant_Detail.css';
 //lazy-loaded components
 const GoogleMapReact = lazy(() => import('google-map-react'));
 const Card = lazy(() => import('@material-ui/core/Card'));
+const Button = lazy(() => import('@material-ui/core/Button'));
 
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
 
@@ -203,13 +203,15 @@ export const RestaurantDetail = (props) => {
                     </Container>
                 </Box>
             </div>
-            <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
+            <Suspense fallback={<div></div>}>
+                <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
                     <div className="button">
                         <Button variant="outlined" style={{textTransform: "lowercase"}}>
                             back
                         </Button>
                     </div>
-            </Link>
+                </Link>
+            </Suspense>
         </Fragment>
     )
 }

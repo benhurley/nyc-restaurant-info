@@ -3,13 +3,6 @@ import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -18,9 +11,7 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import Button from '@material-ui/core/Button';
 
-import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
 import { AdBanner } from '../Banners/Ad_Banner';
@@ -28,6 +19,15 @@ import './Browse.css';
 
 //lazy-loaded components
 const RestaurantSearchBar = lazy(() => import('../Search_Bars/Restaurant_Search_Bar').then(module => ({ default: module.RestaurantSearchBar })));
+const Table = lazy(() => import('@material-ui/core/Table'));
+const TableBody = lazy(() => import('@material-ui/core/TableBody'));
+const TableCell = lazy(() => import('@material-ui/core/TableCell'));
+const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
+const TableHead = lazy(() => import('@material-ui/core/TableHead'));
+const TableRow = lazy(() => import('@material-ui/core/TableRow'));
+const Paper = lazy(() => import('@material-ui/core/Paper'));
+const Button = lazy(() => import('@material-ui/core/Button'));
+const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -93,6 +93,7 @@ function EnhancedTableHead(props) {
   const headerCells = isMobile ? mobileHeadCells : headCells
 
   return (
+    <Suspense fallback={<div></div>}>
     <TableHead className="header">
       <TableRow>
         {headerCells.map((headCell) => (
@@ -127,6 +128,7 @@ function EnhancedTableHead(props) {
               </div>
             }
             &nbsp;
+            <Suspense fallback={<div></div>}>
             {headCell.id === 'status' &&
               <HtmlTooltip
               title={
@@ -175,10 +177,12 @@ function EnhancedTableHead(props) {
               }>
             <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
             </HtmlTooltip> }
+            </Suspense>
           </TableCell>
         ))}
       </TableRow>
     </TableHead>
+    </Suspense>
   );
 }
 
@@ -378,6 +382,7 @@ export const Browse = (props) => {
             ?
             <Fragment>
               <div className="mobileTable">
+              <Suspense fallback={<div></div>}>
               <Paper className="container">
                 <TableContainer>
                   <Table 
@@ -429,10 +434,12 @@ export const Browse = (props) => {
                   ActionsComponent={TablePaginationActions}
                 />
                 </Paper>
+                </Suspense>
               </div>
             </Fragment>
             :
             <div className="desktopTable">
+            <Suspense fallback={<div></div>}>
             <Paper className={classes.paper}>
               <TableContainer>
                 <Table
@@ -494,15 +501,18 @@ export const Browse = (props) => {
                 ActionsComponent={TablePaginationActions}
               />
             </Paper>
+            </Suspense>
           </div>
           }
-          <Link to={'/'} style={{ textDecoration: 'none'}} >
-            <div className="button">
-                <Button variant="outlined" style={{textTransform: "lowercase"}}>
-                    back
-                </Button>
-            </div>
-          </Link>
+          <Suspense fallback={<div></div>}>
+            <Link to={'/'} style={{ textDecoration: 'none'}} >
+              <div className="button">
+                  <Button variant="outlined" style={{textTransform: "lowercase"}}>
+                      back
+                  </Button>
+              </div>
+            </Link>
+          </Suspense>
         </div>
       </div>
     );
