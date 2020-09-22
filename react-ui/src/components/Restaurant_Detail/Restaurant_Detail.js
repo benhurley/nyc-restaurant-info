@@ -97,91 +97,90 @@ export const RestaurantDetail = (props) => {
                     </Link>
                 </header>
             </div>
-            <div className="resultsCard">
-                <Box paddingY="2%">
-                    <Container maxWidth="md" >
-                        <Suspense fallback={<div></div>}>
-                          <Card className="card-container">
-                            <Grid
-                                container
-                                spacing={3}
-                            >
-                              <Grid item xs={12} sm={6}>
-                                <Typography variant="h5" className="standard-padding" gutterBottom>
-                                    {details.restaurantname}
-                                </Typography>
-                                <CardContent>
-                                    <RoomOutlinedIcon className="icon"/> &nbsp;
-                                    <span className="details">
-                                        {!isMobile && details.businessaddress}
-                                    </span>
-                                    <span className="details">
-                                        { isMobile && addressLine1 }<br />
-                                        { isMobile && addressLine2 }
-                                    </span>
-                                </CardContent>
-                                <CardContent>
-                                <ThumbsUpDownOutlinedIcon className="icon"/> &nbsp;
-                                    <span className="details">{
-                                        details.isroadwaycompliant === "Cease and Desist" ||
-                                        details.skippedreason === "No Seating"
-                                        ? <div className="closed">closed</div>
-                                        : details.isroadwaycompliant === "Compliant"
-                                        ? <div className="open">open</div>
-                                        : "unknown"
-                                    }</span>
-                                </CardContent>
-                                <CardContent>
-                                    <AssignmentOutlinedIcon className="icon"/> &nbsp;
-                                    <span className="details">
-                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10) + ", "
-                                        }   
-                                        <br />
-                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.skippedreason
-                                        }   
-                                    </span>
-                                    <span className="details">
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            details.isroadwaycompliant
-                                        }
-                                        <br />
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
-                                            " as of " + details.inspectedon.slice(0,10)
-                                        }
-                                    </span>
-                                    <span className="details">
-                                        {!isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
-                                            details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10)
-                                        } 
-                                    </span>
-                                    <span className="details">
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
-                                            details.isroadwaycompliant
-                                        } 
-                                        <br />
-                                        {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
-                                            " as of " + details.inspectedon.slice(0,10)
-                                        } 
-                                    </span>
-                                </CardContent>
-                                <CardContent>
-                                <AirlineSeatReclineNormalOutlinedIcon className="icon" /> &nbsp;
-                                    <span className="details">
-                                        {details.seatingchoice && details.skippedreason !== "No Seating" &&
-                                            details.seatingchoice === "both"
-                                                ? "sidewalk and roadway"
-                                                : details.seatingchoice === "sidewalk"
-                                                    ? "sidewalk only"
-                                                    : "roadway only"
-                                        }
-                                    </span>
-                                </CardContent>
-                                </Grid>
-                                <Grid item xs={12} sm={6}>
-                                <div style={{ height: '300px', width: '100%' }}>
-                                    <Suspense fallback={<div></div>}>
+                <div className="resultsCard">
+                    <Box paddingY="2%">
+                        <Container maxWidth="md" >
+                          <Suspense fallback={<div></div>}>
+                            <Card className="card-container">
+                                <Grid
+                                    container
+                                    spacing={3}
+                                >
+                                    <Grid item xs={12} sm={6}>
+                                    <Typography variant="h5" className="standard-padding" gutterBottom>
+                                        {details.restaurantname}
+                                    </Typography>
+                                    <CardContent>
+                                        <RoomOutlinedIcon className="icon"/> &nbsp;
+                                        <span className="details">
+                                            {!isMobile && details.businessaddress}
+                                        </span>
+                                        <span className="details">
+                                            { isMobile && addressLine1 }<br />
+                                            { isMobile && addressLine2 }
+                                        </span>
+                                    </CardContent>
+                                    <CardContent>
+                                    <ThumbsUpDownOutlinedIcon className="icon"/> &nbsp;
+                                        <span className="details">{
+                                            details.isroadwaycompliant === "Cease and Desist" ||
+                                            details.skippedreason === "No Seating"
+                                            ? <div className="closed">closed</div>
+                                            : details.isroadwaycompliant === "Compliant"
+                                            ? <div className="open">open</div>
+                                            : "unknown"
+                                        }</span>
+                                    </CardContent>
+                                    <CardContent>
+                                        <AssignmentOutlinedIcon className="icon"/> &nbsp;
+                                        <span className="details">
+                                            {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                                details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10) + ", "
+                                            }   
+                                            <br />
+                                            {!isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                                details.skippedreason
+                                            }   
+                                        </span>
+                                        <span className="details">
+                                            {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                                details.isroadwaycompliant
+                                            }
+                                            <br />
+                                            {isMobile && details.isroadwaycompliant && details.inspectedon && details.skippedreason &&
+                                                " as of " + details.inspectedon.slice(0,10)
+                                            }
+                                        </span>
+                                        <span className="details">
+                                            {!isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                                details.isroadwaycompliant + " as of " + details.inspectedon.slice(0,10)
+                                            } 
+                                        </span>
+                                        <span className="details">
+                                            {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                                details.isroadwaycompliant
+                                            } 
+                                            <br />
+                                            {isMobile && details.isroadwaycompliant && details.inspectedon && !details.skippedreason &&
+                                                " as of " + details.inspectedon.slice(0,10)
+                                            } 
+                                        </span>
+                                    </CardContent>
+                                    <CardContent>
+                                    <AirlineSeatReclineNormalOutlinedIcon className="icon" /> &nbsp;
+                                        <span className="details">
+                                            {details.seatingchoice && details.skippedreason !== "No Seating" &&
+                                                details.seatingchoice === "both"
+                                                    ? "sidewalk and roadway"
+                                                    : details.seatingchoice === "sidewalk"
+                                                        ? "sidewalk only"
+                                                        : "roadway only"
+                                            }
+                                        </span>
+                                    </CardContent>
+                                    </Grid>
+                                    <Grid item xs={12} sm={6}>
+                                    <div style={{ height: '300px', width: '100%' }}>
                                         <GoogleMapReact
                                             bootstrapURLKeys={{ key: googleApiKey }}
                                             defaultCenter={defaultMapProps.center}
@@ -194,24 +193,23 @@ export const RestaurantDetail = (props) => {
                                             text="My Marker"
                                         />
                                         </GoogleMapReact>
-                                    </Suspense>
-                                </div>
-                              </Grid>
-                            </Grid>
-                          </Card>
-                        </Suspense>
-                    </Container>
-                </Box>
-            </div>
-            <Suspense fallback={<div></div>}>
-                <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
-                    <div className="button">
-                        <Button variant="outlined" style={{textTransform: "lowercase"}}>
-                            back
-                        </Button>
-                    </div>
-                </Link>
-            </Suspense>
+                                    </div>
+                                    </Grid>
+                                </Grid>
+                            </Card>
+                          </Suspense>
+                        </Container>
+                    </Box>
+                </div>
+                <Suspense fallback={<div></div>}>
+                    <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
+                        <div className="button">
+                            <Button variant="outlined" style={{textTransform: "lowercase"}}>
+                                back
+                            </Button>
+                        </div>
+                    </Link>
+                </Suspense>
         </Fragment>
     )
 }
