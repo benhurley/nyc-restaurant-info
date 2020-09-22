@@ -86,7 +86,7 @@ export const RestaurantDetail = (props) => {
             <div className="Home">
                 <header className="Home-header">
                  <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none'}} >
-                     <div class="backArrow">
+                     <div className="backArrow">
                         <ArrowBackIcon />
                      </div>
                  </Link>
