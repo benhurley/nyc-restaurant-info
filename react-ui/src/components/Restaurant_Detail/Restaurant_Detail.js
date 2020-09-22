@@ -1,10 +1,8 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import Button from '@material-ui/core/Button';
-import { Card } from '@material-ui/core';
+import Card from '@material-ui/core/Card';
 import Grid from '@material-ui/core/Grid';
-import { AdBanner } from '../Banners/Ad_Banner';
 import { Link } from 'react-router-dom'
-import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging'
 import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
@@ -15,8 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
 import GoogleMapReact from 'google-map-react';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
-import { detectMobile } from '../../helpers/Window_Helper'
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import { AdBanner } from '../Banners/Ad_Banner';
+import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
+import { detectMobile } from '../../helpers/Window_Helper';
+
 import './Restaurant_Detail.css';
 
 const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;

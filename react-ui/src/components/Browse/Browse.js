@@ -1,11 +1,6 @@
 import React, { useState, useEffect, Fragment, createRef } from 'react';
-import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
-import { mapBorough } from '../../helpers/NYC_Data_Massaging'
-import { detectMobile } from '../../helpers/Window_Helper'
-import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
-import { AdBanner } from '../Banners/Ad_Banner';
 import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
@@ -22,9 +17,13 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
+import { mapBorough } from '../../helpers/NYC_Data_Massaging'
+import { detectMobile } from '../../helpers/Window_Helper'
+import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
+import { AdBanner } from '../Banners/Ad_Banner';
 import './Browse.css';
 
 const StyledTableCell = withStyles((theme) => ({
