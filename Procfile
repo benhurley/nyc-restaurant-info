@@ -1,1 +1,1 @@
-web: bin/qglaunch npm start
+web: npm start
