@@ -9,7 +9,7 @@ export const LocationSearchBar = () => {
   const [value, setValue] = useState(null);
 
   useEffect(() => {
-    if (value && value.borough){
+    if (value && value.borough) {
       const newURL = window.location + `location/${value.borough}`
       window.location.assign(newURL)
     }
@@ -52,23 +52,23 @@ export const LocationSearchBar = () => {
         // Regular option
         return option.borough;
       }}
-      renderOption={(option) => ( 
+      renderOption={(option) => (
         <React.Fragment>
-          <div style={{"textTransform": "lowercase"}}>{option.borough} <br /></div>
+          <div style={{ "textTransform": "lowercase" }}>{option.borough} <br /></div>
         </React.Fragment>
       )}
       style={{ width: 200 }}
       renderInput={(params) => (
-        <TextField 
-          {...params} 
-          label="select a nyc borough" 
+        <TextField
+          {...params}
+          label="select a nyc borough"
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
               value && setValue(value);
             }
           }
-        }/>
+          } />
       )}
     />
   );
@@ -76,18 +76,18 @@ export const LocationSearchBar = () => {
 
 const boroughs = [
   {
-      "borough": "bronx"
+    "borough": "bronx"
   },
   {
-      "borough": "brooklyn"
+    "borough": "brooklyn"
   },
   {
-      "borough": "manhattan"
+    "borough": "manhattan"
   },
   {
-      "borough": "queens"
+    "borough": "queens"
   },
   {
-      "borough": "staten island"
+    "borough": "staten island"
   },
 ]
