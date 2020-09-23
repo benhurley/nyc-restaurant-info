@@ -1,20 +1,8 @@
-import React, { useState, useEffect, Fragment, createRef } from 'react';
-import { HtmlTooltip } from '../../helpers/Tooltip_Helper';
+import React, { useState, useEffect, Fragment, createRef, Suspense, lazy } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
-import { mapBorough } from '../../helpers/NYC_Data_Massaging'
-import { detectMobile } from '../../helpers/Window_Helper'
-import { RestaurantSearchBar } from '../Search_Bars/Restaurant_Search_Bar';
-import { AdBanner } from '../Banners/Ad_Banner';
 import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -22,10 +10,24 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+
+import { mapBorough } from '../../helpers/NYC_Data_Massaging'
+import { detectMobile } from '../../helpers/Window_Helper'
+import { AdBanner } from '../Banners/Ad_Banner';
 import './Browse.css';
+
+//lazy-loaded components
+const RestaurantSearchBar = lazy(() => import('../Search_Bars/Restaurant_Search_Bar').then(module => ({ default: module.RestaurantSearchBar })));
+const Table = lazy(() => import('@material-ui/core/Table'));
+const TableBody = lazy(() => import('@material-ui/core/TableBody'));
+const TableCell = lazy(() => import('@material-ui/core/TableCell'));
+const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
+const TableHead = lazy(() => import('@material-ui/core/TableHead'));
+const TableRow = lazy(() => import('@material-ui/core/TableRow'));
+const Paper = lazy(() => import('@material-ui/core/Paper'));
+const Button = lazy(() => import('@material-ui/core/Button'));
+const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -91,6 +93,7 @@ function EnhancedTableHead(props) {
   const headerCells = isMobile ? mobileHeadCells : headCells
 
   return (
+    <Suspense fallback={<div></div>}>
     <TableHead className="header">
       <TableRow>
         {headerCells.map((headCell) => (
@@ -177,6 +180,7 @@ function EnhancedTableHead(props) {
         ))}
       </TableRow>
     </TableHead>
+    </Suspense>
   );
 }
 
@@ -328,171 +332,184 @@ export const Browse = (props) => {
     }
     
     return (
-      <div className={classes.root}>
-        <AdBanner />
-        <div className="Home browse">
-          <header className="Home-header">
-            <Link to={'/'} style={{ textDecoration: 'none'}} >
-              <div className="backArrow">
-                  <ArrowBackIcon />
-              </div>
-            </Link>
-           <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-             <h1> nyc restaurant info™ </h1>
-           </Link>
-           <h4>Location: {borough}</h4>
-           { isMobile ?
-              <Fragment>
-                <div className="desktopSearch">
-                  <RestaurantSearchBar borough={borough} />
+      <Fragment>
+        <div className={classes.root}>
+          <AdBanner />
+          <div className="Home browse">
+            <header className="Home-header">
+              <Link to={'/'} style={{ textDecoration: 'none'}} >
+                <div className="backArrow">
+                    <ArrowBackIcon />
                 </div>
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>what are the records below?</Typography><br />
-                        all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
-                        more infomation and sorting options are available on destop <br /><br />
-                    </Fragment> 
-                  }>
-                  <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info* &nbsp;
-                    <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                  </div>
-              </HtmlTooltip>
-            </Fragment>
-              : 
-              <Fragment>
-                <div className="desktopSearch">
-                  <RestaurantSearchBar borough={borough} />
-                </div>
-                <div className="subheader">
-                  search above for a restaurant or click on a record below to get up-to-date outdoor dining info*
-                </div>
-              </Fragment>
-            }
-          </header>
-          {isMobile 
-            ?
-            <Fragment>
-              <div className="mobileTable">
-              <Paper className="container">
-                <TableContainer>
-                  <Table 
-                    className={classes.mobileTable}
-                    size={'medium'}
-                    aria-label="restaurantInspectionTable"
-                  >
-                    <EnhancedTableHead
-                      classes={classes}
-                      order={order}
-                      orderBy={orderBy}
-                      onRequestSort={handleRequestSort}
-                      rowCount={results.length}
-                      isMobile={true}
+              </Link>
+              <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
+                <h1> nyc restaurant info™ </h1>
+              </Link>
+              <h4>Location: {borough}</h4>
+              <Suspense fallback={<div></div>}>
+                { isMobile ?
+                  <Fragment>
+                    <div className="desktopSearch">
+                        <RestaurantSearchBar borough={borough} />
+                    </div>
+                    <HtmlTooltip
+                      title={
+                        <Fragment>
+                          <Typography>what are the records below?</Typography><br />
+                            all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
+                            more infomation and sorting options are available on destop <br /><br />
+                        </Fragment> 
+                      }>
+                      <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info* &nbsp;
+                        <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+                      </div>
+                    </HtmlTooltip>
+                  </Fragment>
+                  : 
+                  <Fragment>
+                    <div className="desktopSearch">
+                      <RestaurantSearchBar borough={borough} />
+                    </div>
+                    <div className="subheader">
+                      search above for a restaurant or click on a record below to get up-to-date outdoor dining info*
+                    </div>
+                  </Fragment>
+                }
+              </Suspense>
+            </header>
+            <Suspense fallback={<div></div>}>
+              {isMobile 
+                ?
+                <Fragment>
+                  <div className="mobileTable">
+                  <Paper className="container">
+                    <TableContainer>
+                      <Table 
+                        className={classes.mobileTable}
+                        size={'medium'}
+                        aria-label="restaurantInspectionTable"
+                      >
+                        <EnhancedTableHead
+                          classes={classes}
+                          order={order}
+                          orderBy={orderBy}
+                          onRequestSort={handleRequestSort}
+                          rowCount={results.length}
+                          isMobile={true}
+                        />
+                      </Table>
+                    </TableContainer>
+                    <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
+                      <TableContainer>
+                        <Table style={{tableLayout: 'fixed'}}>
+                          <TableBody>
+                          {stableSort(results, getComparator(order, orderBy))                
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((result) => (
+                            <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
+                              <StyledTableCell component="th" scope="row">{result.restaurantname}
+                              </StyledTableCell>
+                              <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
+                                          result.skippedreason === "No Seating"
+                                          ? <div className="closed">Closed</div>
+                                          : result.isroadwaycompliant === "Compliant"
+                                              ? <div className="open">Open</div>
+                                              : "unknown"
+                              }</StyledTableCell>
+                            </StyledTableRow>
+                          ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                    </div>
+                    <TablePagination
+                      rowsPerPageOptions={[]}
+                      component="div"
+                      count={results.length}
+                      rowsPerPage={rowsPerPage}
+                      page={page}
+                      onChangePage={handleChangePage}
+                      onChangeRowsPerPage={handleChangeRowsPerPage}
+                      ActionsComponent={TablePaginationActions}
                     />
-                  </Table>
-                </TableContainer>
-                <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
+                    </Paper>
+                  </div>
+                </Fragment>
+                :
+                <div className="desktopTable">
+                <Paper className={classes.paper}>
                   <TableContainer>
-                    <Table style={{tableLayout: 'fixed'}}>
-                      <TableBody>
-                      {stableSort(results, getComparator(order, orderBy))                
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((result) => (
-                        <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                          <StyledTableCell component="th" scope="row">{result.restaurantname}
-                          </StyledTableCell>
-                          <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                      result.skippedreason === "No Seating"
-                                      ? <div className="closed">Closed</div>
-                                      : result.isroadwaycompliant === "Compliant"
-                                          ? <div className="open">Open</div>
-                                          : "unknown"
-                          }</StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                      </TableBody>
+                    <Table
+                      className={classes.desktopTable}
+                      size={'medium'}
+                      aria-label="restaurantInspectionTable"
+                    >
+                        <EnhancedTableHead
+                            classes={classes}
+                            order={order}
+                            orderBy={orderBy}
+                            onRequestSort={handleRequestSort}
+                            rowCount={results.length}
+                            isMobile={false}
+                        />
                     </Table>
                   </TableContainer>
-                </div>
-                <TablePagination
-                  rowsPerPageOptions={[]}
-                  component="div"
-                  count={results.length}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  onChangePage={handleChangePage}
-                  onChangeRowsPerPage={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                />
+                  <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
+                    <TableContainer>
+                      <Table style={{tableLayout: 'fixed'}}>
+                        <TableBody>
+                          {stableSort(results, getComparator(order, orderBy))                
+                            .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                            .map((result) => (
+                            <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
+                              <StyledTableCell component="th" scope="row">{result.restaurantname}
+                              </StyledTableCell>
+                              <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
+                                          result.skippedreason === "No Seating"
+                                          ? <div className="closed">Closed</div>
+                                          : result.isroadwaycompliant === "Compliant"
+                                              ? <div className="open">Open</div>
+                                              : "Unknown"
+                              }</StyledTableCell>
+                              <StyledTableCell align="left">{result.inspectedon.slice(0,10)}</StyledTableCell>
+                              <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
+                              <StyledTableCell align="left">{result.skippedreason === "No Seating"
+                                        ? "no seating"
+                                        : result.seatingchoice === "both"
+                                          ? "sidewalk and roadway"
+                                          : result.seatingchoice === "sidewalk"
+                                              ? "sidewalk only"
+                                              : "roadway only"}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))}
+                          </TableBody>
+                        </Table>
+                      </TableContainer>
+                  </div>
+                  <TablePagination
+                    rowsPerPageOptions={[20, 50, 100]}
+                    component="div"
+                    count={results.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
                 </Paper>
               </div>
-            </Fragment>
-            :
-            <div className="desktopTable">
-            <Paper className={classes.paper}>
-              <TableContainer>
-                <Table
-                  className={classes.desktopTable}
-                  size={'medium'}
-                  aria-label="restaurantInspectionTable"
-                >
-                    <EnhancedTableHead
-                        classes={classes}
-                        order={order}
-                        orderBy={orderBy}
-                        onRequestSort={handleRequestSort}
-                        rowCount={results.length}
-                        isMobile={false}
-                    />
-                </Table>
-              </TableContainer>
-              <div style={{ overflowY: 'scroll', height: '300px'}} ref={tableRef}>
-                <TableContainer>
-                    <Table style={{tableLayout: 'fixed'}}>
-                      <TableBody>
-                      {stableSort(results, getComparator(order, orderBy))                
-                        .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                        .map((result) => (
-                        <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                          <StyledTableCell component="th" scope="row">{result.restaurantname}
-                          </StyledTableCell>
-                          <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                      result.skippedreason === "No Seating"
-                                      ? <div className="closed">Closed</div>
-                                      : result.isroadwaycompliant === "Compliant"
-                                          ? <div className="open">Open</div>
-                                          : "Unknown"
-                          }</StyledTableCell>
-                          <StyledTableCell align="left">{result.inspectedon.slice(0,10)}</StyledTableCell>
-                          <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
-                          <StyledTableCell align="left">{result.skippedreason === "No Seating"
-                                    ? "no seating"
-                                    : result.seatingchoice === "both"
-                                      ? "sidewalk and roadway"
-                                      : result.seatingchoice === "sidewalk"
-                                          ? "sidewalk only"
-                                          : "roadway only"}
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
-              </div>
-              <TablePagination
-                rowsPerPageOptions={[20, 50, 100]}
-                component="div"
-                count={results.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onChangePage={handleChangePage}
-                onChangeRowsPerPage={handleChangeRowsPerPage}
-                ActionsComponent={TablePaginationActions}
-              />
-            </Paper>
-          </div>
-          }
+              }
+              <Link to={'/'} style={{ textDecoration: 'none'}} >
+                <div className="button">
+                    <Button variant="outlined" style={{textTransform: "lowercase"}}>
+                        back
+                    </Button>
+                </div>
+              </Link>
+            </Suspense>
         </div>
       </div>
-    );
+    </Fragment>
+  );
 }

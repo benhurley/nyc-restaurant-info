@@ -1,8 +1,10 @@
-import React, { Fragment } from 'react';
-import { LocationSearchBar } from '../Search_Bars/Location_Search_Bar';
+import React, { Fragment, Suspense, lazy } from 'react';
 import { AdBanner } from '../Banners/Ad_Banner';
 import { Link } from 'react-router-dom'
 import './Home.css';
+
+//lazy-loaded components
+const LocationSearchBar = lazy(() => import('../Search_Bars/Location_Search_Bar').then(module => ({ default: module.LocationSearchBar })));
 
 export const Home = () => {
   return (
@@ -16,9 +18,11 @@ export const Home = () => {
         </header>
         <p className="topText">near-real-time outdoor dining information during covid-19*</p>
         <div className="searchBar">
-          <LocationSearchBar/>
+          <Suspense fallback={<div></div>}>
+            <LocationSearchBar/>
+          </Suspense>
         </div>
-      </div> 
+      </div>
     </Fragment>
   );
 }

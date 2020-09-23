@@ -1,9 +1,10 @@
 /* eslint-disable no-use-before-define */
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
+
 import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
-import { detectMobile, detectTablet, useWindowSize } from '../../helpers/Window_Helper'
+import { detectMobile } from '../../helpers/Window_Helper'
 
 const filter = createFilterOptions();
 
@@ -12,7 +13,6 @@ export const RestaurantSearchBar = ({ borough }) => {
   const [restaurantNames, setRestaurantNames] = useState([]);
 
   const isMobile = detectMobile();
-  const isTablet = detectTablet();
 
   const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
 
