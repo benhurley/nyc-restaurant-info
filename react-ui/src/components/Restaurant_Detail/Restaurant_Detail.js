@@ -42,6 +42,7 @@ export const RestaurantDetail = (props) => {
     const [coordinates, setCoordinates] = useState({});
     const isMobile = detectMobile();
 
+    const geoLocationUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=${googleApiKey}&address=`;
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1';
     const coordinatesUrl = process.env.NODE_ENV === 'production'
         ? '/api/coordinates'
@@ -66,14 +67,17 @@ export const RestaurantDetail = (props) => {
     }
 
     const getCoordinates = (data) => {
-        fetch(coordinatesUrl + `?address=${data.businessaddress}`).then(response => {
+        fetch(`${geoLocationUrl}${data.businessaddress} NY`).then(response => {
             if (!response.ok) {
                 throw new Error(`status ${response.status}`);
             }
             return response.json();
         }).then(json => {
-            setCoordinates(json);
-        }).catch(e => {
+            if(json.results[0].geometry.location) {
+                setCoordinates(json.results[0].geometry.location);
+            } else {
+                console.log("Couldn't find coordinates");
+            }        }).catch(e => {
             throw new Error(`API call failed: ${e}`);
         });
     }
