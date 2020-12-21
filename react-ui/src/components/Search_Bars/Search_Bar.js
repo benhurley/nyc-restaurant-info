@@ -1,38 +1,31 @@
 /* eslint-disable no-use-before-define */
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
-import { detectMobile } from '../../helpers/Window_Helper'
-
 const filter = createFilterOptions();
 
-export const RestaurantSearchBar = ({ borough }) => {
+export const SearchBar = () => {
   const [value, setValue] = useState(null);
-  const [restaurantNames, setRestaurantNames] = useState([]);
-
-  const isMobile = detectMobile();
-
-  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
+  const [restaurants, setRestaurants] = useState([]);
 
   useEffect(() => {
-    fetch(nycCompliantRestaurantApi).then(response => {
-      if (!response.ok) {
-        throw new Error(`status ${response.status}`);
-      }
-      return response.json();
-    })
+    fetch('/api/restaurants').then(response => {
+        if (!response.ok) {
+          throw new Error(`status ${response.status}`);
+        }
+        return response.json();
+      })
       .then(json => {
-        setRestaurantNames(massageApiResponse(json));
+        setRestaurants(json);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
   }, []);
 
   useEffect(() => {
-    if (value && value.restaurantname) {
-      const newURL = window.location.origin + `/restaurant/${value.restaurantname}`
+    if (value && value._id){
+      const newURL = window.location + `restaurants/${value._id}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -43,12 +36,12 @@ export const RestaurantSearchBar = ({ borough }) => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            restaurantname: newValue,
+            name: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            restaurantname: newValue.inputValue,
+            name: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -60,8 +53,8 @@ export const RestaurantSearchBar = ({ borough }) => {
       selectOnFocus
       clearOnBlur
       handleHomeEndKeys
-      id="restaurant-search-bar"
-      options={restaurantNames}
+      id="free-solo-with-text-demo"
+      options={restaurants}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -72,27 +65,31 @@ export const RestaurantSearchBar = ({ borough }) => {
           return option.inputValue;
         }
         // Regular option
-        return option.restaurantname;
+        return option.name;
       }}
-      renderOption={(option) => (
+      renderOption={(option) => ( 
         <React.Fragment>
-          <div style={{ textTransform: "lowercase" }}>{option.restaurantname} <br />
+          <div>{option.name} <br />
+            <div style={{"fontWeight": "bold", "fontSize": "12px"}}>
+              {option.city + ", " + option.state}
+            </div>
           </div>
         </React.Fragment>
       )}
-      style={{ width: isMobile ? 250 : 325 }}
+      style={{ width: 300 }}
       renderInput={(params) => (
-        <TextField
-          {...params}
-          label={<div style={{ textTransform: "lowercase" }}>{"search for a restaurant"}</div>}
+        <TextField 
+          {...params} 
+          label="Search for a Restaurant" 
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
               value && setValue(value);
             }
           }
-          } />
+        }/>
       )}
     />
   );
 }
+

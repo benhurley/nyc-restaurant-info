@@ -93,7 +93,7 @@ function EnhancedTableHead(props) {
   const headerCells = isMobile ? mobileHeadCells : headCells
 
   return (
-    <Suspense fallback={<div></div>}>
+    <Suspense>
       <TableHead className="header">
         <TableRow>
           {headerCells.map((headCell) => (
@@ -347,34 +347,23 @@ export const Browse = (props) => {
             </Link>
             <h4>Location: {borough}</h4>
             <Suspense fallback={<div></div>}>
-              {isMobile ?
-                <Fragment>
-                  <div className="desktopSearch">
-                    <RestaurantSearchBar borough={borough} />
+              <Fragment>
+                <div className="desktopSearch">
+                  <RestaurantSearchBar borough={borough} />
+                </div>
+                <HtmlTooltip
+                  title={
+                    <Fragment>
+                      <Typography>what are the records below?</Typography><br />
+                          all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
+                          more infomation and sorting options are available on destop <br /><br />
+                    </Fragment>
+                  }>
+                  <div className="subheader"> browse recent restaurant updates &nbsp;
+                      <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                   </div>
-                  <HtmlTooltip
-                    title={
-                      <Fragment>
-                        <Typography>what are the records below?</Typography><br />
-                            all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
-                            more infomation and sorting options are available on destop <br /><br />
-                      </Fragment>
-                    }>
-                    <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info* &nbsp;
-                        <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                    </div>
-                  </HtmlTooltip>
-                </Fragment>
-                :
-                <Fragment>
-                  <div className="desktopSearch">
-                    <RestaurantSearchBar borough={borough} />
-                  </div>
-                  <div className="subheader">
-                    search above for a restaurant or click on a record below to get up-to-date outdoor dining info*
-                    </div>
-                </Fragment>
-              }
+                </HtmlTooltip>
+              </Fragment>
             </Suspense>
           </header>
           <Suspense fallback={<div></div>}>
