@@ -18,11 +18,11 @@ export const RestaurantSearchBar = ({ borough }) => {
 
   useEffect(() => {
     fetch(nycCompliantRestaurantApi).then(response => {
-        if (!response.ok) {
-          throw new Error(`status ${response.status}`);
-        }
-        return response.json();
-      })
+      if (!response.ok) {
+        throw new Error(`status ${response.status}`);
+      }
+      return response.json();
+    })
       .then(json => {
         setRestaurantNames(massageApiResponse(json));
       }).catch(e => {
@@ -31,7 +31,7 @@ export const RestaurantSearchBar = ({ borough }) => {
   }, []);
 
   useEffect(() => {
-    if (value && value.restaurantname){
+    if (value && value.restaurantname) {
       const newURL = window.location.origin + `/restaurant/${value.restaurantname}`
       window.location.assign(newURL)
     }
@@ -74,24 +74,24 @@ export const RestaurantSearchBar = ({ borough }) => {
         // Regular option
         return option.restaurantname;
       }}
-      renderOption={(option) => ( 
+      renderOption={(option) => (
         <React.Fragment>
-          <div style={{textTransform: "lowercase"}}>{option.restaurantname} <br />
+          <div style={{ textTransform: "lowercase" }}>{option.restaurantname} <br />
           </div>
         </React.Fragment>
       )}
       style={{ width: isMobile ? 250 : 325 }}
       renderInput={(params) => (
-        <TextField 
-          {...params} 
-          label={<div style={{textTransform: "lowercase"}}>{"search restaurants"}</div>}
+        <TextField
+          {...params}
+          label={<div style={{ textTransform: "lowercase" }}>{"search restaurants"}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
               value && setValue(value);
             }
           }
-        }/>
+          } />
       )}
     />
   );
