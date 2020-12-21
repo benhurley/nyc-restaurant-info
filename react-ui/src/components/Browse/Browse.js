@@ -458,9 +458,9 @@ export const Browse = (props) => {
                                 </StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
                                   result.skippedreason === "No Seating"
-                                  ? <div className="closed">Closed</div>
+                                  ? <div className="closed">closed</div>
                                   : result.isroadwaycompliant === "Compliant"
-                                    ? <div className="open">Open</div>
+                                    ? <div className="open">open</div>
                                     : result.isroadwaycompliant.includes('HIQA')
                                       ? <div className="pending">pending</div>
                                       : <div className="unknown">unknown</div>

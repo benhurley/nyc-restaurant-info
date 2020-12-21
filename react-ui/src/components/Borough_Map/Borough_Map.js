@@ -5,7 +5,7 @@ export const BoroughMap =() => {
     const handleClick = (borough) => {
         const newURL = window.location + `location/${borough}`
         window.location.assign(newURL)
-      }
+    }
 
     return (
         <div className="container">
