@@ -14,7 +14,7 @@ If you would like to contribute to the project, please reach out to me at benfro
 
 ## Local Development
 
-This app has the skeloton of a MERN app and configured to proxy backend requests to a local Node server, but we are currently only using the front end for cost-saving purposes. The following steps assume the website is static and may be updated in the future.
+This app has the skeloton of a MERN app and is configured to proxy backend requests to a local Node server, but we are currently only using the front end for cost-saving purposes. The following steps assume the website is static and may be updated in the future.
 
 ### Spin the React UI
 
