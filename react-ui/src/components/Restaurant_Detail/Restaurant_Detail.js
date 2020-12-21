@@ -44,9 +44,6 @@ export const RestaurantDetail = (props) => {
 
     const geoLocationUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=${googleApiKey}&address=`;
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1';
-    const coordinatesUrl = process.env.NODE_ENV === 'production'
-        ? '/api/coordinates'
-        : 'http://localhost:5000/api/coordinates'
 
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(','));
     const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',') + 2);
