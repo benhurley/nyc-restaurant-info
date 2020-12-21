@@ -135,6 +135,7 @@ function EnhancedTableHead(props) {
                       <Typography>how is outdoor dining status calculated?</Typography><br />
                       <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
                       <b>{"closed: "}</b>{"cease and desist issued or a skipped inspection due to no seating available"}<br /><br />
+                      <b>{"pending: "}</b>{"awaiting roadway compliance check, usually still operating"}<br /><br />
                       <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                     </Fragment>
                   }>
@@ -400,10 +401,12 @@ export const Browse = (props) => {
                                   </StyledTableCell>
                                   <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
                                     result.skippedreason === "No Seating"
-                                    ? <div className="closed">Closed</div>
+                                    ? <div className="closed">closed</div>
                                     : result.isroadwaycompliant === "Compliant"
-                                      ? <div className="open">Open</div>
-                                      : "unknown"
+                                      ? <div className="open">open</div>
+                                      : result.isroadwaycompliant.includes('HIQA')
+                                        ? <div className="pending">pending</div>
+                                        : <div className="unknown">unknown</div>
                                   }</StyledTableCell>
                                 </StyledTableRow>
                               ))}
@@ -458,7 +461,9 @@ export const Browse = (props) => {
                                   ? <div className="closed">Closed</div>
                                   : result.isroadwaycompliant === "Compliant"
                                     ? <div className="open">Open</div>
-                                    : "Unknown"
+                                    : result.isroadwaycompliant.includes('HIQA')
+                                      ? <div className="pending">pending</div>
+                                      : <div className="unknown">unknown</div>
                                 }</StyledTableCell>
                                 <StyledTableCell align="left">{result.inspectedon.slice(0, 10)}</StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
