@@ -36,6 +36,15 @@ th {
   font-weight: bold;
 }
 
+.pending {
+  color :rgb(114, 148, 128);
+}
+
+.unknown {
+  color: black;
+  font-weight: normal;
+}
+
 .closed {
   color: lightcoral;
   font-weight: bold;
@@ -121,6 +130,6 @@ tr:hover {
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  padding-bottom: 30px;
+  padding-bottom: 60px;
   text-transform: lowercase;
 }

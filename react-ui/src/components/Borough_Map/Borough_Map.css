@@ -1,0 +1,74 @@
+.container {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    display: inline-block;
+    position: relative;
+    font-size: x-small;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.borough-image {
+    width: 300px;
+}
+
+.manhattan,
+.bronx,
+.queens,
+.staten-island,
+.brooklyn {
+    position: absolute;
+    display: inline-block;   
+    z-index: 1;    
+    color: white;
+    padding: 2em;     
+    margin: -2em;
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+    opacity: 0.7;
+}
+
+.manhattan:hover,
+.bronx:hover,
+.queens:hover,
+.staten-island:hover,
+.brooklyn:hover {
+    -webkit-transition: all 500ms ease;
+    -moz-transition: all 500ms ease;
+    -ms-transition: all 500ms ease;
+    -o-transition: all 500ms ease;
+    transition: all 500ms ease;
+    font-size: 11px;
+    opacity: 1;
+}
+
+.manhattan {
+    bottom: 210px;
+    left: 75px;    
+    padding: 3em;     
+    margin: -3em;
+    color: black;
+}
+
+.bronx {
+    bottom: 244px;
+    right: 78px;
+}
+
+.brooklyn {
+    bottom: 97px;
+    left: 132px;
+}
+
+.staten-island {
+    left: 56px;
+    bottom: 70px;
+}
+
+.queens {
+    right: 50px;
+    bottom: 158px;
+}

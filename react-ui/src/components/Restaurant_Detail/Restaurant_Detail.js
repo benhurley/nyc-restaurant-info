@@ -30,7 +30,7 @@ const defaultMapProps = {
         lat: 40.74,
         lng: -73.98
     },
-    zoom: 11
+    zoom: 10
 };
 
 const LocationMapIcon = () => <LocationOnIcon style={{ fill: "red" }}></LocationOnIcon>
@@ -129,7 +129,10 @@ export const RestaurantDetail = (props) => {
                                                     ? <div className="closed">closed</div>
                                                     : details.isroadwaycompliant === "Compliant"
                                                         ? <div className="open">open</div>
-                                                        : "unknown"
+                                                        : details.isroadwaycompliant && 
+                                                            details.isroadwaycompliant === "For HIQA Review"
+                                                            ? <div className="pending">pending</div>
+                                                            : <div className="unknown">unknown</div>
                                             }</span>
                                         </CardContent>
                                         <CardContent>

@@ -14,21 +14,9 @@ If you would like to contribute to the project, please reach out to me at benfro
 
 ## Local Development
 
-### Run the API server
+This app has the skeloton of a MERN app and is configured to proxy backend requests to a local Node server, but we are currently only using the front end for cost-saving purposes. The following steps assume the website is static and may be updated in the future.
 
-```bash
-# initial setup
-npm install
-
-# start the server
-npm run start-dev
-```
-
-### Run the React UI
-
-The React app is configured to proxy backend requests to the local Node server. (See [`"proxy"` config](react-ui/package.json))
-
-In a separate terminal from the API server, start the UI:
+### Spin the React UI
 
 ```bash
 # change into the react directory
@@ -40,6 +28,8 @@ npm install
 # start the server
 npm start
 ```
+
+That's it!
 
 ### Optional Commands
 
