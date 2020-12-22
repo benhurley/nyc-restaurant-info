@@ -404,7 +404,8 @@ export const Browse = (props) => {
                                     ? <div className="closed">closed</div>
                                     : result.isroadwaycompliant === "Compliant"
                                       ? <div className="open">open</div>
-                                      : result.isroadwaycompliant.includes('HIQA')
+                                      : result.isroadwaycompliant &&
+                                        result.isroadwaycompliant === "For HIQA Review"
                                         ? <div className="pending">pending</div>
                                         : <div className="unknown">unknown</div>
                                   }</StyledTableCell>
@@ -461,9 +462,10 @@ export const Browse = (props) => {
                                   ? <div className="closed">closed</div>
                                   : result.isroadwaycompliant === "Compliant"
                                     ? <div className="open">open</div>
-                                    : result.isroadwaycompliant.includes('HIQA')
-                                      ? <div className="pending">pending</div>
-                                      : <div className="unknown">unknown</div>
+                                    : result.isroadwaycompliant &&
+                                    result.isroadwaycompliant === "For HIQA Review"
+                                    ? <div className="pending">pending</div>
+                                    : <div className="unknown">unknown</div>
                                 }</StyledTableCell>
                                 <StyledTableCell align="left">{result.inspectedon.slice(0, 10)}</StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
