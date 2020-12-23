@@ -93,7 +93,7 @@ function EnhancedTableHead(props) {
   const headerCells = isMobile ? mobileHeadCells : headCells
 
   return (
-    <Suspense fallback={<div></div>}>
+    <Suspense>
       <TableHead className="header">
         <TableRow>
           {headerCells.map((headCell) => (
@@ -135,6 +135,7 @@ function EnhancedTableHead(props) {
                       <Typography>how is outdoor dining status calculated?</Typography><br />
                       <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
                       <b>{"closed: "}</b>{"cease and desist issued or a skipped inspection due to no seating available"}<br /><br />
+                      <b>{"pending: "}</b>{"awaiting roadway compliance check, usually still operating"}<br /><br />
                       <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                     </Fragment>
                   }>
@@ -347,34 +348,23 @@ export const Browse = (props) => {
             </Link>
             <h4>Location: {borough}</h4>
             <Suspense fallback={<div></div>}>
-              {isMobile ?
-                <Fragment>
-                  <div className="desktopSearch">
-                    <RestaurantSearchBar borough={borough} />
+              <Fragment>
+                <div className="desktopSearch">
+                  <RestaurantSearchBar borough={borough} />
+                </div>
+                <HtmlTooltip
+                  title={
+                    <Fragment>
+                      <Typography>what are the records below?</Typography><br />
+                          all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
+                          more infomation and sorting options are available on destop <br /><br />
+                    </Fragment>
+                  }>
+                  <div className="subheader"> browse recent restaurant updates &nbsp;
+                      <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                   </div>
-                  <HtmlTooltip
-                    title={
-                      <Fragment>
-                        <Typography>what are the records below?</Typography><br />
-                            all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
-                            more infomation and sorting options are available on destop <br /><br />
-                      </Fragment>
-                    }>
-                    <div className="subheader"> search above for a restaurant or click on a record below to get up-to-date outdoor dining info* &nbsp;
-                        <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                    </div>
-                  </HtmlTooltip>
-                </Fragment>
-                :
-                <Fragment>
-                  <div className="desktopSearch">
-                    <RestaurantSearchBar borough={borough} />
-                  </div>
-                  <div className="subheader">
-                    search above for a restaurant or click on a record below to get up-to-date outdoor dining info*
-                    </div>
-                </Fragment>
-              }
+                </HtmlTooltip>
+              </Fragment>
             </Suspense>
           </header>
           <Suspense fallback={<div></div>}>
@@ -411,10 +401,13 @@ export const Browse = (props) => {
                                   </StyledTableCell>
                                   <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
                                     result.skippedreason === "No Seating"
-                                    ? <div className="closed">Closed</div>
+                                    ? <div className="closed">closed</div>
                                     : result.isroadwaycompliant === "Compliant"
-                                      ? <div className="open">Open</div>
-                                      : "unknown"
+                                      ? <div className="open">open</div>
+                                      : result.isroadwaycompliant &&
+                                        result.isroadwaycompliant === "For HIQA Review"
+                                        ? <div className="pending">pending</div>
+                                        : <div className="unknown">unknown</div>
                                   }</StyledTableCell>
                                 </StyledTableRow>
                               ))}
@@ -466,10 +459,13 @@ export const Browse = (props) => {
                                 </StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
                                   result.skippedreason === "No Seating"
-                                  ? <div className="closed">Closed</div>
+                                  ? <div className="closed">closed</div>
                                   : result.isroadwaycompliant === "Compliant"
-                                    ? <div className="open">Open</div>
-                                    : "Unknown"
+                                    ? <div className="open">open</div>
+                                    : result.isroadwaycompliant &&
+                                    result.isroadwaycompliant === "For HIQA Review"
+                                    ? <div className="pending">pending</div>
+                                    : <div className="unknown">unknown</div>
                                 }</StyledTableCell>
                                 <StyledTableCell align="left">{result.inspectedon.slice(0, 10)}</StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
