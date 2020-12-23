@@ -295,7 +295,7 @@ export const Browse = (props) => {
   borough = mapBorough(borough);
 
   useEffect(() => {
-    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
+    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}$limit=20000&$where=inspectedon between '2020-07-08T00:00:00' and '2020-12-21T23:59:59'&$order=inspectedon DESC`
 
     fetch(nycCompliantRestaurantApi).then(response => {
       if (!response.ok) {
