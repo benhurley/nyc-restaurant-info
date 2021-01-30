@@ -39,10 +39,8 @@ export const RestaurantDetail = (props) => {
     let { restaurantname } = props.match.params;
     restaurantname = encodeRestaurantName(restaurantname);
     const [details, setDetails] = useState({});
-    const [coordinates, setCoordinates] = useState({});
     const isMobile = detectMobile();
 
-    const geoLocationUrl = `https://maps.googleapis.com/maps/api/geocode/json?key=${googleApiKey}&address=`;
     const nycCompliantRestaurantApi = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=1';
 
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(','));
@@ -54,29 +52,11 @@ export const RestaurantDetail = (props) => {
                 throw new Error(`status ${response.status}`);
             }
             return response.json();
-        })
-            .then(json => {
+        }).then(json => {
                 setDetails(massageSearchResponse(json[0]));
-                getCoordinates(json[0]);
             }).catch(e => {
                 throw new Error(`API call failed: ${e}`);
             });
-    }
-
-    const getCoordinates = (data) => {
-        fetch(`${geoLocationUrl}${data.businessaddress} NY`).then(response => {
-            if (!response.ok) {
-                throw new Error(`status ${response.status}`);
-            }
-            return response.json();
-        }).then(json => {
-            if(json.results[0].geometry.location) {
-                setCoordinates(json.results[0].geometry.location);
-            } else {
-                console.log("Couldn't find coordinates");
-            }        }).catch(e => {
-            throw new Error(`API call failed: ${e}`);
-        });
     }
 
     useEffect(() => {
@@ -192,8 +172,8 @@ export const RestaurantDetail = (props) => {
                                                 yesIWantToUseGoogleMapApiInternals
                                             >
                                                 <LocationMapIcon
-                                                    lat={coordinates.lat}
-                                                    lng={coordinates.lng} x
+                                                    lat={details.latitude}
+                                                    lng={details.longitude} x
                                                     text="My Marker"
                                                 />
                                             </GoogleMapReact>
