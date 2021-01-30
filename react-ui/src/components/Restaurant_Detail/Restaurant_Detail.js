@@ -104,8 +104,7 @@ export const RestaurantDetail = (props) => {
                                         <CardContent>
                                             <ThumbsUpDownOutlinedIcon className="icon" /> &nbsp;
                                         <span className="details">{
-                                                details.isroadwaycompliant === "Cease and Desist" ||
-                                                    details.skippedreason === "No Seating"
+                                                details.isroadwaycompliant === "Cease and Desist"
                                                     ? <div className="closed">closed</div>
                                                     : details.isroadwaycompliant === "Compliant"
                                                         ? <div className="open">open</div>

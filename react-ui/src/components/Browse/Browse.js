@@ -11,10 +11,11 @@ import LastPageIcon from '@material-ui/icons/LastPage';
 import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
+import { Multiselect } from 'multiselect-react-dropdown';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
 import { AdBanner } from '../Banners/Ad_Banner';
+import { getPostCodes } from '../../helpers/NYC_Post_Codes';
 import './Browse.css';
 
 //lazy-loaded components
@@ -77,6 +78,7 @@ const headCells = [
   { id: 'inspectedon', numeric: true, disablePadding: false, label: 'date' },
   { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
   { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
+  { id: 'postcode', numeric: true, disablePadding: false, label: 'zip code' },
 ];
 
 const mobileHeadCells = [
@@ -134,7 +136,7 @@ function EnhancedTableHead(props) {
                     <Fragment>
                       <Typography>how is outdoor dining status calculated?</Typography><br />
                       <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
-                      <b>{"closed: "}</b>{"cease and desist issued or a skipped inspection due to no seating available"}<br /><br />
+                      <b>{"closed: "}</b>{"cease and desist issued"}<br /><br />
                       <b>{"pending: "}</b>{"awaiting roadway compliance check, usually still operating"}<br /><br />
                       <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
                     </Fragment>
@@ -159,7 +161,7 @@ function EnhancedTableHead(props) {
                       <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
                       <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
                       <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
-                      <b>{"skipped inspection: "}</b>{"inspection could not be performed"}
+                      <b>{"inspection: "}</b>{"inspection could not be performed"}
                     </Fragment>
                   }>
                   <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -281,6 +283,7 @@ function TablePaginationActions(props) {
 
 export const Browse = (props) => {
   const [results, setResults] = useState([]);
+  const [fullResults, setFullResults] = useState([]);
   const isMobile = detectMobile();
 
   // enhanced material-ui table
@@ -290,10 +293,14 @@ export const Browse = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const tableRef = createRef();
+  const diningStatuses = [{'status': 'open'}, {'status': 'closed'}, {'status': 'pending'}, {'status': 'unknown'}]
+  const [appliedZipFilters, setAppliedZipFilters] = useState([]);
+  const [appliedCompliancyFilters, setAppliedCompliancyFilters] = useState([]);
 
   // nyc request requires capital names
   let { borough } = props.match.params;
   borough = mapBorough(borough);
+  const postCodes = getPostCodes(borough);
 
   useEffect(() => {
     let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
@@ -306,6 +313,7 @@ export const Browse = (props) => {
     })
       .then(json => {
         setResults(json);
+        setFullResults(json);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
@@ -332,6 +340,47 @@ export const Browse = (props) => {
     window.location.assign(newURL);
   }
 
+  const handleCompliancyFilterSelect = (selectedList, selectedItem) => {
+    let status = '';
+
+    if (selectedItem['status'] === 'open') {
+      status = "compliant";
+    } else if (selectedItem['status'] === 'closed') {
+      status = "cease and desist";
+    } else if (selectedItem['status'] === 'pending') {
+      status = "for hiqa review";
+    } else if (selectedItem['status'] === 'unknown') {
+      status = 'skipped inspection';
+    }
+
+    setResults(results.filter((result) => result['isroadwaycompliant'].toLowerCase() === status));
+    setAppliedCompliancyFilters([{'isroadwaycompliant': status}]);
+
+  }
+
+  const handleZipFilterSelect = (selectedList, selectedItem) => {
+    setResults(results.filter((result) => result['postcode'] === selectedItem['postcode']));
+    setAppliedZipFilters(selectedList);
+  }
+
+  const handleZipFilterRemove = (selectedList, removedItem) => {
+    if (appliedCompliancyFilters.length > 0) {
+      setResults(fullResults.filter((result) => result['isroadwaycompliant'].toLowerCase() === appliedCompliancyFilters[0]['isroadwaycompliant']));
+      setAppliedZipFilters([]);
+    } else {
+      setResults(fullResults);
+    }
+  }
+
+  const handleCompliancyFilterRemove = (selectedList, removedItem) => {
+    if (appliedZipFilters.length > 0) {
+      setResults(fullResults.filter((result) => result['postcode'] === appliedZipFilters[0]['postcode']));
+      setAppliedCompliancyFilters([]);
+    } else {
+      setResults(fullResults);
+    }
+  }
+
   return (
     <Fragment>
       <div className={classes.root}>
@@ -352,18 +401,20 @@ export const Browse = (props) => {
                 <div className="desktopSearch">
                   <RestaurantSearchBar borough={borough} />
                 </div>
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>what are the records below?</Typography><br />
-                          all recent {mapBorough(borough)} inspections, sorted by inspection date in descending order<br /><br />
-                          more infomation and sorting options are available on destop <br /><br />
-                    </Fragment>
-                  }>
-                  <div className="subheader"> browse recent restaurant updates &nbsp;
+                <div className="subheader"> browse recent restaurant updates &nbsp;
+
+                  <HtmlTooltip
+                    title={
+                      <Fragment>
+                        <Typography>what am i looking at here?</Typography><br />
+                            below you will find all recent {mapBorough(borough)} inspections, sorted by inspection date (showing most-recent)<br /><br />
+                            <b>new</b>: you can now filter by dining status and zip code too! <br /><br />
+                            additional table-sorting methods are available on desktop <br /><br />
+                      </Fragment>
+                    }>
                       <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                  </div>
-                </HtmlTooltip>
+                  </HtmlTooltip>
+                </div>
               </Fragment>
             </Suspense>
           </header>
@@ -371,6 +422,36 @@ export const Browse = (props) => {
             {isMobile
               ?
               <Fragment>
+                <div className="filterBarMobile">
+                  <div className="statusFilterMobile">
+                    <Multiselect
+                      options={diningStatuses} // Options to display in the dropdown
+                      onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
+                      onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
+                      displayValue="status" // Property name to display in the dropdown options
+                      placeholder="filter by status"
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                  <div className="zipCodeFilterMobile">
+                    <Multiselect
+                      options={postCodes} // Options to display in the dropdown
+                      onSelect={handleZipFilterSelect} // Function will trigger on select event
+                      onRemove={handleZipFilterRemove} // Function will trigger on remove event
+                      displayValue="postcode" // Property name to display in the dropdown options
+                      placeholder="filter by zip"
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                </div>
                 <div className="mobileTable">
                   <Paper className="container">
                     <TableContainer>
@@ -399,8 +480,7 @@ export const Browse = (props) => {
                                 <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
                                   <StyledTableCell component="th" scope="row">{result.restaurantname}
                                   </StyledTableCell>
-                                  <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                    result.skippedreason === "No Seating"
+                                  <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist"
                                     ? <div className="closed">closed</div>
                                     : result.isroadwaycompliant === "Compliant"
                                       ? <div className="open">open</div>
@@ -428,7 +508,37 @@ export const Browse = (props) => {
                   </Paper>
                 </div>
               </Fragment>
-              :
+              :<Fragment>
+                <div className="filterBar">
+                  <div className="statusFilter">
+                    <Multiselect
+                      options={diningStatuses} // Options to display in the dropdown
+                      onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
+                      onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
+                      displayValue="status" // Property name to display in the dropdown options
+                      placeholder="filter by dining status"
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                  <div className="zipCodeFilter">
+                    <Multiselect
+                      options={postCodes} // Options to display in the dropdown
+                      onSelect={handleZipFilterSelect} // Function will trigger on select event
+                      onRemove={handleZipFilterRemove} // Function will trigger on remove event
+                      displayValue="postcode" // Property name to display in the dropdown options
+                      placeholder="filter by zip code"
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                </div>
               <div className="desktopTable">
                 <Paper className={classes.paper}>
                   <TableContainer>
@@ -457,8 +567,7 @@ export const Browse = (props) => {
                               <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
                                 <StyledTableCell component="th" scope="row">{result.restaurantname}
                                 </StyledTableCell>
-                                <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist" ||
-                                  result.skippedreason === "No Seating"
+                                <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist"
                                   ? <div className="closed">closed</div>
                                   : result.isroadwaycompliant === "Compliant"
                                     ? <div className="open">open</div>
@@ -477,6 +586,7 @@ export const Browse = (props) => {
                                       ? "sidewalk only"
                                       : "roadway only"}
                                 </StyledTableCell>
+                                <StyledTableCell align="left">{result.postcode}</StyledTableCell>
                               </StyledTableRow>
                             ))}
                         </TableBody>
@@ -495,6 +605,7 @@ export const Browse = (props) => {
                   />
                 </Paper>
               </div>
+              </Fragment>
             }
             <Link to={'/'} style={{ textDecoration: 'none' }} >
               <div className="button">
