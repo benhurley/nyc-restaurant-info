@@ -78,6 +78,7 @@ const headCells = [
   { id: 'inspectedon', numeric: true, disablePadding: false, label: 'date' },
   { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
   { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
+  { id: 'postcode', numeric: true, disablePadding: false, label: 'zip code' },
 ];
 
 const mobileHeadCells = [
@@ -581,6 +582,7 @@ export const Browse = (props) => {
                                       ? "sidewalk only"
                                       : "roadway only"}
                                 </StyledTableCell>
+                                <StyledTableCell align="left">{result.postcode}</StyledTableCell>
                               </StyledTableRow>
                             ))}
                         </TableBody>

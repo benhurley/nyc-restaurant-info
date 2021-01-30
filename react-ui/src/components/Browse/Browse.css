@@ -136,7 +136,7 @@ tr:hover {
 
 .filterBar {
   display: flex;
-  justify-content: flex-end;
+  justify-content: flex-start;
 }
 
 .filterBarMobile {
@@ -145,21 +145,19 @@ tr:hover {
 }
 
 .statusFilter {
-  margin-left: 5px;
   max-width: 250px;
 } 
 
 .zipCodeFilter {
-  margin-left: 5px;
+  margin-left: 16px;
   max-width: 250px;
 }
 
 .statusFilterMobile {
-  margin-left: 5px;
   max-width: 145px;
 } 
 
 .zipCodeFilterMobile {
-  margin-left: 5px;
+  margin-left: 16px;
   max-width: 145px;
 }
