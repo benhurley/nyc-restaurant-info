@@ -24,8 +24,7 @@
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongodb": "^3.6.3",
-    "mongoose": "^5.11.8",
-    "multiselect-react-dropdown": "^1.6.3"
+    "mongoose": "^5.11.8"
   },
   "repository": {
     "type": "git",
