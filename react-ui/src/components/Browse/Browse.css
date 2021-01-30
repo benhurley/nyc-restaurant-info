@@ -52,7 +52,7 @@ th {
 
 .subheader {
     font-size: small;
-    margin-bottom: 15px;
+    margin-bottom: 30px;
 }
 
 .results {
@@ -130,6 +130,36 @@ tr:hover {
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  padding-bottom: 60px;
+  padding-bottom: 30px;
   text-transform: lowercase;
+}
+
+.filterBar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.filterBarMobile {
+  display: flex;
+  justify-content: center;
+}
+
+.statusFilter {
+  margin-left: 5px;
+  max-width: 250px;
+} 
+
+.zipCodeFilter {
+  margin-left: 5px;
+  max-width: 250px;
+}
+
+.statusFilterMobile {
+  margin-left: 5px;
+  max-width: 145px;
+} 
+
+.zipCodeFilterMobile {
+  margin-left: 5px;
+  max-width: 145px;
 }
