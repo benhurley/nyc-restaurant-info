@@ -293,7 +293,7 @@ export const Browse = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const tableRef = createRef();
-  const diningStatuses = [{'status': 'open'}, {'status': 'closed'}]
+  const diningStatuses = [{'status': 'open'}, {'status': 'closed'}, {'status': 'pending'}, {'status': 'unknown'}]
   const [appliedZipFilters, setAppliedZipFilters] = useState([]);
   const [appliedCompliancyFilters, setAppliedCompliancyFilters] = useState([]);
 
@@ -346,7 +346,11 @@ export const Browse = (props) => {
     if (selectedItem['status'] === 'open') {
       status = "compliant";
     } else if (selectedItem['status'] === 'closed') {
-      status = "cease and desist"
+      status = "cease and desist";
+    } else if (selectedItem['status'] === 'pending') {
+      status = "for hiqa review";
+    } else if (selectedItem['status'] === 'unknown') {
+      status = 'skipped inspection';
     }
 
     setResults(results.filter((result) => result['isroadwaycompliant'].toLowerCase() === status));
