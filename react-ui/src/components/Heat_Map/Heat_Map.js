@@ -5,6 +5,7 @@ import * as topojson from 'topojson';
 import './Heat_Map.css'
 import { select, svg } from 'd3';
 import { useRef } from 'react';
+import { set } from 'lodash';
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -19,6 +20,8 @@ const useStyles = makeStyles((theme) => ({
 
 export const HeatMap = (props) => {
     const classes = useStyles();
+    const [height, setHeight] = useState({});
+    const [width, setWidth] = useState({})
 
     const svgRef = useRef();
     const wrapperRef = useRef();
@@ -60,12 +63,17 @@ export const HeatMap = (props) => {
             .attr('class', 'borough')
             .attr('d', feature => pathGenerator(feature))
 
-
     };
 
 
     useEffect(() => {
+        setHeight(wrapperRef.current.clientWidth / 1.75);
+        setWidth(wrapperRef.current.clientWidth - 64);
         loadData();
+
+
+        console.log(wrapperRef.current.clientWidth/1.75);
+        console.log(wrapperRef.current.clientWidth);
     }, []);
 
     return (
@@ -77,8 +85,9 @@ export const HeatMap = (props) => {
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
                         <Card ref={wrapperRef} id="content">
-                            <svg ref={svgRef} width="1000" height="750">
-                            </svg>
+                            <Box p={4}>
+                                <svg ref={svgRef} width={width} height={height}></svg>
+                            </Box>
                         </Card>
                     </Grid>
                 </Grid>
