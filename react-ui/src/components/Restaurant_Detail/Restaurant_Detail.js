@@ -16,6 +16,9 @@ import { AdBanner } from '../Banners/Ad_Banner';
 import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
 import { detectMobile } from '../../helpers/Window_Helper';
 
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 import './Restaurant_Detail.css';
 
 //lazy-loaded components
@@ -81,7 +84,12 @@ export const RestaurantDetail = (props) => {
             <div className="resultsCard">
                 <Box paddingY="2%">
                     <Container maxWidth="md" >
-                        <Suspense fallback={<div></div>}>
+                        <Suspense fallback={<div className="loadingAnimation"><Loader
+                            type="ThreeDots"
+                            color="#d3d3d3"
+                            height={100}
+                            width={100} 
+                        /></div>}>
                             <Card className="card-container">
                                 <Grid
                                     container
@@ -184,7 +192,12 @@ export const RestaurantDetail = (props) => {
                     </Container>
                 </Box>
             </div>
-            <Suspense fallback={<div></div>}>
+            <Suspense fallback={<div className="loadingAnimation"><Loader
+                type="ThreeDots"
+                color="#d3d3d3"
+                height={100}
+                width={100} 
+            /></div>}>
                 <Link to={`/location/${mapBorough(details.borough)}`} style={{ textDecoration: 'none' }} >
                     <div className="button">
                         <Button variant="outlined" style={{ textTransform: "lowercase" }}>

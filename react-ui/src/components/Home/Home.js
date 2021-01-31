@@ -1,6 +1,10 @@
 import React, { Fragment, Suspense, lazy } from 'react';
 import { AdBanner } from '../Banners/Ad_Banner';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+
 import './Home.css';
 
 //lazy-loaded components
@@ -17,7 +21,12 @@ export const Home = () => {
           </Link>
         </header>
         <p className="sub-header">near-real-time outdoor dining information during covid-19*</p>
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<Loader
+          type="ThreeDots"
+          color="#d3d3d3"
+          height={100}
+          width={100} 
+        />}>
           <BoroughMap />
         </Suspense>
       </div>
