@@ -7,6 +7,9 @@ import {
   Switch,
   Route,
 } from "react-router-dom";
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import './App.css';
 
 //lazy-loaded components
 const Footer = lazy(() => import('./components/Footer/Footer').then(module => ({ default: module.Footer })));
@@ -23,7 +26,12 @@ function App() {
             </Switch>
           </Fragment>
         </Router>
-        <Suspense fallback={<div></div>}>
+        <Suspense fallback={<div className="loadingAnimation"><Loader
+          type="ThreeDots"
+          color="#d3d3d3"
+          height={100}
+          width={100} 
+        /></div>}>
           <Footer />
       </Suspense>
     </Fragment>

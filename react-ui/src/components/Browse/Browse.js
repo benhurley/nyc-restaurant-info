@@ -16,6 +16,8 @@ import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
 import { AdBanner } from '../Banners/Ad_Banner';
 import { getPostCodes } from '../../helpers/NYC_Post_Codes';
+import Loader from 'react-loader-spinner';
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import './Browse.css';
 
 //lazy-loaded components
@@ -396,7 +398,12 @@ export const Browse = (props) => {
               <h1> nyc restaurant info™ </h1>
             </Link>
             <h4>Location: {borough}</h4>
-            <Suspense fallback={<div></div>}>
+            <Suspense fallback={<Loader
+              type="ThreeDots"
+              color="#d3d3d3"
+              height={100}
+              width={100} 
+            />}>
               <Fragment>
                 <div className="desktopSearch">
                   <RestaurantSearchBar borough={borough} />
@@ -418,13 +425,19 @@ export const Browse = (props) => {
               </Fragment>
             </Suspense>
           </header>
-          <Suspense fallback={<div></div>}>
+          <Suspense fallback={<Loader
+            type="ThreeDots"
+            color="#d3d3d3"
+            height={100}
+            width={100} 
+          />}>
             {isMobile
               ?
               <Fragment>
                 <div className="filterBarMobile">
                   <div className="statusFilterMobile">
                     <Multiselect
+                      id={"status_mobile"}
                       options={diningStatuses} // Options to display in the dropdown
                       onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
                       onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
@@ -439,6 +452,7 @@ export const Browse = (props) => {
                   </div>
                   <div className="zipCodeFilterMobile">
                     <Multiselect
+                      id={"zip_mobile"}
                       options={postCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event
@@ -512,6 +526,7 @@ export const Browse = (props) => {
                 <div className="filterBar">
                   <div className="statusFilter">
                     <Multiselect
+                      id={"status"}
                       options={diningStatuses} // Options to display in the dropdown
                       onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
                       onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
@@ -526,6 +541,7 @@ export const Browse = (props) => {
                   </div>
                   <div className="zipCodeFilter">
                     <Multiselect
+                      id={"zip"}
                       options={postCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event

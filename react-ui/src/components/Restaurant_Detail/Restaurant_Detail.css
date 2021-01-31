@@ -100,3 +100,8 @@
 .backArrow {
     text-align: left;
 }
+
+.loadingAnimation {
+    display: flex;
+    justify-content: center;
+}
