@@ -471,7 +471,7 @@ export const RestaurantDetail = (props) => {
                   <HtmlTooltip
                     title={
                       <Fragment>
-                        <Typography>how do use this table?</Typography><br />
+                        <Typography>how do i use this table?</Typography><br />
                             below you will find all previous inspections for this restaurant<br /><br />
                             this information can be helpful to understand the restaurant's track record,
                             so you can confirm if a recent inspection is an accurate representation of their status <br /><br />
