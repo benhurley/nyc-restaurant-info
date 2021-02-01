@@ -1,11 +1,12 @@
 import { Typography, Container, Box, Grid, Card, makeStyles } from '@material-ui/core';
-import React, { useState, useEffect, Fragment, Suspense, lazy } from 'react';
-import * as d3 from "d3";
-import * as topojson from 'topojson';
-import './Heat_Map.css'
-import { select, svg } from 'd3';
+import React, { useState, useEffect, Fragment } from 'react';
+import { select, geoPath, geoMercator, min, max, scaleLinear } from "d3";
+// import * as topojson from 'topojson';
 import { useRef } from 'react';
-import { set } from 'lodash';
+import { detectMobile } from '../../helpers/Window_Helper';
+import useResizeObserver from "../../helpers/Resize_Observer";
+
+import './Heat_Map.css'
 const useStyles = makeStyles((theme) => ({
     root: {
       flexGrow: 1,
@@ -19,18 +20,18 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const HeatMap = (props) => {
+    const isMobile = detectMobile();
     const classes = useStyles();
-    const [height, setHeight] = useState({});
-    const [width, setWidth] = useState({})
-
+    const [selectedBorough, setSelectedBorough] = useState(null);
     const svgRef = useRef();
     const wrapperRef = useRef();
-    let bouroughData = {};
+    const dimensions = useResizeObserver(wrapperRef);
+
+    let boroughData = {};
 
     // let projection = d3.geoEquirectangular();
     // let geoGenerator = d3.geoPath().projection(projection); 
     const loadData = () => {
-        // fetch("https://data-beta-nyc-files.s3.amazonaws.com/resources/35dd04fb-81b3-479b-a074-a27a37888ce7/d085e2f8d0b54d4590b1e7d1f35594c1pediacitiesnycneighborhoods.geojson?Signature=kNTm%2FKVCnbv1sH0z5zuc71bWtnU%3D&Expires=1612033618&AWSAccessKeyId=AKIAWM5UKMRH2KITC3QA").then(response => {
         fetch("https://raw.githubusercontent.com/dwillis/nyc-maps/master/boroughs.geojson").then(response => {
             if (!response.ok) {
                 throw new Error(`status ${response.status}`);
@@ -38,43 +39,48 @@ export const HeatMap = (props) => {
             return response.json()
         
         }).then(json => {
-            console.log(json);
-            bouroughData = json;
-            drawChart(json);
+            boroughData = json;
+            drawChart();
         })
     }
 
-    const drawChart = (geoJson) => {   
-        console.log('geoJson', geoJson)
-    
-        const { width, height } = wrapperRef.current.getBoundingClientRect();
-    
-        const svg = select(svgRef.current);
+    const drawChart = () => {   
+        console.log('geoJson', boroughData)
+        const { width, height } = dimensions || wrapperRef.current.getBoundingClientRect();
         // Projects geo-coordinates on a 2d plane
-        let projection = d3.geoMercator().fitSize([width, height], geoJson);
+        const projection = geoMercator()
+            .fitSize([width, height], selectedBorough || boroughData)
+            .precision(100);
+
+        const svg = select(svgRef.current);
 
         // Take geojson data,
         // transforms that into the d attribute of a path element
-        let pathGenerator = d3.geoPath().projection(projection); 
+        let pathGenerator = geoPath().projection(projection); 
         
-        svg.selectAll('.borough')
-            .data(geoJson.features)
+        svg
+            .selectAll('.borough')
+            .data(boroughData.features)
             .join('path')
+            .on('click', (event, feature) => {
+                console.log(feature);
+                console.log(selectedBorough);
+                return setSelectedBorough(selectedBorough === feature ? null : feature);
+            })
             .attr('class', 'borough')
-            .attr('d', feature => pathGenerator(feature))
+            .transition()
+            .duration(1000)
+            .attr("fill", '#ccc')
+            .attr('d', (feature) => {
+                console.log(feature);
+                return pathGenerator(feature)
+            });
 
     };
 
-
     useEffect(() => {
-        setHeight(wrapperRef.current.clientWidth / 1.75);
-        setWidth(wrapperRef.current.clientWidth - 64);
         loadData();
-
-
-        console.log(wrapperRef.current.clientWidth/1.75);
-        console.log(wrapperRef.current.clientWidth);
-    }, []);
+    }, [boroughData, dimensions, selectedBorough]);
 
     return (
         <Fragment>
@@ -84,14 +90,16 @@ export const HeatMap = (props) => {
             <Container className="heatmap-container" justify="center" maxWidth="lg">
                 <Grid container spacing={3}>
                     <Grid item xs={12}>
-                        <Card ref={wrapperRef} id="content">
-                            <Box p={4}>
-                                <svg ref={svgRef} width={width} height={height}></svg>
-                            </Box>
-                        </Card>
-                    </Grid>
-                </Grid>
-            </Container>
+                        <Card id="content">
+                            <Box p={2}>
+                                <div ref={wrapperRef}>
+                                    <svg ref={svgRef} height={750} width={1250}></svg>
+                                </div>
+                             </Box>
+                         </Card>
+                     </Grid>
+                 </Grid>
+             </Container>
         </Fragment>
     )
 }
