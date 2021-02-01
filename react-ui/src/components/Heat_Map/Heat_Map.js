@@ -37,7 +37,6 @@ export const HeatMap = (props) => {
         
         }).then(json => {
             setBoroughData(json);
-            drawChart();
         })
     }
 
