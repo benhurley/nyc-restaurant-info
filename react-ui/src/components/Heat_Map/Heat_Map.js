@@ -23,14 +23,11 @@ export const HeatMap = (props) => {
     const isMobile = detectMobile();
     const classes = useStyles();
     const [selectedBorough, setSelectedBorough] = useState(null);
+    const [boroughData, setBoroughData] = useState(null);
     const svgRef = useRef();
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef);
 
-    let boroughData = {};
-
-    // let projection = d3.geoEquirectangular();
-    // let geoGenerator = d3.geoPath().projection(projection); 
     const loadData = () => {
         fetch("https://raw.githubusercontent.com/dwillis/nyc-maps/master/boroughs.geojson").then(response => {
             if (!response.ok) {
@@ -39,47 +36,47 @@ export const HeatMap = (props) => {
             return response.json()
         
         }).then(json => {
-            boroughData = json;
+            setBoroughData(json);
             drawChart();
         })
     }
 
-    const drawChart = () => {   
-        console.log('geoJson', boroughData)
-        const { width, height } = dimensions || wrapperRef.current.getBoundingClientRect();
-        // Projects geo-coordinates on a 2d plane
-        const projection = geoMercator()
-            .fitSize([width, height], selectedBorough || boroughData)
-            .precision(100);
-
-        const svg = select(svgRef.current);
-
-        // Take geojson data,
-        // transforms that into the d attribute of a path element
-        let pathGenerator = geoPath().projection(projection); 
-        
-        svg
-            .selectAll('.borough')
-            .data(boroughData.features)
-            .join('path')
-            .on('click', (event, feature) => {
-                console.log(feature);
-                console.log(selectedBorough);
-                return setSelectedBorough(selectedBorough === feature ? null : feature);
-            })
-            .attr('class', 'borough')
-            .transition()
-            .duration(1000)
-            .attr("fill", '#ccc')
-            .attr('d', (feature) => {
-                console.log(feature);
-                return pathGenerator(feature)
-            });
-
-    };
-
     useEffect(() => {
-        loadData();
+        if(!boroughData) {
+            loadData();
+        } else {
+            let svg = select(svgRef.current);
+            console.log('geoJson', boroughData)
+            const { width, height } = dimensions || wrapperRef.current.getBoundingClientRect();
+            // Projects geo-coordinates on a 2d plane
+            const projection = geoMercator()
+                .fitSize([width, height], selectedBorough || boroughData)
+                .precision(100);
+    
+    
+            // Take geojson data,
+            // transforms that into the d attribute of a path element
+            let pathGenerator = geoPath().projection(projection); 
+            
+            svg
+                .selectAll('.borough')
+                .data(boroughData.features)
+                .join('path')
+                .on('click', (event, feature) => {
+                    console.log(feature);
+                    console.log(selectedBorough);
+                    return setSelectedBorough(selectedBorough === feature ? null : feature);
+                })
+                .attr('class', 'borough')
+                .transition()
+                .duration(1000)
+                .attr("fill", '#ccc')
+                .attr('d', (feature) => {
+                    console.log(feature);
+                    return pathGenerator(feature)
+                });
+        }
+        
     }, [boroughData, dimensions, selectedBorough]);
 
     return (
