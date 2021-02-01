@@ -1,16 +1,27 @@
 import React, { createRef, useState, useEffect, Fragment, Suspense, lazy } from 'react';
-import Grid from '@material-ui/core/Grid';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom'
-import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
-import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
-import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
-import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
+
 import Box from '@material-ui/core/Box';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import CardContent from '@material-ui/core/CardContent';
+import Grid from '@material-ui/core/Grid';
+import TablePagination from '@material-ui/core/TablePagination';
+import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
+import IconButton from '@material-ui/core/IconButton';
+import TableSortLabel from '@material-ui/core/TableSortLabel';
+
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import FirstPageIcon from '@material-ui/icons/FirstPage';
+import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
+import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
+import LastPageIcon from '@material-ui/icons/LastPage';
+import AirlineSeatReclineNormalOutlinedIcon from '@material-ui/icons/AirlineSeatReclineNormalOutlined';
+import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
+import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
+import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 
 import { AdBanner } from '../Banners/Ad_Banner';
 import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
@@ -18,16 +29,6 @@ import { detectMobile } from '../../helpers/Window_Helper';
 
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
-
-import TablePagination from '@material-ui/core/TablePagination';
-import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
-import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import FirstPageIcon from '@material-ui/icons/FirstPage';
-import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
-import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
-import LastPageIcon from '@material-ui/icons/LastPage';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 
 import './Restaurant_Detail.css';
 
@@ -39,7 +40,8 @@ const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
 const TableHead = lazy(() => import('@material-ui/core/TableHead'));
 const TableRow = lazy(() => import('@material-ui/core/TableRow'));
 const Paper = lazy(() => import('@material-ui/core/Paper'));
-const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));const GoogleMapReact = lazy(() => import('google-map-react'));
+const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
+const GoogleMapReact = lazy(() => import('google-map-react'));
 const Card = lazy(() => import('@material-ui/core/Card'));
 const Button = lazy(() => import('@material-ui/core/Button'));
 
@@ -110,7 +112,7 @@ const StyledTableCell = withStyles((theme) => ({
     ];
     
     function EnhancedTableHead(props) {
-    const { classes, order, orderBy, onRequestSort, isMobile } = props;
+    const { order, orderBy, onRequestSort, isMobile } = props;
     const createSortHandler = (property) => (event) => {
         onRequestSort(event, property);
     };
