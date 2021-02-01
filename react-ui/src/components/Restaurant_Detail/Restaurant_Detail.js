@@ -458,12 +458,15 @@ export const RestaurantDetail = (props) => {
                 </Box>
             </div>
             <div className="historyTable">
-                <Suspense fallback={<Loader
-                type="ThreeDots"
-                color="#d3d3d3"
-                height={100}
-                width={100} 
-                />}>
+                <Suspense fallback={
+                    <div className="loadingAnimation">
+                        <Loader
+                            type="ThreeDots"
+                            color="#d3d3d3"
+                            height={100}
+                            width={100} 
+                        />
+                    </div>}>
                 <div className="tableHelper"> browse all previous inspections below &nbsp;
                   <HtmlTooltip
                     title={
