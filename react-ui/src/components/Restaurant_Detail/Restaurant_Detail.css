@@ -105,3 +105,36 @@
     display: flex;
     justify-content: center;
 }
+
+.desktopTable {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    cursor: pointer;
+    text-transform: lowercase;
+}
+
+.mobileTableHeader {
+    font-weight: bold;
+    display: inline-block;
+}
+
+.mobileTable {
+    margin-top: 20px;
+    margin-bottom: 40px;
+    text-transform: lowercase;
+}
+
+.historyTable {
+    margin-left: 40px;
+    margin-right: 40px;
+}
+
+.tableHelper {
+    font-size: small;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: lowercase;
+}

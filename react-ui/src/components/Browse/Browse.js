@@ -77,7 +77,7 @@ function stableSort(array, comparator) {
 const headCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
   { id: 'status', numeric: false, disablePadding: false, label: 'dining status' },
-  { id: 'inspectedon', numeric: true, disablePadding: false, label: 'date' },
+  { id: 'inspectedon', numeric: true, disablePadding: false, label: 'inspected on' },
   { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
   { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
   { id: 'postcode', numeric: true, disablePadding: false, label: 'zip code' },
@@ -136,21 +136,12 @@ function EnhancedTableHead(props) {
                 <HtmlTooltip
                   title={
                     <Fragment>
-                      <Typography>how is outdoor dining status calculated?</Typography><br />
-                      <b>{"open: "}</b>{"most-recent inspection yielded a compliant rating"}<br /><br />
+                      <Typography>how is dining status calculated?</Typography><br />
+                      {'our predictions are based on the most-recent inspection'}<br /><br />
+                      <b>{"open: "}</b>{"recieved a compliant rating"}<br /><br />
                       <b>{"closed: "}</b>{"cease and desist issued"}<br /><br />
                       <b>{"pending: "}</b>{"awaiting roadway compliance check, usually still operating"}<br /><br />
                       <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
-                    </Fragment>
-                  }>
-                  <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                </HtmlTooltip>}
-              {headCell.id === 'inspectedon' &&
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>inspection date</Typography><br />
-                      {"showing results for all nyc inspections, sorted by inspection date in descending order"}
                     </Fragment>
                   }>
                   <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -408,15 +399,14 @@ export const Browse = (props) => {
                 <div className="desktopSearch">
                   <RestaurantSearchBar borough={borough} />
                 </div>
-                <div className="subheader"> browse recent restaurant updates &nbsp;
-
+                <div className="subheader"> browse recent restaurant inspections below &nbsp;
                   <HtmlTooltip
                     title={
                       <Fragment>
-                        <Typography>what am i looking at here?</Typography><br />
-                            below you will find all recent {mapBorough(borough)} inspections, sorted by inspection date (showing most-recent)<br /><br />
-                            <b>new</b>: you can now filter by dining status and zip code too! <br /><br />
-                            additional table-sorting methods are available on desktop <br /><br />
+                        <Typography>how do i use this table?</Typography><br />
+                            below you will find all of the most-recent {mapBorough(borough)} restaurant inspections <br /><br />
+                            clicking on a line item below will pull up the detail page for that restaurant,
+                            where you can find it's full inspection history <br /><br />
                       </Fragment>
                     }>
                       <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>

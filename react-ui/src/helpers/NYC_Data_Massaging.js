@@ -9,14 +9,16 @@ export const massageApiResponse = (response) => {
 }
 
 export const massageSearchResponse = (response) => {
-    if (response.restaurantname === "Redoak") {
-        response.restaurantname = "Red oak";
-    } else if (response.restaurantname.includes("GÇÖ")) {
-        response.restaurantname = response.restaurantname.replace("GÇÖ", "'");
-    } else if (response.restaurantname.includes("+¬")) {
-        response.restaurantname = response.restaurantname.replace("+¬", "e");
-    } else if (response.restaurantname.includes("+¦")) {
-        response.restaurantname = response.restaurantname.replace("+¦", "ll");
+    for (let i = 0; i < response.length; i++) {
+        if (response[i].restaurantname === "Redoak") {
+            response[i].restaurantname = "Red oak";
+        } else if (response[i].restaurantname.includes("GÇÖ")) {
+            response[i].restaurantname = response[i].restaurantname.replace("GÇÖ", "'");
+        } else if (response[i].restaurantname.includes("+¬")) {
+            response[i].restaurantname = response[i].restaurantname.replace("+¬", "e");
+        } else if (response[i].restaurantname.includes("+¦")) {
+            response[i].restaurantname = response[i].restaurantname.replace("+¦", "ll");
+        }
     }
 
     return response;
