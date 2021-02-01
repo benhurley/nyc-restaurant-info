@@ -275,7 +275,16 @@ function TablePaginationActions(props) {
 }
 
 export const Browse = (props) => {
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState([{
+    "borough": "",
+    "restaurantname": "loading...",
+    "seatingchoice": "",
+    "legalbusinessname": "",
+    "businessaddress": "",
+    "restaurantinspectionid": "",
+    "isroadwaycompliant": "",
+    "inspectedon": "",
+},]);
   const [fullResults, setFullResults] = useState([]);
   const isMobile = detectMobile();
 
@@ -491,7 +500,9 @@ export const Browse = (props) => {
                                       : result.isroadwaycompliant &&
                                         result.isroadwaycompliant === "For HIQA Review"
                                         ? <div className="pending">pending</div>
-                                        : <div className="unknown">unknown</div>
+                                        : result.restaurantname === "loading..."
+                                          ? null
+                                          : <div className="unknown">unknown</div>
                                   }</StyledTableCell>
                                 </StyledTableRow>
                               ))}
@@ -580,7 +591,9 @@ export const Browse = (props) => {
                                     : result.isroadwaycompliant &&
                                     result.isroadwaycompliant === "For HIQA Review"
                                     ? <div className="pending">pending</div>
-                                    : <div className="unknown">unknown</div>
+                                    : result.restaurantname === "loading..."
+                                      ? null
+                                      : <div className="unknown">unknown</div>
                                 }</StyledTableCell>
                                 <StyledTableCell align="left">{result.inspectedon.slice(0, 10)}</StyledTableCell>
                                 <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
@@ -590,7 +603,9 @@ export const Browse = (props) => {
                                     ? "sidewalk and roadway"
                                     : result.seatingchoice === "sidewalk"
                                       ? "sidewalk only"
-                                      : "roadway only"}
+                                      : result.restaurantname === "loading..."
+                                        ? null
+                                        : "roadway only"}
                                 </StyledTableCell>
                                 <StyledTableCell align="left">{result.postcode}</StyledTableCell>
                               </StyledTableRow>
