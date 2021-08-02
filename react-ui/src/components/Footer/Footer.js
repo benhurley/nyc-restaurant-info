@@ -8,7 +8,7 @@ export const Footer = () => {
               site created by <a href='https://benhurley.dev'>ben hurley</a> and <a href='https://ericnatelson.dev'>eric natelson</a><br />
           </div>
           <div className="disclaimer">
-            nyc restaurant info™ 2020. all rights reserved. <br /><br />
+            nyc restaurant info™ 2021. all rights reserved. <br /><br />
             * disclaimer: the information contained in this website is provided for informational purposes only, and should not be construed as legal advice on any matter. 
             this open-source project makes deterministic predictions on a restaurant's outdoor dining status based on the inspection data provided by <a href="https://data.cityofnewyork.us/Transportation/Open-Restaurants-Inspections/4dx7-axux">nyc open data</a>. 
             these predictions are made by checking recent inspection data for characteristics that would generally result in a restaurant being open or closed for in-person dining. <br /><br />
