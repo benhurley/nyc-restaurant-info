@@ -4,14 +4,12 @@ import { detectMobile } from '../../helpers/Window_Helper'
 import './Ad_Banner.css'
 
 export const AdBanner = () => {
-    // hook below used to force re-render on hiding ad in session
-    // eslint-disable no-unused-vars
-    const [removeAd, setRemoveAd] = useState(false);
-    const isHidden = sessionStorage.getItem('hideAd')
+    const [closedInCurrentSession, setClosedInCurrentSession] = useState(false);
+    const isVisible = !sessionStorage.getItem('hideAd')
 
     const handleClick = () => {
         sessionStorage.setItem('hideAd', 'true')
-        setRemoveAd(true);
+        setClosedInCurrentSession(true);
     }
 
     const amazonAd = detectMobile() 
@@ -19,7 +17,7 @@ export const AdBanner = () => {
         : <iframe title="desktop-amazon-ad" src="//rcm-na.amazon-adsystem.com/e/cm?o=1&p=48&l=ur1&category=kitchen&banner=0EQTT1PJSFVACNQ29W02&f=ifr&linkID=f7d4eb1ab922fba4058f107ab754d252&t=turbogamer7000-20&tracking_id=turbogamer7000-20" width="728" height="90" scrolling="no" border="0" marginwidth="0" style={{border: 'none'}} frameborder="0"></iframe>
 
     return (
-        !isHidden && (
+        isVisible && !closedInCurrentSession && (
             <div className="adBanner">
                 <div class="closeButton" onClick={handleClick}>
                     X
