@@ -5,7 +5,7 @@ export const Footer = () => {
     return (
         <Fragment>
           <div className="mainLine">
-              site created by <a href='https://benhurley.dev'>ben hurley</a> and <a href='https://ericnatelson.dev'>eric natelson</a><br />
+              created by <a href='https://benhurley.dev'>ben hurley</a> and <a href='https://ericnatelson.dev'>eric natelson</a><br />
           </div>
           <div className="disclaimer">
             nyc restaurant info™ 2021. all rights reserved. <br /><br />
