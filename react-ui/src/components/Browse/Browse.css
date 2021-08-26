@@ -161,3 +161,8 @@ tr:hover {
   margin-left: 16px;
   max-width: 145px;
 }
+
+.tm {
+  height: 10px;
+  margin-bottom: 20px;
+}

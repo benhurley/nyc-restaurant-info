@@ -395,8 +395,10 @@ export const Browse = (props) => {
               </div>
             </Link>
             <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
-              <h1> nyc restaurant info™ </h1>
-            </Link>
+              <h1> 
+                nyc restaurant info
+                    <img alt="working trademark" className="tm" src={require("../../helpers/tm.png")} />
+                </h1>                </Link>
             <h4>Location: {borough}</h4>
             <Suspense fallback={<Loader
               type="ThreeDots"
