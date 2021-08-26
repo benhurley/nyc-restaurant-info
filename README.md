@@ -1,3 +1,5 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/c48e33a1-3209-4d31-b00e-5c29161036e8/deploy-status)](https://app.netlify.com/sites/nycrestaurantinfo/deploys)
+
 # NYC Restaurant Info™
 
 ## Tracking Outdoor Dining Statuses during Covid-19
