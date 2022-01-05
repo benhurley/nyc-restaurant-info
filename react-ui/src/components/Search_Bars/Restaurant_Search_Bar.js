@@ -10,11 +10,11 @@ const filter = createFilterOptions();
 
 export const RestaurantSearchBar = ({ borough }) => {
   const [value, setValue] = useState(null);
-  const [restaurantNames, setRestaurantNames] = useState([]);
+  const [restaurant_names, setrestaurant_names] = useState([]);
 
   const isMobile = detectMobile();
 
-  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?$select=distinct restaurantname &$limit=20000&borough=${borough}`;
+  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?$select=distinct restaurant_name &$limit=20000&borough=${borough}`;
 
   useEffect(() => {
     fetch(nycCompliantRestaurantApi).then(response => {
@@ -24,15 +24,15 @@ export const RestaurantSearchBar = ({ borough }) => {
       return response.json();
     })
       .then(json => {
-        setRestaurantNames(massageApiResponse(json));
+        setrestaurant_names(massageApiResponse(json));
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
   }, []);
 
   useEffect(() => {
-    if (value && value.restaurantname) {
-      const newURL = window.location.origin + `/restaurant/${value.restaurantname}`
+    if (value && value.restaurant_name) {
+      const newURL = window.location.origin + `/restaurant/${value.restaurant_name}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -43,12 +43,12 @@ export const RestaurantSearchBar = ({ borough }) => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            restaurantname: newValue,
+            restaurant_name: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            restaurantname: newValue.inputValue,
+            restaurant_name: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -61,7 +61,7 @@ export const RestaurantSearchBar = ({ borough }) => {
       clearOnBlur
       handleHomeEndKeys
       id="restaurant-search-bar"
-      options={restaurantNames}
+      options={restaurant_names}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -72,11 +72,11 @@ export const RestaurantSearchBar = ({ borough }) => {
           return option.inputValue;
         }
         // Regular option
-        return option.restaurantname;
+        return option.restaurant_name;
       }}
       renderOption={(option) => (
         <React.Fragment>
-          <div style={{ textTransform: "lowercase" }}>{option.restaurantname} <br />
+          <div style={{ textTransform: "lowercase" }}>{option.restaurant_name} <br />
           </div>
         </React.Fragment>
       )}

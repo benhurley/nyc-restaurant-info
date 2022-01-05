@@ -1,13 +1,13 @@
 export const getPostCodes = (borough) => {
-    if (borough.toLowerCase() === "manhattan") {
+    if (borough === "Manhattan") {
         return manhattanPostCodes();
-    } else if (borough.toLowerCase() === "bronx") {
+    } else if (borough === "Bronx") {
         return bronxPostCodes();
-    } else if (borough.toLowerCase() === "brooklyn") {
+    } else if (borough === "Brooklyn") {
         return brooklynPostCodes();
-    } else if (borough.toLowerCase() === "queens") {
+    } else if (borough === "Queens") {
         return queensPostCodes();
-    } else if (borough.toLowerCase() === "staten island") {
+    } else if (borough === "Staten island") {
         return statenIslandPostCodes();
     }
 }

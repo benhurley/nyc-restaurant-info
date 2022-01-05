@@ -292,7 +292,7 @@ export const RestaurantDetail = (props) => {
     const [rowsPerPage, setRowsPerPage] = React.useState(20);
     const tableRef = createRef();
 
-    const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?restaurantname=${restaurantname}&$order=inspectedon DESC`;
+    const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?restaurantname=${restaurantname}&$order=inspectedon DESC`;
 
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(','));
     const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',') + 2);

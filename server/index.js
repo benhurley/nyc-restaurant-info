@@ -25,7 +25,8 @@ db.once('open', function() {
 // restaurant schema and model for mongodb
 const restaurantSchema = require('./restaurantSchema.js');
 const RestaurantModel = mongoose.model("nyc_restaurant", restaurantSchema);
-const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/4dx7-axux.json?$limit=100000000';
+const nycApiEndpoint = 'https://data.cityofnewyork.us/resource/pitm-atqc.json';
+
 
 // Lodash Utilities
 var merge = _.spread(_.partial(_.merge, {}));

@@ -76,16 +76,15 @@ function stableSort(array, comparator) {
 
 const headCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'dining status' },
-  { id: 'inspectedon', numeric: true, disablePadding: false, label: 'inspected on' },
-  { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
-  { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
-  { id: 'postcode', numeric: true, disablePadding: false, label: 'zip code' },
+  { id: 'time_of_submission', numeric: true, disablePadding: false, label: 'inspected on' },
+  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'seating interest' },
+  { id: 'decision', numeric: false, disablePadding: false, label: 'approval rating' },
+  { id: 'zip', numeric: true, disablePadding: false, label: 'zip code' },
 ];
 
 const mobileHeadCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'status', numeric: false, disablePadding: false, label: 'dining status' },
+  { id: 'decision', numeric: false, disablePadding: false, label: 'decision' },
 ];
 
 function EnhancedTableHead(props) {
@@ -107,7 +106,7 @@ function EnhancedTableHead(props) {
               padding={headCell.disablePadding ? 'none' : 'default'}
               sortDirection={orderBy === headCell.id ? order : false}
             >
-              {!isMobile && headCell.id !== 'status' &&
+              {!isMobile &&
                 <TableSortLabel
                   active={orderBy === headCell.id}
                   direction={orderBy === headCell.id ? order : 'asc'}
@@ -126,32 +125,14 @@ function EnhancedTableHead(props) {
                   {headCell.label}
                 </div>
               }
-              {!isMobile && headCell.id === 'status' &&
-                <div className="mobileTableHeader">
-                  {headCell.label}
-                </div>
-              }
             &nbsp;
-              {headCell.id === 'status' &&
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>how is dining status calculated?</Typography><br />
-                      {'our predictions are based on the most-recent inspection'}<br /><br />
-                      <b>{"open: "}</b>{"recieved a compliant rating"}<br /><br />
-                      <b>{"closed: "}</b>{"cease and desist issued"}<br /><br />
-                      <b>{"pending: "}</b>{"awaiting roadway compliance check, usually still operating"}<br /><br />
-                      <b>{"unknown: "}</b>{"cannot determine based on given data (may be non-compliant but still operating)"}
-                    </Fragment>
-                  }>
-                  <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                </HtmlTooltip>}
-              {headCell.id === 'isroadwaycompliant' &&
+              {headCell.id === 'decision' &&
                 <HtmlTooltip
                   title={
                     <Fragment>
                       <Typography>inspection results</Typography><br />
-                      <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
+                      <b>{"compliant: "
+                      }</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
                       <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
                       <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
                       <b>{"inspection: "}</b>{"inspection could not be performed"}
@@ -159,7 +140,7 @@ function EnhancedTableHead(props) {
                   }>
                   <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
                 </HtmlTooltip>}
-              {headCell.id === 'seatingchoice' &&
+              {headCell.id === 'seating_interest_sidewalk' &&
                 <HtmlTooltip
                   title={
                     <Fragment>
@@ -278,12 +259,12 @@ export const Browse = (props) => {
   const [results, setResults] = useState([{
     "borough": "",
     "restaurantname": "loading...",
-    "seatingchoice": "",
+    "seating_interest_sidewalk": "",
     "legalbusinessname": "",
     "businessaddress": "",
     "restaurantinspectionid": "",
     "isroadwaycompliant": "",
-    "inspectedon": "",
+    "time_of_submission": "",
 },]);
   const [fullResults, setFullResults] = useState([]);
   const isMobile = detectMobile();
@@ -291,21 +272,21 @@ export const Browse = (props) => {
   // enhanced material-ui table
   const classes = useStyles();
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('inspectedon');
+  const [orderBy, setOrderBy] = React.useState('time_of_submission');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const tableRef = createRef();
-  const diningStatuses = [{'status': 'open'}, {'status': 'closed'}, {'status': 'pending'}, {'status': 'unknown'}]
+  const approvalStatuses = [{'status': 'approved'}, {'status': 'declined'}]
   const [appliedZipFilters, setAppliedZipFilters] = useState([]);
   const [appliedCompliancyFilters, setAppliedCompliancyFilters] = useState([]);
 
   // nyc request requires capital names
   let { borough } = props.match.params;
-  borough = mapBorough(borough);
+  borough = borough[0].toUpperCase() + borough.slice(1)
   const postCodes = getPostCodes(borough);
 
   useEffect(() => {
-    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/4dx7-axux.json?borough=${borough}&$limit=20000&$order=inspectedon DESC`;
+    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?borough=${borough}&$limit=20000&$order=time_of_submission%20DESC`;
 
     fetch(nycCompliantRestaurantApi).then(response => {
       if (!response.ok) {
@@ -355,19 +336,20 @@ export const Browse = (props) => {
       status = 'skipped inspection';
     }
 
-    setResults(results.filter((result) => result['isroadwaycompliant'].toLowerCase() === status));
+    setResults(results.filter((result) => result['isroadwaycompliant'] === status));
     setAppliedCompliancyFilters([{'isroadwaycompliant': status}]);
 
   }
 
   const handleZipFilterSelect = (selectedList, selectedItem) => {
-    setResults(results.filter((result) => result['postcode'] === selectedItem['postcode']));
+    debugger
+    setResults(results.filter((result) => result['zip'] === selectedItem['zip']));
     setAppliedZipFilters(selectedList);
   }
 
   const handleZipFilterRemove = (selectedList, removedItem) => {
     if (appliedCompliancyFilters.length > 0) {
-      setResults(fullResults.filter((result) => result['isroadwaycompliant'].toLowerCase() === appliedCompliancyFilters[0]['isroadwaycompliant']));
+      setResults(fullResults.filter((result) => result['isroadwaycompliant'] === appliedCompliancyFilters[0]['isroadwaycompliant']));
       setAppliedZipFilters([]);
     } else {
       setResults(fullResults);
@@ -376,7 +358,7 @@ export const Browse = (props) => {
 
   const handleCompliancyFilterRemove = (selectedList, removedItem) => {
     if (appliedZipFilters.length > 0) {
-      setResults(fullResults.filter((result) => result['postcode'] === appliedZipFilters[0]['postcode']));
+      setResults(fullResults.filter((result) => result['zip'] === appliedZipFilters[0]['zip']));
       setAppliedCompliancyFilters([]);
     } else {
       setResults(fullResults);
@@ -439,11 +421,11 @@ export const Browse = (props) => {
                   <div className="statusFilterMobile">
                     <Multiselect
                       id={"status_mobile"}
-                      options={diningStatuses} // Options to display in the dropdown
+                      options={approvalStatuses} // Options to display in the dropdown
                       onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
                       onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
                       displayValue="status" // Property name to display in the dropdown options
-                      placeholder="filter by status"
+                      placeholder="filter by approval rating"
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -457,7 +439,7 @@ export const Browse = (props) => {
                       options={postCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event
-                      displayValue="postcode" // Property name to display in the dropdown options
+                      displayValue="zip" // Property name to display in the dropdown options
                       placeholder="filter by zip"
                       selectionLimit={1}
                       style={{
@@ -492,8 +474,8 @@ export const Browse = (props) => {
                             {stableSort(results, getComparator(order, orderBy))
                               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((result) => (
-                                <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                                  <StyledTableCell component="th" scope="row">{result.restaurantname}
+                                <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurant_name)}>
+                                  <StyledTableCell component="th" scope="row">{result.restaurant_name}
                                   </StyledTableCell>
                                   <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist"
                                     ? <div className="closed">closed</div>
@@ -502,7 +484,7 @@ export const Browse = (props) => {
                                       : result.isroadwaycompliant &&
                                         result.isroadwaycompliant === "For HIQA Review"
                                         ? <div className="pending">pending</div>
-                                        : result.restaurantname === "loading..."
+                                        : result.restaurant_name === "loading..."
                                           ? null
                                           : <div className="unknown">unknown</div>
                                   }</StyledTableCell>
@@ -530,11 +512,11 @@ export const Browse = (props) => {
                   <div className="statusFilter">
                     <Multiselect
                       id={"status"}
-                      options={diningStatuses} // Options to display in the dropdown
+                      options={approvalStatuses} // Options to display in the dropdown
                       onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
                       onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
                       displayValue="status" // Property name to display in the dropdown options
-                      placeholder="filter by dining status"
+                      placeholder="filter by approval rating"
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -548,8 +530,8 @@ export const Browse = (props) => {
                       options={postCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event
-                      displayValue="postcode" // Property name to display in the dropdown options
-                      placeholder="filter by zip code"
+                      displayValue="zip" // Property name to display in the dropdown options
+                      placeholder="filter by zip"
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -583,33 +565,26 @@ export const Browse = (props) => {
                           {stableSort(results, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((result) => (
-                              <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurantname)}>
-                                <StyledTableCell component="th" scope="row">{result.restaurantname}
+                              <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurant_name)}>
+                                <StyledTableCell component="th" scope="row">{result.restaurant_name}
                                 </StyledTableCell>
-                                <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist"
-                                  ? <div className="closed">closed</div>
-                                  : result.isroadwaycompliant === "Compliant"
-                                    ? <div className="open">open</div>
-                                    : result.isroadwaycompliant &&
-                                    result.isroadwaycompliant === "For HIQA Review"
-                                    ? <div className="pending">pending</div>
-                                    : result.restaurantname === "loading..."
-                                      ? null
-                                      : <div className="unknown">unknown</div>
-                                }</StyledTableCell>
-                                <StyledTableCell align="left">{result.inspectedon.slice(0, 10)}</StyledTableCell>
-                                <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
-                                <StyledTableCell align="left">{result.skippedreason === "No Seating"
-                                  ? "no seating"
-                                  : result.seatingchoice === "both"
-                                    ? "sidewalk and roadway"
-                                    : result.seatingchoice === "sidewalk"
+                                <StyledTableCell align="left">{result.time_of_submission.slice(0, 10)}</StyledTableCell>
+                                <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                    ? "sidewalk and street"
+                                    : result.seating_interest_sidewalk === "sidewalk"
                                       ? "sidewalk only"
                                       : result.restaurantname === "loading..."
                                         ? null
-                                        : "roadway only"}
+                                        : "street only"}
                                 </StyledTableCell>
-                                <StyledTableCell align="left">{result.postcode}</StyledTableCell>
+                                <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                  ? (result.approved_for_sidewalk_seating === 'yes' && result.approved_for_roadway_seating === 'yes')
+                                    ? "approved" : "declined"
+                                  : result.seating_interest_sidewalk === "sidewalk"
+                                    ? result.approved_for_sidewalk_seating === 'yes' ? "approved" : "declined"
+                                    : result.approved_for_roadway_seating === 'yes' ? "approved" : "declined"
+                                  }</StyledTableCell>
+                                <StyledTableCell align="left">{result.zip}</StyledTableCell>
                               </StyledTableRow>
                             ))}
                         </TableBody>
