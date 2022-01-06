@@ -262,9 +262,6 @@ export const Browse = (props) => {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const tableRef = createRef();
-  const approvalStatuses = [{'status': 'approved'}, {'status': 'declined'}]
-  const [appliedZipFilters, setAppliedZipFilters] = useState([]);
-  const [appliedCompliancyFilters, setAppliedCompliancyFilters] = useState([]);
 
   // nyc request requires capital names
   let { borough } = props.match.params;
@@ -309,45 +306,12 @@ export const Browse = (props) => {
     window.location.assign(newURL);
   }
 
-  const handleCompliancyFilterSelect = (selectedList, selectedItem) => {
-    let status = '';
-
-    if (selectedItem['status'] === 'open') {
-      status = "compliant";
-    } else if (selectedItem['status'] === 'closed') {
-      status = "cease and desist";
-    } else if (selectedItem['status'] === 'pending') {
-      status = "for hiqa review";
-    } else if (selectedItem['status'] === 'unknown') {
-      status = 'skipped inspection';
-    }
-
-    setResults(results.filter((result) => result['seating_interest_sidewalk'] === status));
-    setAppliedCompliancyFilters([{'isroadwaycompliant': status}]);
-
-  }
-
   const handleZipFilterSelect = (selectedList, selectedItem) => {
     setResults(results.filter((result) => result['zip'] === selectedItem['zipcode']));
-    setAppliedZipFilters(selectedList);
   }
 
   const handleZipFilterRemove = (selectedList, removedItem) => {
-    if (appliedCompliancyFilters.length > 0) {
-      setResults(fullResults.filter((result) => result.seating_interest_sidewalk === appliedCompliancyFilters[0]['seating_interest_sidewalk']));
-      setAppliedZipFilters([]);
-    } else {
-      setResults(fullResults);
-    }
-  }
-
-  const handleCompliancyFilterRemove = (selectedList, removedItem) => {
-    if (appliedZipFilters.length > 0) {
-      setResults(fullResults.filter((result) => result['zip'] === appliedZipFilters[0]['zip']));
-      setAppliedCompliancyFilters([]);
-    } else {
-      setResults(fullResults);
-    }
+    setResults(fullResults);
   }
 
   return (
