@@ -136,11 +136,6 @@ tr:hover {
 
 .filterBar {
   display: flex;
-  justify-content: flex-start;
-}
-
-.filterBarMobile {
-  display: flex;
   justify-content: center;
 }
 

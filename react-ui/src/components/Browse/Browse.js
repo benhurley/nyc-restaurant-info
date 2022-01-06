@@ -249,7 +249,6 @@ export const Browse = (props) => {
     "legalbusinessname": "",
     "businessaddress": "",
     "restaurantinspectionid": "",
-    "isroadwaycompliant": "",
     "time_of_submission": "",
 },]);
   const [fullResults, setFullResults] = useState([]);
@@ -348,7 +347,7 @@ export const Browse = (props) => {
                         <Typography>how do i use this table?</Typography><br />
                             below you will find all of the most-recent {mapBorough(borough)} restaurant inspections <br /><br />
                             clicking on a line item below will pull up the detail page for that restaurant,
-                            where you can find the health code status full inspection history <br /><br />
+                            where you can find the health code status and full inspection history <br /><br />
                       </Fragment>
                     }>
                       <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -366,7 +365,7 @@ export const Browse = (props) => {
             {isMobile
               ?
               <Fragment>
-                <div className="filterBarMobile">
+                <div className="filterBar">
                   <div className="zipCodeFilterMobile">
                     <Multiselect
                       id={"zip_mobile"}

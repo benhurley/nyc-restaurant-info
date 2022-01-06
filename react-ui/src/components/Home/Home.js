@@ -23,7 +23,7 @@ export const Home = () => {
               </h1>
             </Link>
           </header>
-          <p className="sub-header">near-real-time outdoor dining information</p>
+          <p className="sub-header">live inspection and health information for nyc diners</p>
           <Suspense fallback={<Loader
             type="ThreeDots"
             color="#d3d3d3"
