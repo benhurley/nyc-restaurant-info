@@ -15,7 +15,7 @@ import { Multiselect } from 'multiselect-react-dropdown';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
 import { AdBanner } from '../Banners/Ad_Banner';
-import { getPostCodes } from '../../helpers/NYC_Post_Codes';
+import { getZipCodes } from '../../helpers/NYC_Post_Codes';
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import './Browse.css';
@@ -75,16 +75,17 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
+  { id: 'restaurantname', numeric: false, disablePadding: false, label: 'restaurant' },
   { id: 'time_of_submission', numeric: true, disablePadding: false, label: 'inspected on' },
-  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'seating interest' },
-  { id: 'decision', numeric: false, disablePadding: false, label: 'approval rating' },
-  { id: 'zip', numeric: true, disablePadding: false, label: 'zip code' },
+  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'applied for' },
+  { id: 'decision', numeric: false, disablePadding: false, label: 'status' },
+  { id: 'zip', numeric: true, disablePadding: false, label: 'zip' },
 ];
 
 const mobileHeadCells = [
   { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'decision', numeric: false, disablePadding: false, label: 'decision' },
+  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'request' },
+  { id: 'decision', numeric: false, disablePadding: false, label: 'status' },
 ];
 
 function EnhancedTableHead(props) {
@@ -126,29 +127,14 @@ function EnhancedTableHead(props) {
                 </div>
               }
             &nbsp;
-              {headCell.id === 'decision' &&
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>inspection results</Typography><br />
-                      <b>{"compliant: "
-                      }</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
-                      <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
-                      <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
-                      <b>{"inspection: "}</b>{"inspection could not be performed"}
-                    </Fragment>
-                  }>
-                  <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                </HtmlTooltip>}
               {headCell.id === 'seating_interest_sidewalk' &&
                 <HtmlTooltip
                   title={
                     <Fragment>
-                      <Typography>outdoor seating options</Typography><br />
-                      <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br /><br />
-                      <b>{"roadway only: "}</b>{"outdoor seating available on the street in a protective barrier"}<br /><br />
-                      <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br /><br />
-                      <b>{"no seating: "}</b>{"inspection was skipped due to lack of seating options"}
+                      <Typography>outdoor seating applications</Typography><br />
+                      <b>{"sidewalk only: "}</b>{"applied for outdoor seating on sidewalk"}<br /><br />
+                      <b>{"street only: "}</b>{"applied for outdoor seating on street"}<br /><br />
+                      <b>{"sidewalk and street: "}</b>{"applied for both options above"}<br /><br />
                     </Fragment>
                   }>
                   <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -283,7 +269,7 @@ export const Browse = (props) => {
   // nyc request requires capital names
   let { borough } = props.match.params;
   borough = borough[0].toUpperCase() + borough.slice(1)
-  const postCodes = getPostCodes(borough);
+  const zipCodes = getZipCodes(borough);
 
   useEffect(() => {
     let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?borough=${borough}&$limit=20000&$order=time_of_submission%20DESC`;
@@ -336,20 +322,19 @@ export const Browse = (props) => {
       status = 'skipped inspection';
     }
 
-    setResults(results.filter((result) => result['isroadwaycompliant'] === status));
+    setResults(results.filter((result) => result['seating_interest_sidewalk'] === status));
     setAppliedCompliancyFilters([{'isroadwaycompliant': status}]);
 
   }
 
   const handleZipFilterSelect = (selectedList, selectedItem) => {
-    debugger
-    setResults(results.filter((result) => result['zip'] === selectedItem['zip']));
+    setResults(results.filter((result) => result['zip'] === selectedItem['zipcode']));
     setAppliedZipFilters(selectedList);
   }
 
   const handleZipFilterRemove = (selectedList, removedItem) => {
     if (appliedCompliancyFilters.length > 0) {
-      setResults(fullResults.filter((result) => result['isroadwaycompliant'] === appliedCompliancyFilters[0]['isroadwaycompliant']));
+      setResults(fullResults.filter((result) => result.seating_interest_sidewalk === appliedCompliancyFilters[0]['seating_interest_sidewalk']));
       setAppliedZipFilters([]);
     } else {
       setResults(fullResults);
@@ -381,7 +366,7 @@ export const Browse = (props) => {
                 nyc restaurant info
                     <img alt="working trademark" className="tm" src={require("../../helpers/tm.png")} />
                 </h1>                </Link>
-            <h4>Location: {borough}</h4>
+            <h2>{borough}</h2>
             <Suspense fallback={<Loader
               type="ThreeDots"
               color="#d3d3d3"
@@ -399,7 +384,7 @@ export const Browse = (props) => {
                         <Typography>how do i use this table?</Typography><br />
                             below you will find all of the most-recent {mapBorough(borough)} restaurant inspections <br /><br />
                             clicking on a line item below will pull up the detail page for that restaurant,
-                            where you can find it's full inspection history <br /><br />
+                            where you can find the health code status full inspection history <br /><br />
                       </Fragment>
                     }>
                       <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -418,29 +403,14 @@ export const Browse = (props) => {
               ?
               <Fragment>
                 <div className="filterBarMobile">
-                  <div className="statusFilterMobile">
-                    <Multiselect
-                      id={"status_mobile"}
-                      options={approvalStatuses} // Options to display in the dropdown
-                      onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
-                      onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
-                      displayValue="status" // Property name to display in the dropdown options
-                      placeholder="filter by approval rating"
-                      selectionLimit={1}
-                      style={{
-                        searchBox: { // To change search box element look
-                          minHeight: 30,
-                        }}}
-                    />
-                  </div>
                   <div className="zipCodeFilterMobile">
                     <Multiselect
                       id={"zip_mobile"}
-                      options={postCodes} // Options to display in the dropdown
+                      options={zipCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event
-                      displayValue="zip" // Property name to display in the dropdown options
-                      placeholder="filter by zip"
+                      displayValue="zipcode" // Property name to display in the dropdown options
+                      placeholder="filter on zip"
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -477,16 +447,20 @@ export const Browse = (props) => {
                                 <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurant_name)}>
                                   <StyledTableCell component="th" scope="row">{result.restaurant_name}
                                   </StyledTableCell>
-                                  <StyledTableCell align="left">{result.isroadwaycompliant === "Cease and Desist"
-                                    ? <div className="closed">closed</div>
-                                    : result.isroadwaycompliant === "Compliant"
-                                      ? <div className="open">open</div>
-                                      : result.isroadwaycompliant &&
-                                        result.isroadwaycompliant === "For HIQA Review"
-                                        ? <div className="pending">pending</div>
-                                        : result.restaurant_name === "loading..."
-                                          ? null
-                                          : <div className="unknown">unknown</div>
+                                  <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                    ? "sidewalk and street"
+                                    : result.seating_interest_sidewalk === "sidewalk"
+                                      ? "sidewalk only"
+                                      : result.restaurantname === "loading..."
+                                        ? null
+                                        : "street only"}
+                                </StyledTableCell>
+                                  <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                  ? (result.approved_for_sidewalk_seating === 'yes' && result.approved_for_roadway_seating === 'yes')
+                                    ? "approved" : "declined"
+                                  : result.seating_interest_sidewalk === "sidewalk"
+                                    ? result.approved_for_sidewalk_seating === 'yes' ? "approved" : "declined"
+                                    : result.approved_for_roadway_seating === 'yes' ? "approved" : "declined"
                                   }</StyledTableCell>
                                 </StyledTableRow>
                               ))}
@@ -509,29 +483,14 @@ export const Browse = (props) => {
               </Fragment>
               :<Fragment>
                 <div className="filterBar">
-                  <div className="statusFilter">
-                    <Multiselect
-                      id={"status"}
-                      options={approvalStatuses} // Options to display in the dropdown
-                      onSelect={handleCompliancyFilterSelect} // Function will trigger on select event
-                      onRemove={handleCompliancyFilterRemove} // Function will trigger on remove event
-                      displayValue="status" // Property name to display in the dropdown options
-                      placeholder="filter by approval rating"
-                      selectionLimit={1}
-                      style={{
-                        searchBox: { // To change search box element look
-                          minHeight: 30,
-                        }}}
-                    />
-                  </div>
                   <div className="zipCodeFilter">
                     <Multiselect
                       id={"zip"}
-                      options={postCodes} // Options to display in the dropdown
+                      options={zipCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
                       onRemove={handleZipFilterRemove} // Function will trigger on remove event
-                      displayValue="zip" // Property name to display in the dropdown options
-                      placeholder="filter by zip"
+                      displayValue="zipcode" // Property name to display in the dropdown options
+                      placeholder="filter on zip"
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look

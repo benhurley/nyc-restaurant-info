@@ -1,74 +1,74 @@
-export const getPostCodes = (borough) => {
+export const getZipCodes = (borough) => {
     if (borough === "Manhattan") {
-        return manhattanPostCodes();
+        return manhattanZipCodes();
     } else if (borough === "Bronx") {
-        return bronxPostCodes();
+        return bronxZipCodes();
     } else if (borough === "Brooklyn") {
-        return brooklynPostCodes();
+        return brooklynZipCodes();
     } else if (borough === "Queens") {
-        return queensPostCodes();
+        return queensZipCodes();
     } else if (borough === "Staten island") {
-        return statenIslandPostCodes();
+        return statenIslandZipCodes();
     }
 }
 
-export const manhattanPostCodes = () => {
-    return ([{'postcode': '10001'}, {'postcode': '10002'}, {'postcode': '10003'}, {'postcode': '10004'}, 
-    {'postcode': '10005'}, {'postcode': '10006'}, {'postcode': '10007'}, {'postcode': '10009'}, 
-    {'postcode': '10010'}, {'postcode': '10011'}, {'postcode': '10012'}, {'postcode': '10013'}, 
-    {'postcode': '10014'}, {'postcode': '10016'}, {'postcode': '10017'}, {'postcode': '10018'}, 
-    {'postcode': '10019'}, {'postcode': '10020'}, {'postcode': '10021'}, {'postcode': '10022'}, 
-    {'postcode': '10023'}, {'postcode': '10024'}, {'postcode': '10025'}, {'postcode': '10026'}, 
-    {'postcode': '10027'}, {'postcode': '10028'}, {'postcode': '10029'}, {'postcode': '10030'},
-    {'postcode': '10031'}, {'postcode': '10032'}, {'postcode': '10033'}, {'postcode': '10034'}, 
-    {'postcode': '10035'}, {'postcode': '10036'}, {'postcode': '10037'}, {'postcode': '10038'}, 
-    {'postcode': '10039'}, {'postcode': '10040'}, {'postcode': '10044'}, {'postcode': '10065'}, 
-    {'postcode': '10075'}, {'postcode': '10128'}, {'postcode': '10280'}]);
+export const manhattanZipCodes = () => {
+    return ([{'zipcode': '10001'}, {'zipcode': '10002'}, {'zipcode': '10003'}, {'zipcode': '10004'}, 
+    {'zipcode': '10005'}, {'zipcode': '10006'}, {'zipcode': '10007'}, {'zipcode': '10009'}, 
+    {'zipcode': '10010'}, {'zipcode': '10011'}, {'zipcode': '10012'}, {'zipcode': '10013'}, 
+    {'zipcode': '10014'}, {'zipcode': '10016'}, {'zipcode': '10017'}, {'zipcode': '10018'}, 
+    {'zipcode': '10019'}, {'zipcode': '10020'}, {'zipcode': '10021'}, {'zipcode': '10022'}, 
+    {'zipcode': '10023'}, {'zipcode': '10024'}, {'zipcode': '10025'}, {'zipcode': '10026'}, 
+    {'zipcode': '10027'}, {'zipcode': '10028'}, {'zipcode': '10029'}, {'zipcode': '10030'},
+    {'zipcode': '10031'}, {'zipcode': '10032'}, {'zipcode': '10033'}, {'zipcode': '10034'}, 
+    {'zipcode': '10035'}, {'zipcode': '10036'}, {'zipcode': '10037'}, {'zipcode': '10038'}, 
+    {'zipcode': '10039'}, {'zipcode': '10040'}, {'zipcode': '10044'}, {'zipcode': '10065'}, 
+    {'zipcode': '10075'}, {'zipcode': '10128'}, {'zipcode': '10280'}]);
 }
 
-export const bronxPostCodes = () => {
-    return ([{'postcode': '10451'}, {'postcode': '10452'}, {'postcode': '10453'}, {'postcode': '10454'}, 
-    {'postcode': '10455'}, {'postcode': '10456'}, {'postcode': '10457'}, {'postcode': '10458'}, 
-    {'postcode': '10460'}, {'postcode': '10459'}, {'postcode': '10461'}, {'postcode': '10462'}, 
-    {'postcode': '10463'}, {'postcode': '10464'}, {'postcode': '10465'}, {'postcode': '10466'}, 
-    {'postcode': '10467'}, {'postcode': '10468'}, {'postcode': '10469'}, {'postcode': '10470'}, 
-    {'postcode': '10471'}, {'postcode': '10471'}, {'postcode': '10472'}, {'postcode': '10473'}, 
-    {'postcode': '10475'}]);
+export const bronxZipCodes = () => {
+    return ([{'zipcode': '10451'}, {'zipcode': '10452'}, {'zipcode': '10453'}, {'zipcode': '10454'}, 
+    {'zipcode': '10455'}, {'zipcode': '10456'}, {'zipcode': '10457'}, {'zipcode': '10458'}, 
+    {'zipcode': '10460'}, {'zipcode': '10459'}, {'zipcode': '10461'}, {'zipcode': '10462'}, 
+    {'zipcode': '10463'}, {'zipcode': '10464'}, {'zipcode': '10465'}, {'zipcode': '10466'}, 
+    {'zipcode': '10467'}, {'zipcode': '10468'}, {'zipcode': '10469'}, {'zipcode': '10470'}, 
+    {'zipcode': '10471'}, {'zipcode': '10471'}, {'zipcode': '10472'}, {'zipcode': '10473'}, 
+    {'zipcode': '10475'}]);
 }
 
-export const brooklynPostCodes = () => {
-    return ([{'postcode': '11201'}, {'postcode': '11203'}, {'postcode': '11204'}, {'postcode': '11205'}, 
-    {'postcode': '11206'}, {'postcode': '11207'}, {'postcode': '11208'}, {'postcode': '11209'}, 
-    {'postcode': '11210'}, {'postcode': '11211'}, {'postcode': '11212'}, {'postcode': '11213'}, 
-    {'postcode': '11214'}, {'postcode': '11215'}, {'postcode': '11216'}, {'postcode': '11217'}, 
-    {'postcode': '11228'}, {'postcode': '11219'}, {'postcode': '11220'}, {'postcode': '11221'}, 
-    {'postcode': '11222'}, {'postcode': '11223'}, {'postcode': '11224'}, {'postcode': '11201'}, 
-    {'postcode': '11225'}, {'postcode': '11226'}, {'postcode': '11229'}, {'postcode': '11230'}, 
-    {'postcode': '11231'}, {'postcode': '11232'}, {'postcode': '11233'}, {'postcode': '11234'}, 
-    {'postcode': '11235'}, {'postcode': '11236'}, {'postcode': '11237'}, {'postcode': '11238'}, 
-    {'postcode': '11239'}]);
+export const brooklynZipCodes = () => {
+    return ([{'zipcode': '11201'}, {'zipcode': '11203'}, {'zipcode': '11204'}, {'zipcode': '11205'}, 
+    {'zipcode': '11206'}, {'zipcode': '11207'}, {'zipcode': '11208'}, {'zipcode': '11209'}, 
+    {'zipcode': '11210'}, {'zipcode': '11211'}, {'zipcode': '11212'}, {'zipcode': '11213'}, 
+    {'zipcode': '11214'}, {'zipcode': '11215'}, {'zipcode': '11216'}, {'zipcode': '11217'}, 
+    {'zipcode': '11228'}, {'zipcode': '11219'}, {'zipcode': '11220'}, {'zipcode': '11221'}, 
+    {'zipcode': '11222'}, {'zipcode': '11223'}, {'zipcode': '11224'}, {'zipcode': '11201'}, 
+    {'zipcode': '11225'}, {'zipcode': '11226'}, {'zipcode': '11229'}, {'zipcode': '11230'}, 
+    {'zipcode': '11231'}, {'zipcode': '11232'}, {'zipcode': '11233'}, {'zipcode': '11234'}, 
+    {'zipcode': '11235'}, {'zipcode': '11236'}, {'zipcode': '11237'}, {'zipcode': '11238'}, 
+    {'zipcode': '11239'}]);
 }
 
-export const statenIslandPostCodes = () => {
-    return ([{'postcode': '10301'}, {'postcode': '10302'}, {'postcode': '10303'}, {'postcode': '10304'}, 
-    {'postcode': '10305'}, {'postcode': '10306'}, {'postcode': '10307'}, {'postcode': '10308'}, 
-    {'postcode': '10309'}, {'postcode': '10310'}, {'postcode': '10312'}, {'postcode': '10314'},]);
+export const statenIslandZipCodes = () => {
+    return ([{'zipcode': '10301'}, {'zipcode': '10302'}, {'zipcode': '10303'}, {'zipcode': '10304'}, 
+    {'zipcode': '10305'}, {'zipcode': '10306'}, {'zipcode': '10307'}, {'zipcode': '10308'}, 
+    {'zipcode': '10309'}, {'zipcode': '10310'}, {'zipcode': '10312'}, {'zipcode': '10314'},]);
 }
 
-export const queensPostCodes = () => {
-    return ([{'postcode': '11004'}, {'postcode': '11005'}, {'postcode': '11101'}, {'postcode': '11102'}, 
-    {'postcode': '11103'}, {'postcode': '11104'}, {'postcode': '11105'}, {'postcode': '11106'}, 
-    {'postcode': '11354'}, {'postcode': '11355'}, {'postcode': '11356'}, {'postcode': '11357'}, 
-    {'postcode': '11358'}, {'postcode': '11359'}, {'postcode': '11360'}, {'postcode': '11361'},
-    {'postcode': '11362'}, {'postcode': '11363'}, {'postcode': '11364'}, {'postcode': '11365'}, 
-    {'postcode': '11366'}, {'postcode': '11367'}, {'postcode': '11368'}, {'postcode': '11369'}, 
-    {'postcode': '11370'}, {'postcode': '11373'}, {'postcode': '11374'}, {'postcode': '11375'},
-    {'postcode': '11377'}, {'postcode': '11378'}, {'postcode': '11379'}, {'postcode': '11385'},
-    {'postcode': '11411'}, {'postcode': '11412'}, {'postcode': '11413'}, {'postcode': '11414'}, 
-    {'postcode': '11415'}, {'postcode': '11416'}, {'postcode': '11417'}, {'postcode': '11418'},
-    {'postcode': '11419'}, {'postcode': '11420'}, {'postcode': '11421'}, {'postcode': '11422'}, 
-    {'postcode': '11423'}, {'postcode': '11426'}, {'postcode': '11427'}, {'postcode': '11428'}, 
-    {'postcode': '11429'}, {'postcode': '11432'}, {'postcode': '11433'}, {'postcode': '11434'}, 
-    {'postcode': '11435'}, {'postcode': '11436'}, {'postcode': '11691'}, {'postcode': '11692'}, 
-    {'postcode': '11693'}, {'postcode': '11694'}, {'postcode': '11695'}, {'postcode': '11697'}]);
+export const queensZipCodes = () => {
+    return ([{'zipcode': '11004'}, {'zipcode': '11005'}, {'zipcode': '11101'}, {'zipcode': '11102'}, 
+    {'zipcode': '11103'}, {'zipcode': '11104'}, {'zipcode': '11105'}, {'zipcode': '11106'}, 
+    {'zipcode': '11354'}, {'zipcode': '11355'}, {'zipcode': '11356'}, {'zipcode': '11357'}, 
+    {'zipcode': '11358'}, {'zipcode': '11359'}, {'zipcode': '11360'}, {'zipcode': '11361'},
+    {'zipcode': '11362'}, {'zipcode': '11363'}, {'zipcode': '11364'}, {'zipcode': '11365'}, 
+    {'zipcode': '11366'}, {'zipcode': '11367'}, {'zipcode': '11368'}, {'zipcode': '11369'}, 
+    {'zipcode': '11370'}, {'zipcode': '11373'}, {'zipcode': '11374'}, {'zipcode': '11375'},
+    {'zipcode': '11377'}, {'zipcode': '11378'}, {'zipcode': '11379'}, {'zipcode': '11385'},
+    {'zipcode': '11411'}, {'zipcode': '11412'}, {'zipcode': '11413'}, {'zipcode': '11414'}, 
+    {'zipcode': '11415'}, {'zipcode': '11416'}, {'zipcode': '11417'}, {'zipcode': '11418'},
+    {'zipcode': '11419'}, {'zipcode': '11420'}, {'zipcode': '11421'}, {'zipcode': '11422'}, 
+    {'zipcode': '11423'}, {'zipcode': '11426'}, {'zipcode': '11427'}, {'zipcode': '11428'}, 
+    {'zipcode': '11429'}, {'zipcode': '11432'}, {'zipcode': '11433'}, {'zipcode': '11434'}, 
+    {'zipcode': '11435'}, {'zipcode': '11436'}, {'zipcode': '11691'}, {'zipcode': '11692'}, 
+    {'zipcode': '11693'}, {'zipcode': '11694'}, {'zipcode': '11695'}, {'zipcode': '11697'}]);
 }

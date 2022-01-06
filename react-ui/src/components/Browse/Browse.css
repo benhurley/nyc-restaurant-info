@@ -149,8 +149,7 @@ tr:hover {
 } 
 
 .zipCodeFilter {
-  margin-left: 16px;
-  max-width: 300px;
+  max-width: 100px;
 }
 
 .statusFilterMobile {

@@ -24,7 +24,7 @@ import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 
 import { AdBanner } from '../Banners/Ad_Banner';
-import { mapBorough, massageSearchResponse, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
+import { mapBorough, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
 import { detectMobile } from '../../helpers/Window_Helper';
 
 import Loader from 'react-loader-spinner';
@@ -100,15 +100,15 @@ const StyledTableCell = withStyles((theme) => ({
     }
     
     const headCells = [
-        { id: 'inspectedon', numeric: true, disablePadding: false, label: 'inspected on' },
-        { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
-        { id: 'seatingchoice', numeric: false, disablePadding: false, label: 'seating' },
-        { id: 'agencycode', numeric: false, disablePadding: false, label: 'agency code' },
+        { id: 'time_of_submission', numeric: true, disablePadding: false, label: 'inspected on' },
+        { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'applied for' },
+        { id: 'decision', numeric: false, disablePadding: false, label: 'status' },
+        { id: 'healthcompliance_terms', numeric: false, disablePadding: false, label: 'health compliant' },
     ];
       
     const mobileHeadCells = [
-        { id: 'inspectedon', numeric: true, disablePadding: false, label: 'inspected on' },
-        { id: 'isroadwaycompliant', numeric: false, disablePadding: false, label: 'compliancy' },
+        { id: 'time_of_submission', numeric: true, disablePadding: false, label: 'inspected on' },
+        { id: 'healthcompliance_terms', numeric: false, disablePadding: false, label: 'health compliant' },
     ];
     
     function EnhancedTableHead(props) {
@@ -130,12 +130,12 @@ const StyledTableCell = withStyles((theme) => ({
                 padding={headCell.disablePadding ? 'none' : 'default'}
                 sortDirection={orderBy === headCell.id ? order : false}
                 >
-                {isMobile && headCell.id !== 'inspectedon' &&
+                {isMobile && headCell.id !== 'time_of_submission' &&
                     <div className="mobileTableHeader">
                         {headCell.label} &nbsp;
                     </div>
                 }   
-                {headCell.id === 'inspectedon' &&
+                {headCell.id === 'time_of_submission' &&
                     <TableSortLabel
                         active={orderBy === headCell.id}
                         direction={orderBy === headCell.id ? order : 'asc'}
@@ -144,37 +144,23 @@ const StyledTableCell = withStyles((theme) => ({
                     {headCell.label}
                     </TableSortLabel>
                 }
-                {!isMobile && headCell.id !== 'inspectedon' &&
+                {!isMobile && headCell.id !== 'time_of_submission' &&
                     <div className="mobileTableHeader">
                         {headCell.label} &nbsp;
                     </div>
                 }
-                {headCell.id === 'isroadwaycompliant' &&
-                    <HtmlTooltip
-                    title={
-                        <Fragment>
-                        <Typography>inspection results</Typography><br />
-                        <b>{"compliant: "}</b>{"outdoor seating options listed have passed an inspection"}<br /><br />
-                        <b>{"non-compliant: "}</b>{"inspection failed, but restaurant may still be operating"}<br /><br />
-                        <b>{"for hiqa review: "}</b>{"pending highway inspection and quality assurance review"}<br /><br />
-                        <b>{"inspection: "}</b>{"inspection could not be performed"}
-                        </Fragment>
-                    }>
-                    <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                    </HtmlTooltip>}
-                {headCell.id === 'seatingchoice' &&
-                    <HtmlTooltip
-                    title={
-                        <Fragment>
-                        <Typography>outdoor seating options</Typography><br />
-                        <b>{"sidewalk only: "}</b>{"outdoor seating available on sidewalk"}<br /><br />
-                        <b>{"roadway only: "}</b>{"outdoor seating available on the street in a protective barrier"}<br /><br />
-                        <b>{"sidwealk and roadway: "}</b>{"both options above are available"}<br /><br />
-                        <b>{"no seating: "}</b>{"inspection was skipped due to lack of seating options"}
-                        </Fragment>
-                    }>
-                    <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                    </HtmlTooltip>}
+              {headCell.id === 'seating_interest_sidewalk' &&
+                <HtmlTooltip
+                  title={
+                    <Fragment>
+                      <Typography>outdoor seating applications</Typography><br />
+                      <b>{"sidewalk only: "}</b>{"applied for outdoor seating on sidewalk"}<br /><br />
+                      <b>{"street only: "}</b>{"applied for outdoor seating on street"}<br /><br />
+                      <b>{"sidewalk and street: "}</b>{"applied for both options above"}<br /><br />
+                    </Fragment>
+                  }>
+                  <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
+                </HtmlTooltip>}
                 </TableCell>
             ))}
             </TableRow>
@@ -279,20 +265,20 @@ function TablePaginationActions(props) {
 
 export const RestaurantDetail = (props) => {
     let { restaurantname } = props.match.params;
-    restaurantname = encodeRestaurantName(restaurantname);
+    restaurantname = encodeRestaurantName(restaurantname).toUpperCase();
     const [details, setDetails] = useState([]);
-    const [mostRecentInspection, setMostRecentInspection] = useState([])
+    const [mostRecentInspection, setMostRecentInspection] = useState([]);
     const isMobile = detectMobile();
 
     // enhanced material-ui table
     const classes = useStyles();
     const [order, setOrder] = React.useState('desc');
-    const [orderBy, setOrderBy] = React.useState('inspectedon');
+    const [orderBy, setOrderBy] = React.useState('time_of_submission');
     const [page, setPage] = React.useState(0);
     const [rowsPerPage, setRowsPerPage] = React.useState(20);
     const tableRef = createRef();
 
-    const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?restaurantname=${restaurantname}&$order=inspectedon DESC`;
+    const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?restaurant_name=${restaurantname}`;
 
     const addressLine1 = details.businessaddress && details.businessaddress.substr(0, details.businessaddress.indexOf(','));
     const addressLine2 = details.businessaddress && details.businessaddress.substr(details.businessaddress.indexOf(',') + 2);
@@ -304,8 +290,10 @@ export const RestaurantDetail = (props) => {
             }
             return response.json();
         }).then(json => {
-                setDetails(massageSearchResponse(json));
-                setMostRecentInspection(json[0]);
+                if (json.length > 0){
+                    setDetails(json);
+                    setMostRecentInspection(json[0]);
+                }
             }).catch(e => {
                 throw new Error(`API call failed: ${e}`);
             });
@@ -330,6 +318,10 @@ export const RestaurantDetail = (props) => {
         setRowsPerPage(parseInt(event.target.value, 10));
         setPage(0);
       };
+
+    if (!mostRecentInspection) {
+        return null;
+    }
       
     return (
         <Fragment>
@@ -365,12 +357,12 @@ export const RestaurantDetail = (props) => {
                                 >
                                     <Grid item xs={12} sm={6}>
                                         <Typography variant="h5" className="standard-padding" gutterBottom>
-                                            {mostRecentInspection.restaurantname}
+                                            {mostRecentInspection.restaurant_name}
                                         </Typography>
                                         <CardContent>
                                             <RoomOutlinedIcon className="icon" /> &nbsp;
                                         <span className="details">
-                                                {mostRecentInspection.businessaddress}
+                                                {mostRecentInspection.business_address}
                                             </span>
                                             <span className="details">
                                                 {isMobile && addressLine1}<br />
@@ -378,64 +370,37 @@ export const RestaurantDetail = (props) => {
                                             </span>
                                         </CardContent>
                                         <CardContent>
-                                            <ThumbsUpDownOutlinedIcon className="icon" /> &nbsp;
-                                        <span className="details">{
-                                                mostRecentInspection.isroadwaycompliant === "Cease and Desist"
-                                                    ? <div className="closed">closed</div>
-                                                    : mostRecentInspection.isroadwaycompliant === "Compliant"
-                                                        ? <div className="open">open</div>
-                                                        : mostRecentInspection.isroadwaycompliant && 
-                                                            mostRecentInspection.isroadwaycompliant === "For HIQA Review"
-                                                            ? <div className="pending">pending</div>
-                                                            : <div className="unknown">unknown</div>
-                                            }</span>
+                                        <AssignmentOutlinedIcon className="icon" /> &nbsp;
+                                        {mostRecentInspection.time_of_submission && <span className="details">
+                                                {mostRecentInspection.time_of_submission && mostRecentInspection.healthcompliance_terms === 'yes' ?
+                                                    "health compliant"
+                                                    : "health non-compliant"
+                                                }
+                                        </span>}
                                         </CardContent>
                                         <CardContent>
-                                            <AssignmentOutlinedIcon className="icon" /> &nbsp;
+                                        <AirlineSeatReclineNormalOutlinedIcon className="icon" /> &nbsp;
                                         <span className="details">
-                                                {!isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && mostRecentInspection.skippedreason &&
-                                                    mostRecentInspection.isroadwaycompliant + " as of " + mostRecentInspection.inspectedon.slice(0, 10) + ", "
-                                                }
-                                                <br />
-                                                {!isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && mostRecentInspection.skippedreason &&
-                                                    mostRecentInspection.skippedreason
-                                                }
-                                            </span>
-                                            <span className="details">
-                                                {isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && mostRecentInspection.skippedreason &&
-                                                    mostRecentInspection.isroadwaycompliant
-                                                }
-                                                <br />
-                                                {isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && mostRecentInspection.skippedreason &&
-                                                    " as of " + mostRecentInspection.inspectedon.slice(0, 10)
-                                                }
-                                            </span>
-                                            <span className="details">
-                                                {!isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && !mostRecentInspection.skippedreason &&
-                                                    mostRecentInspection.isroadwaycompliant + " as of " + mostRecentInspection.inspectedon.slice(0, 10)
-                                                }
-                                            </span>
-                                            <span className="details">
-                                                {isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && !mostRecentInspection.skippedreason &&
-                                                    mostRecentInspection.isroadwaycompliant
-                                                }
-                                                <br />
-                                                {isMobile && mostRecentInspection.isroadwaycompliant && mostRecentInspection.inspectedon && !mostRecentInspection.skippedreason &&
-                                                    " as of " + mostRecentInspection.inspectedon.slice(0, 10)
-                                                }
-                                            </span>
-                                        </CardContent>
-                                        <CardContent>
-                                            <AirlineSeatReclineNormalOutlinedIcon className="icon" /> &nbsp;
-                                        <span className="details">
-                                                {mostRecentInspection.seatingchoice && mostRecentInspection.skippedreason !== "No Seating" &&
+                                                {mostRecentInspection.seatingchoice &&
                                                     mostRecentInspection.seatingchoice === "both"
-                                                    ? "sidewalk and roadway"
+                                                    ? "applied for sidewalk and street seating"
                                                     : mostRecentInspection.seatingchoice === "sidewalk"
-                                                        ? "sidewalk only"
-                                                        : "roadway only"
+                                                        ? "applied for sidewalk seating"
+                                                        : "applied for street seating"
                                                 }
                                             </span>
+                                        </CardContent>
+                                        <CardContent>
+                                            <ThumbsUpDownOutlinedIcon className="icon" /> &nbsp;
+                                        <span className="details">
+                                        {mostRecentInspection.seating_interest_sidewalk === "both"
+                                        ? (mostRecentInspection.approved_for_sidewalk_seating === 'yes' && mostRecentInspection.approved_for_roadway_seating === 'yes')
+                                            ? "application approved" : " application declined"
+                                        : mostRecentInspection.seating_interest_sidewalk === "sidewalk"
+                                            ? mostRecentInspection.approved_for_sidewalk_seating === 'yes' ? "application approved" : "application declined"
+                                            : mostRecentInspection.approved_for_roadway_seating === 'yes' ? "application approved" : "application declined"
+                                        }
+                                        </span>
                                         </CardContent>
                                     </Grid>
                                     <Grid item xs={12} sm={6}>
@@ -513,10 +478,10 @@ export const RestaurantDetail = (props) => {
                                     .map((result) => (
                                     <StyledTableRow key={result.restaurantinspectionid}>
                                         <StyledTableCell component="th" scope="row">
-                                            {result.inspectedon.slice(0,10)}
+                                            {result.time_of_submission.slice(0,10)}
                                         </StyledTableCell>
                                         <StyledTableCell component="th" scope="row">
-                                            {result.isroadwaycompliant}
+                                            {result.healthcompliance_terms}
                                         </StyledTableCell>
                                     </StyledTableRow>
                                     ))}
@@ -564,18 +529,24 @@ export const RestaurantDetail = (props) => {
                                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                                 .map((result) => (
                                     <StyledTableRow key={result.restaurantinspectionid}>
-                                    <StyledTableCell component="th" scope="row">{result.inspectedon.slice(0,10)}
+                                    <StyledTableCell component="th" scope="row">{result.time_of_submission.slice(0,10)}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{result.isroadwaycompliant}</StyledTableCell>
-                                    <StyledTableCell align="left">{result.skippedreason === "No Seating"
-                                        ? "no seating"
-                                        : result.seatingchoice === "both"
-                                        ? "sidewalk and roadway"
-                                        : result.seatingchoice === "sidewalk"
-                                            ? "sidewalk only"
-                                            : "roadway only"}
+                                    <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                        ? "sidewalk and street"
+                                        : result.seating_interest_sidewalk === "sidewalk"
+                                        ? "sidewalk only"
+                                        : result.restaurant_name === "loading..."
+                                            ? null
+                                            : "street only"}
                                     </StyledTableCell>
-                                    <StyledTableCell align="left">{result.agencycode || "n/a"}</StyledTableCell>
+                                    <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
+                                        ? (result.approved_for_sidewalk_seating === 'yes' && result.approved_for_roadway_seating === 'yes')
+                                            ? "approved" : "declined"
+                                        : result.seating_interest_sidewalk === "sidewalk"
+                                            ? result.approved_for_sidewalk_seating === 'yes' ? "approved" : "declined"
+                                            : result.approved_for_roadway_seating === 'yes' ? "approved" : "declined"
+                                        }</StyledTableCell>
+                                    <StyledTableCell align="left">{result.healthcompliance_terms || "n/a"}</StyledTableCell>
                                     </StyledTableRow>
                                 ))}
                             </TableBody>
