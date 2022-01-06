@@ -3,19 +3,19 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-import { massageApiResponse } from '../../helpers/NYC_Data_Massaging';
 import { detectMobile } from '../../helpers/Window_Helper'
 
 const filter = createFilterOptions();
 
 export const RestaurantSearchBar = ({ borough }) => {
+  debugger
   const [value, setValue] = useState(null);
   const [restaurant_names, setrestaurant_names] = useState([]);
 
   const isMobile = detectMobile();
 
-  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?$select=distinct restaurant_name &$limit=20000&borough=${borough}`;
-
+  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?$limit=20000&borough=Manhattan&$order=time_of_submission%20DESC`;
+  
   useEffect(() => {
     fetch(nycCompliantRestaurantApi).then(response => {
       if (!response.ok) {
@@ -24,7 +24,7 @@ export const RestaurantSearchBar = ({ borough }) => {
       return response.json();
     })
       .then(json => {
-        setrestaurant_names(massageApiResponse(json));
+        setrestaurant_names(json);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })

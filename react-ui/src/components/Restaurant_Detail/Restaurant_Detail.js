@@ -24,7 +24,7 @@ import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 
 import { AdBanner } from '../Banners/Ad_Banner';
-import { mapBorough, encodeRestaurantName } from '../../helpers/NYC_Data_Massaging';
+import { mapBorough } from '../../helpers/NYC_Data_Massaging';
 import { detectMobile } from '../../helpers/Window_Helper';
 
 import Loader from 'react-loader-spinner';
@@ -264,8 +264,9 @@ function TablePaginationActions(props) {
 }
 
 export const RestaurantDetail = (props) => {
+    debugger
     let { restaurantname } = props.match.params;
-    restaurantname = encodeRestaurantName(restaurantname).toUpperCase();
+    restaurantname = restaurantname && restaurantname.toUpperCase();
     const [details, setDetails] = useState([]);
     const [mostRecentInspection, setMostRecentInspection] = useState([]);
     const isMobile = detectMobile();
