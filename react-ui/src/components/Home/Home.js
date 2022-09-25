@@ -1,5 +1,4 @@
 import React, { Fragment, Suspense, lazy } from 'react';
-import { AdBanner } from '../Banners/Ad_Banner';
 import { Link } from 'react-router-dom';
 
 import Loader from 'react-loader-spinner';
@@ -13,7 +12,6 @@ const BoroughMap = lazy(() => import('../Borough_Map/Borough_Map').then(module =
 export const Home = () => {
   return (
       <Fragment>
-        <AdBanner />
         <div className="Home">
           <header className="Home-header">
             <Link to={"/"} style={{ textDecoration: 'none', color: "black" }}>
