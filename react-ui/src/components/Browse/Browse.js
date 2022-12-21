@@ -14,7 +14,6 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { detectMobile } from '../../helpers/Window_Helper'
-import { AdBanner } from '../Banners/Ad_Banner';
 import { getZipCodes } from '../../helpers/NYC_Post_Codes';
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
@@ -316,7 +315,6 @@ export const Browse = (props) => {
   return (
     <Fragment>
       <div className={classes.root}>
-        <AdBanner />
         <div className="Home browse">
           <header className="Home-header">
             <Link to={'/'} style={{ textDecoration: 'none' }} >

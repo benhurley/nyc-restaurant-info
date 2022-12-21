@@ -23,7 +23,6 @@ import ThumbsUpDownOutlinedIcon from '@material-ui/icons/ThumbsUpDownOutlined';
 import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 
-import { AdBanner } from '../Banners/Ad_Banner';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging';
 import { detectMobile } from '../../helpers/Window_Helper';
 
@@ -326,7 +325,6 @@ export const RestaurantDetail = (props) => {
       
     return (
         <Fragment>
-            <AdBanner />
             <div className="Home">
                 <header className="Home-header">
                     <Link to={`/location/${mapBorough(mostRecentInspection.borough)}`} style={{ textDecoration: 'none' }} >
