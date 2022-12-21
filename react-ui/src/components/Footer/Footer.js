@@ -4,9 +4,6 @@ import './Footer.css'
 export const Footer = () => {
     return (
         <Fragment>
-          <div className="mainLine">
-              created by <a href='https://benhurley.dev'>ben hurley</a> and <a href='https://ericnatelson.dev'>eric natelson</a><br />
-          </div>
           <div className="disclaimer">
             nyc restaurant info™ 2022. all rights reserved. <br /><br />
             * disclaimer: the information contained in this website is provided for informational purposes only, and should not be construed as legal advice on any matter. 

@@ -10,10 +10,6 @@ In mid-August of 2020, we discovered a new API on [NYC Open Data](https://openda
 
 We have created an [application](https://nycrestaurant.info) to browse restaurants in your area to see their current inspection status, seating configurations, and if they are open for outdoor dining. You can also search for a specific restaurant to get the most-recent information available.
 
-## Contact
-
-If you would like to contribute to the project, please reach out to me at benfromtech@gmail.com
-
 ## Local Development
 
 This app has the skeloton of a MERN app and is configured to proxy backend requests to a local Node server, but we are currently only using the front end for cost-saving purposes. The following steps assume the website is static and may be updated in the future.
