@@ -1,21 +1,21 @@
 table {
-    table-layout: fixed;
+  table-layout: fixed;
 }
 
 html {
-    scroll-behavior: smooth;
+  scroll-behavior: smooth;
 }
 
 h2 {
-    text-transform: lowercase;
+  text-transform: capitalize;
 }
 
 h3 {
-    text-transform: lowercase;
+  text-transform: capitalize;
 }
 
 h4 {
-  text-transform: lowercase;
+  text-transform: capitalize;
 }
 
 tr.result td {
@@ -23,8 +23,8 @@ tr.result td {
 }
 
 td {
-    padding-top: 5px;
-    padding-bottom: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 th {
@@ -37,7 +37,7 @@ th {
 }
 
 .pending {
-  color :rgb(114, 148, 128);
+  color: rgb(114, 148, 128);
 }
 
 .unknown {
@@ -51,8 +51,8 @@ th {
 }
 
 .subheader {
-    font-size: small;
-    margin-bottom: 30px;
+  font-size: small;
+  margin-bottom: 30px;
 }
 
 .results {
@@ -63,7 +63,6 @@ th {
 .result {
   margin-top: 10px;
   margin-bottom: 10px;
-  text-transform: lowercase;
 }
 
 .mobileResults {
@@ -79,13 +78,13 @@ th {
 .browse {
   margin-left: 40px;
   margin-right: 40px;
+  margin-bottom: 164px;
 }
 
 .desktopTable {
   margin-top: 20px;
   margin-bottom: 40px;
   cursor: pointer;
-  text-transform: lowercase;
 }
 
 .mobileTableHeader {
@@ -96,7 +95,6 @@ th {
 .mobileTable {
   margin-top: 20px;
   margin-bottom: 40px;
-  text-transform: lowercase;
 }
 
 tr:hover {
@@ -121,7 +119,6 @@ tr:hover {
   color: black;
   padding-top: 20px;
   padding-bottom: 25px;
-  text-transform: lowercase;
 }
 
 .desktopSearch {
@@ -131,29 +128,30 @@ tr:hover {
   font-size: calc(10px + 2vmin);
   color: black;
   padding-bottom: 30px;
-  text-transform: lowercase;
 }
 
 .filterBar {
-  display: flex;
+  display: inline-flex;
   justify-content: center;
+  align-items: center;
 }
-
-.statusFilter {
-  max-width: 300px;
-} 
 
 .zipCodeFilter {
-  max-width: 100px;
+  padding-right: 4px;
 }
 
-.statusFilterMobile {
-  max-width: 145px;
-} 
+.gradeFilter {
+  padding-left: 4px;
+}
 
 .zipCodeFilterMobile {
-  margin-left: 16px;
-  max-width: 145px;
+  width: 125px;
+  padding-right: 4px;
+}
+
+.gradeFilterMobile {
+  width: 125px;
+  padding-left: 4px;
 }
 
 .tm {

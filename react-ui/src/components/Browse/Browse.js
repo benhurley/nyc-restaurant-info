@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment, createRef, Suspense, lazy } from 'react';
+import React, { useState, useEffect, useRef, Fragment, createRef, Suspense, lazy } from 'react';
 import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import TablePagination from '@material-ui/core/TablePagination';
@@ -13,11 +13,14 @@ import TableSortLabel from '@material-ui/core/TableSortLabel';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Multiselect } from 'multiselect-react-dropdown';
 import { mapBorough } from '../../helpers/NYC_Data_Massaging'
-import { detectMobile } from '../../helpers/Window_Helper'
+import { DetectMobile } from '../../helpers/Window_Helper'
 import { getZipCodes } from '../../helpers/NYC_Post_Codes';
 import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import './Browse.css';
+import { getGradeImage } from '../../helpers/get_grade_image';
+import { toTitleCase } from '../../helpers/to_title_case';
+import { getGrades, reverseGradeMap } from '../../helpers/grade_map';
 
 //lazy-loaded components
 const RestaurantSearchBar = lazy(() => import('../Search_Bars/Restaurant_Search_Bar').then(module => ({ default: module.RestaurantSearchBar })));
@@ -28,7 +31,6 @@ const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
 const TableHead = lazy(() => import('@material-ui/core/TableHead'));
 const TableRow = lazy(() => import('@material-ui/core/TableRow'));
 const Paper = lazy(() => import('@material-ui/core/Paper'));
-const Button = lazy(() => import('@material-ui/core/Button'));
 const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
 
 const StyledTableCell = withStyles((theme) => ({
@@ -74,17 +76,17 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-  { id: 'restaurantname', numeric: false, disablePadding: false, label: 'restaurant' },
-  { id: 'time_of_submission', numeric: true, disablePadding: false, label: 'inspected on' },
-  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'applied for' },
-  { id: 'decision', numeric: false, disablePadding: false, label: 'status' },
-  { id: 'zip', numeric: true, disablePadding: false, label: 'zip' },
+  { id: 'dba', numeric: false, disablePadding: false, label: 'restaurant' },
+  { id: 'cuisine', numeric: false, disablePadding: false, label: 'cuisine' },
+  { id: 'grade_date', numeric: true, disablePadding: false, label: 'grade date' },
+  { id: 'grade', numeric: false, disablePadding: false, label: 'grade' },
+  { id: 'zip', numeric: true, disablePadding: false, label: 'zip code' },
 ];
 
 const mobileHeadCells = [
-  { id: 'restaurantname', numeric: false, disablePadding: false, label: 'name' },
-  { id: 'seating_interest_sidewalk', numeric: false, disablePadding: false, label: 'request' },
-  { id: 'decision', numeric: false, disablePadding: false, label: 'status' },
+  { id: 'dba', numeric: false, disablePadding: false, label: 'name' },
+  { id: 'grade', numeric: false, disablePadding: false, label: 'grade' },
+  { id: 'zip', numeric: true, disablePadding: false, label: 'zip code' },
 ];
 
 function EnhancedTableHead(props) {
@@ -125,19 +127,6 @@ function EnhancedTableHead(props) {
                   {headCell.label}
                 </div>
               }
-            &nbsp;
-              {headCell.id === 'seating_interest_sidewalk' &&
-                <HtmlTooltip
-                  title={
-                    <Fragment>
-                      <Typography>outdoor seating applications</Typography><br />
-                      <b>{"sidewalk only: "}</b>{"applied for outdoor seating on sidewalk"}<br /><br />
-                      <b>{"street only: "}</b>{"applied for outdoor seating on street"}<br /><br />
-                      <b>{"sidewalk and street: "}</b>{"applied for both options above"}<br /><br />
-                    </Fragment>
-                  }>
-                  <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                </HtmlTooltip>}
             </TableCell>
           ))}
         </TableRow>
@@ -243,20 +232,23 @@ function TablePaginationActions(props) {
 export const Browse = (props) => {
   const [results, setResults] = useState([{
     "borough": "",
-    "restaurantname": "loading...",
-    "seating_interest_sidewalk": "",
+    "dba": "loading...",
+    "cuisine": "",
     "legalbusinessname": "",
     "businessaddress": "",
     "restaurantinspectionid": "",
-    "time_of_submission": "",
+    "grade_date": "",
 },]);
   const [fullResults, setFullResults] = useState([]);
-  const isMobile = detectMobile();
+  const isMobile = DetectMobile();
 
   // enhanced material-ui table
   const classes = useStyles();
+  const zipRef = useRef(null);
+  const gradeRef = useRef(null);
+
   const [order, setOrder] = React.useState('desc');
-  const [orderBy, setOrderBy] = React.useState('time_of_submission');
+  const [orderBy, setOrderBy] = React.useState('grade_date');
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(20);
   const tableRef = createRef();
@@ -265,23 +257,26 @@ export const Browse = (props) => {
   let { borough } = props.match.params;
   borough = borough[0].toUpperCase() + borough.slice(1)
   const zipCodes = getZipCodes(borough);
+  const grades = getGrades();
 
   useEffect(() => {
-    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?borough=${borough}&$limit=20000&$order=time_of_submission%20DESC`;
+    let nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/gra9-xbjk.json?boro=${borough}&$limit=20000&$order=grade_date%20DESC`;
 
     fetch(nycCompliantRestaurantApi).then(response => {
       if (!response.ok) {
-        throw new Error(`status ${response.status}`);
+        throw new Error(`grade ${response.status}`);
       }
       return response.json();
     })
       .then(json => {
-        setResults(json);
-        setFullResults(json);
+        const unique = new Map(json.map(item => [item['dba'], item]));
+        const deduppedResults = Array.from(unique.values());
+        setResults(deduppedResults);
+        setFullResults(deduppedResults);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
-  }, []);
+  }, [borough]);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -305,12 +300,22 @@ export const Browse = (props) => {
   }
 
   const handleZipFilterSelect = (selectedList, selectedItem) => {
-    setResults(results.filter((result) => result['zip'] === selectedItem['zipcode']));
+    setResults(results.filter((result) => result['zipcode'] === selectedItem['zipcode']));
   }
 
-  const handleZipFilterRemove = (selectedList, removedItem) => {
+  const handleGradeFilterSelect = (selectedList, selectedItem) => {
+    setResults(results.filter((result) => result['grade'] === reverseGradeMap[selectedItem['grade']]));
+  }
+
+  const handleFilterRemove = (selectedList, removedItem) => {
+    zipRef.current.resetSelectedValues();
+    gradeRef.current.resetSelectedValues();
     setResults(fullResults);
   }
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <Fragment>
@@ -327,7 +332,7 @@ export const Browse = (props) => {
                 nyc restaurant info
                     <img alt="working trademark" className="tm" src={require("../../helpers/tm.png")} />
                 </h1>                </Link>
-            <h2>{borough}</h2>
+            <h2 style={{marginTop: '48px'}}>{borough}</h2>
             <Suspense fallback={<Loader
               type="ThreeDots"
               color="#d3d3d3"
@@ -338,14 +343,14 @@ export const Browse = (props) => {
                 <div className="desktopSearch">
                   <RestaurantSearchBar borough={borough} />
                 </div>
-                <div className="subheader"> browse recent restaurant inspections below &nbsp;
+                <div className="subheader"> Browse recent restaurant inspections below &nbsp;
                   <HtmlTooltip
                     title={
                       <Fragment>
-                        <Typography>how do i use this table?</Typography><br />
-                            below you will find all of the most-recent {mapBorough(borough)} restaurant inspections <br /><br />
-                            clicking on a line item below will pull up the detail page for that restaurant,
-                            where you can find the health code status and full inspection history <br /><br />
+                        <Typography>How should I use this table?</Typography><br />
+                            Below you will find the most-recent {mapBorough(borough)} restaurant inspections. <br /><br />
+                            Clicking on a line item below will pull up the detail page for that restaurant,
+                            where you can find the health code grade and full inspection history. <br /><br />
                       </Fragment>
                     }>
                       <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
@@ -369,9 +374,26 @@ export const Browse = (props) => {
                       id={"zip_mobile"}
                       options={zipCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
-                      onRemove={handleZipFilterRemove} // Function will trigger on remove event
+                      onRemove={handleFilterRemove} // Function will trigger on remove event
                       displayValue="zipcode" // Property name to display in the dropdown options
-                      placeholder="filter on zip"
+                      placeholder="Filter by Zipcode"
+                      ref={zipRef}
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                  <div className="gradeFilterMobile">
+                    <Multiselect
+                      id={"grade_mobile"}
+                      options={grades} // Options to display in the dropdown
+                      onSelect={handleGradeFilterSelect} // Function will trigger on select event
+                      onRemove={handleFilterRemove} // Function will trigger on remove event
+                      displayValue="grade" // Property name to display in the dropdown options
+                      placeholder="Filter by Grade"
+                      ref={gradeRef}
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -405,24 +427,10 @@ export const Browse = (props) => {
                             {stableSort(results, getComparator(order, orderBy))
                               .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                               .map((result) => (
-                                <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurant_name)}>
-                                  <StyledTableCell component="th" scope="row">{result.restaurant_name}
-                                  </StyledTableCell>
-                                  <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
-                                    ? "sidewalk and street"
-                                    : result.seating_interest_sidewalk === "sidewalk"
-                                      ? "sidewalk only"
-                                      : result.restaurantname === "loading..."
-                                        ? null
-                                        : "street only"}
-                                </StyledTableCell>
-                                  <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
-                                  ? (result.approved_for_sidewalk_seating === 'yes' && result.approved_for_roadway_seating === 'yes')
-                                    ? "approved" : "declined"
-                                  : result.seating_interest_sidewalk === "sidewalk"
-                                    ? result.approved_for_sidewalk_seating === 'yes' ? "approved" : "declined"
-                                    : result.approved_for_roadway_seating === 'yes' ? "approved" : "declined"
-                                  }</StyledTableCell>
+                                <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.dba)}>
+                                  <StyledTableCell component="th" scope="row">{toTitleCase(result.dba)}</StyledTableCell>
+                                  <StyledTableCell align="left">{getGradeImage(result.grade)}</StyledTableCell>
+                                  <StyledTableCell align="left">{result.zipcode}</StyledTableCell>
                                 </StyledTableRow>
                               ))}
                           </TableBody>
@@ -449,9 +457,26 @@ export const Browse = (props) => {
                       id={"zip"}
                       options={zipCodes} // Options to display in the dropdown
                       onSelect={handleZipFilterSelect} // Function will trigger on select event
-                      onRemove={handleZipFilterRemove} // Function will trigger on remove event
+                      onRemove={handleFilterRemove} // Function will trigger on remove event
                       displayValue="zipcode" // Property name to display in the dropdown options
-                      placeholder="filter on zip"
+                      placeholder="Filter by Zipcode"
+                      ref={zipRef}
+                      selectionLimit={1}
+                      style={{
+                        searchBox: { // To change search box element look
+                          minHeight: 30,
+                        }}}
+                    />
+                  </div>
+                  <div className="gradeFilter">
+                    <Multiselect
+                      id={"grade"}
+                      options={grades} // Options to display in the dropdown
+                      onSelect={handleGradeFilterSelect} // Function will trigger on select event
+                      onRemove={handleFilterRemove} // Function will trigger on remove event
+                      displayValue="grade" // Property name to display in the dropdown options
+                      placeholder="Filter by Grade"
+                      ref={gradeRef}
                       selectionLimit={1}
                       style={{
                         searchBox: { // To change search box element look
@@ -485,26 +510,12 @@ export const Browse = (props) => {
                           {stableSort(results, getComparator(order, orderBy))
                             .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                             .map((result) => (
-                              <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.restaurant_name)}>
-                                <StyledTableCell component="th" scope="row">{result.restaurant_name}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">{result.time_of_submission.slice(0, 10)}</StyledTableCell>
-                                <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
-                                    ? "sidewalk and street"
-                                    : result.seating_interest_sidewalk === "sidewalk"
-                                      ? "sidewalk only"
-                                      : result.restaurantname === "loading..."
-                                        ? null
-                                        : "street only"}
-                                </StyledTableCell>
-                                <StyledTableCell align="left">{result.seating_interest_sidewalk === "both"
-                                  ? (result.approved_for_sidewalk_seating === 'yes' && result.approved_for_roadway_seating === 'yes')
-                                    ? "approved" : "declined"
-                                  : result.seating_interest_sidewalk === "sidewalk"
-                                    ? result.approved_for_sidewalk_seating === 'yes' ? "approved" : "declined"
-                                    : result.approved_for_roadway_seating === 'yes' ? "approved" : "declined"
-                                  }</StyledTableCell>
-                                <StyledTableCell align="left">{result.zip}</StyledTableCell>
+                              <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.dba)}>
+                                <StyledTableCell component="th" scope="row">{toTitleCase(result.dba)}</StyledTableCell>
+                                <StyledTableCell align="left">{result.cuisine_description}</StyledTableCell>
+                                <StyledTableCell align="left">{result.grade_date.slice(0, 10)}</StyledTableCell>
+                                <StyledTableCell align="left">{getGradeImage(result.grade)}</StyledTableCell>
+                                <StyledTableCell align="left">{result.zipcode}</StyledTableCell>
                               </StyledTableRow>
                             ))}
                         </TableBody>
@@ -525,13 +536,6 @@ export const Browse = (props) => {
               </div>
               </Fragment>
             }
-            <Link to={'/'} style={{ textDecoration: 'none' }} >
-              <div className="button">
-                <Button variant="outlined" style={{ textTransform: "lowercase" }}>
-                  back
-                </Button>
-              </div>
-            </Link>
           </Suspense>
         </div>
       </div>

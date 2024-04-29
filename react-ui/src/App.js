@@ -22,7 +22,7 @@ function App() {
             <Switch>
               <Route exact path="/" component={Home} />
               <Route exact path="/location/:borough" component={Browse} />
-              <Route exact path="/restaurant/:restaurantname" component={RestaurantDetail}/>
+              <Route exact path="/restaurant/:dba" component={RestaurantDetail}/>
             </Switch>
           </Fragment>
         </Router>

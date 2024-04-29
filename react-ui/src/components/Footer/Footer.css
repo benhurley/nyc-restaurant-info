@@ -9,12 +9,11 @@
 }
 
 .disclaimer {
+    bottom: 0;
     border-top: 1px solid rgb(192, 192, 192);
     font-weight: bold;
     text-align: left;
     font-size: 10px;
-    padding-top: 15px;
-    padding-left: 40px;
-    padding-right: 40px;
-    margin-bottom: 15px;
+    padding: 16px;
+    background-color: #fff;
 }

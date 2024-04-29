@@ -3,18 +3,18 @@ import React, { useState, useEffect } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete, { createFilterOptions } from '@material-ui/lab/Autocomplete';
 
-import { detectMobile } from '../../helpers/Window_Helper'
+import { DetectMobile } from '../../helpers/Window_Helper';
+import { toTitleCase } from '../../helpers/to_title_case';
 
 const filter = createFilterOptions();
 
 export const RestaurantSearchBar = ({ borough }) => {
-  debugger
   const [value, setValue] = useState(null);
-  const [restaurant_names, setrestaurant_names] = useState([]);
+  const [dbas, setDbas] = useState([]);
 
-  const isMobile = detectMobile();
+  const isMobile = DetectMobile();
 
-  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/pitm-atqc.json?$limit=20000&borough=Manhattan&$order=time_of_submission%20DESC`;
+  const nycCompliantRestaurantApi = `https://data.cityofnewyork.us/resource/gra9-xbjk.json?$limit=20000&boro=${borough}&$order=grade_date%20DESC`;
   
   useEffect(() => {
     fetch(nycCompliantRestaurantApi).then(response => {
@@ -24,15 +24,17 @@ export const RestaurantSearchBar = ({ borough }) => {
       return response.json();
     })
       .then(json => {
-        setrestaurant_names(json);
+        const unique = new Map(json.map(item => [item['dba'], item]));
+        const deduppedResults = Array.from(unique.values());
+        setDbas(deduppedResults);
       }).catch(e => {
         throw new Error(`API call failed: ${e}`);
       })
-  }, []);
+  }, [nycCompliantRestaurantApi]);
 
   useEffect(() => {
-    if (value && value.restaurant_name) {
-      const newURL = window.location.origin + `/restaurant/${value.restaurant_name}`
+    if (value && value.dba) {
+      const newURL = window.location.origin + `/restaurant/${value.dba}`
       window.location.assign(newURL)
     }
   }, [value]);
@@ -43,12 +45,12 @@ export const RestaurantSearchBar = ({ borough }) => {
       onChange={(event, newValue) => {
         if (typeof newValue === 'string') {
           setValue({
-            restaurant_name: newValue,
+            dba: newValue,
           });
         } else if (newValue && newValue.inputValue) {
           // Create a new value from the user input
           setValue({
-            restaurant_name: newValue.inputValue,
+            dba: newValue.inputValue,
           });
         } else {
           setValue(newValue);
@@ -61,7 +63,7 @@ export const RestaurantSearchBar = ({ borough }) => {
       clearOnBlur
       handleHomeEndKeys
       id="restaurant-search-bar"
-      options={restaurant_names}
+      options={dbas}
       getOptionLabel={(option) => {
         // Value selected with enter, right from the input
         if (typeof option === 'string') {
@@ -72,19 +74,18 @@ export const RestaurantSearchBar = ({ borough }) => {
           return option.inputValue;
         }
         // Regular option
-        return option.restaurant_name;
+        return option.dba;
       }}
       renderOption={(option) => (
         <React.Fragment>
-          <div style={{ textTransform: "lowercase" }}>{option.restaurant_name} <br />
-          </div>
+          <div>{toTitleCase(option.dba)}</div>
         </React.Fragment>
       )}
       style={{ width: isMobile ? 250 : 325 }}
       renderInput={(params) => (
         <TextField
           {...params}
-          label={<div style={{ textTransform: "lowercase" }}>{`search ${borough}`}</div>}
+          label={<div>{`Search by restaurant name`}</div>}
           variant="outlined"
           onKeyDown={e => {
             if (e.keyCode === 13 && e.target.value) {
