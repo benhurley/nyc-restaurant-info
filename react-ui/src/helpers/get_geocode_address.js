@@ -7,7 +7,8 @@ export async function getGeocodeAddress(address) {
         const data = await response.json();
         if (data.status === 'OK') {
             const { lat, lng } = data.results[0].geometry.location;
-            return { latitude: lat, longitude: lng };
+            const { formatted_address } = data.results[0];
+            return { latitude: lat, longitude: lng, formatted_address };
         } else {
             throw new Error(`Geocoding failed: ${data.status}`);
         }

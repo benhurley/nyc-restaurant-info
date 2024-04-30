@@ -10,11 +10,11 @@ export const BoroughMap =() => {
     return (
         <div className="container">
             <img alt="nyc map" className="borough-image" src={require("../../helpers/nyc_boroughs.png")} />
-            <div onClick={() => handleClick("Manhattan")} className="manhattan">manhattan</div>
-            <div onClick={() => handleClick("Bronx")} className="bronx">bronx</div>
-            <div onClick={() => handleClick("Brooklyn")} className="brooklyn">brooklyn</div>
-            <div onClick={() => handleClick("Staten Island")} className="staten-island">staten <br />island</div>
-            <div onClick={() => handleClick("Queens")} className="queens">queens</div>
+            <div onClick={() => handleClick("Manhattan")} className="manhattan">Manhattan</div>
+            <div onClick={() => handleClick("Bronx")} className="bronx">Bronx</div>
+            <div onClick={() => handleClick("Brooklyn")} className="brooklyn">Brooklyn</div>
+            <div onClick={() => handleClick("Staten Island")} className="staten-island">Staten <br />Island</div>
+            <div onClick={() => handleClick("Queens")} className="queens">Queens</div>
         </div>
     )
 }

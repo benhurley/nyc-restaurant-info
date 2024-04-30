@@ -21,7 +21,7 @@ export const Home = () => {
               </h1>
             </Link>
           </header>
-          <p className="sub-header">Find grades and inspection reports for nyc restaurants</p>
+          <p className="sub-header">Explore NYC Restaurant Grades and Health Reports</p>
           <Suspense fallback={<Loader
             type="ThreeDots"
             color="#d3d3d3"

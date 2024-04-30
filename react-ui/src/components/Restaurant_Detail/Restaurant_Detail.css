@@ -133,13 +133,14 @@
 }
 
 .tableHelper {
-    font-size: small;
+    font-size: x-large;
     margin-top: 32px;
     margin-bottom: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: capitalize;
+    font-weight: n;
 }
 
 .tm {
@@ -155,7 +156,7 @@
 
   .pull-left {
     margin-top: -32px;
-    margin-left: 10px;
+    margin-left: -20px;
     margin-bottom: -32px;
   }
 

@@ -11,15 +11,12 @@ import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
 import IconButton from '@material-ui/core/IconButton';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
-
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
-import GradeIcon from '@material-ui/icons/GradeOutlined';
-import RoomOutlinedIcon from '@material-ui/icons/RoomOutlined';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 
 import { mapBorough } from '../../helpers/NYC_Data_Massaging';
@@ -42,7 +39,6 @@ const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
 const TableHead = lazy(() => import('@material-ui/core/TableHead'));
 const TableRow = lazy(() => import('@material-ui/core/TableRow'));
 const Paper = lazy(() => import('@material-ui/core/Paper'));
-const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
 const GoogleMapReact = lazy(() => import('google-map-react'));
 const Card = lazy(() => import('@material-ui/core/Card'));
 const Button = lazy(() => import('@material-ui/core/Button'));
@@ -254,6 +250,7 @@ export const RestaurantDetail = (props) => {
             lat: 40.74,
             lng: -73.98
         },
+        formatted_address: null,
         zoom: 11
     });
 
@@ -302,7 +299,8 @@ export const RestaurantDetail = (props) => {
                             center: {
                                 lat: coords.latitude,
                                 lng: coords.longitude
-                            }
+                            },
+                            formatted_address: coords.formatted_address
                         }));
                     }
                 });
@@ -326,7 +324,7 @@ export const RestaurantDetail = (props) => {
     };
 
     const handleMapChange = ({ center, zoom }) => {
-        setMapProps({ center, zoom });
+        setMapProps({ ...mapProps, center, zoom });
     };
 
     if (!mostRecentInspection) {
@@ -365,24 +363,24 @@ export const RestaurantDetail = (props) => {
                                         alignItems='center'
                                     >
                                         <Grid item xs={12} sm={6}>
-                                            <Typography variant="h5" className="standard-padding" gutterBottom>
+                                            <Typography variant="h5" className="standard-padding" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
                                                 {toTitleCase(mostRecentInspection.dba)}
                                             </Typography>
-                                            <CardContent style={{ marginBottom: '-8px' }}>
-                                                <GradeIcon className="icon" style={{ paddingBottom: '8px' }} /> &nbsp;
-                                                {getGradeImage(mostRecentInspection.grade, 40)}
+                                            <CardContent style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: -24, marginBottom: -16 }}>
+                                                <p><b>{`${mapProps.formatted_address}`}</b></p>
                                             </CardContent>
-                                            <CardContent style={{ marginBottom: '-8px' }}>
-                                                <RoomOutlinedIcon className="icon" style={{ paddingBottom: '4px' }} /> &nbsp;
-                                                <div className='address'>
-                                                    <p style={{ marginBottom: '4px' }}>{`${mostRecentInspection.building} ${toTitleCase(mostRecentInspection.street)},`}</p>
-                                                    <p>{`${mostRecentInspection.boro} NY ${mostRecentInspection.zipcode}`}</p>
+                                            <CardContent style={{ marginBottom: '-16px' }}>
+                                                <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                                                    {getGradeImage(mostRecentInspection.grade, 100)}
                                                 </div>
+                                            </CardContent>
+                                            <CardContent style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                                                <p>{`(Graded ${mostRecentInspection.grade_date?.slice(0, 10)})`}</p>
                                             </CardContent>
                                             <CardContent>
                                                 <AssignmentOutlinedIcon className="icon" /> &nbsp;
                                                 <span className="details">
-                                                    {mostRecentInspection.critical_flag === "Critical" ? <span style={{ color: 'red' }}><b>critical violations</b></span> : <span style={{ color: 'green' }}><b>No critical violations</b></span>}
+                                                    {mostRecentInspection.critical_flag === "Critical" ? <span style={{ color: 'red', fontSize: 16 }}><b>critical violations</b></span> : <span style={{ color: 'green' }}><b>No critical violations</b></span>}
                                                 </span>
                                             </CardContent>
                                             <CardContent>
@@ -394,7 +392,7 @@ export const RestaurantDetail = (props) => {
                                             </CardContent>
                                         </Grid>
                                         <Grid item xs={12} sm={6}>
-                                            <div style={{ height: '300px', width: '100%' }}>
+                                            <div style={{ height: '400px', width: '100%' }}>
                                                 <GoogleMapReact
                                                     bootstrapURLKeys={{ key: googleApiKey }}
                                                     center={mapProps.center}
@@ -425,19 +423,7 @@ export const RestaurantDetail = (props) => {
                                 width={100}
                             />
                         </div>}>
-                        <div className="tableHelper"> browse all previous inspections below &nbsp;
-                            <HtmlTooltip
-                                title={
-                                    <Fragment>
-                                        <Typography>how do i use this table?</Typography><br />
-                                        below you will find all previous inspections for this restaurant<br /><br />
-                                        this information can be helpful to understand the restaurant's track record,
-                                        so you can confirm if a recent inspection is an accurate representation of their grade <br /><br />
-                                    </Fragment>
-                                }>
-                                <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                            </HtmlTooltip>
-                        </div>
+                        <div className="tableHelper"> Previous Inspections</div>
                         {isMobile
                             ?
                             <Fragment>
@@ -493,7 +479,7 @@ export const RestaurantDetail = (props) => {
                                 </div>
                             </Fragment>
                             : <Fragment>
-                                <div className="desktopTable">
+                                <div className="desktopTable" style={{marginBottom: 164}}>
                                     <Paper className={classes.paper}>
                                         <TableContainer>
                                             <Table

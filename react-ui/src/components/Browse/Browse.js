@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef, Fragment, createRef, Suspense, lazy } from 'react';
-import Typography from '@material-ui/core/Typography';
 import { Link } from 'react-router-dom'
 import TablePagination from '@material-ui/core/TablePagination';
 import { makeStyles, withStyles, useTheme } from '@material-ui/core/styles';
@@ -12,7 +11,6 @@ import PropTypes from 'prop-types';
 import TableSortLabel from '@material-ui/core/TableSortLabel';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import { Multiselect } from 'multiselect-react-dropdown';
-import { mapBorough } from '../../helpers/NYC_Data_Massaging'
 import { DetectMobile } from '../../helpers/Window_Helper'
 import { getZipCodes } from '../../helpers/NYC_Post_Codes';
 import Loader from 'react-loader-spinner';
@@ -31,7 +29,6 @@ const TableContainer = lazy(() => import('@material-ui/core/TableContainer'));
 const TableHead = lazy(() => import('@material-ui/core/TableHead'));
 const TableRow = lazy(() => import('@material-ui/core/TableRow'));
 const Paper = lazy(() => import('@material-ui/core/Paper'));
-const HtmlTooltip = lazy(() => import('../../helpers/Tooltip_Helper').then(module => ({ default: module.HtmlTooltip })));
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -332,7 +329,7 @@ export const Browse = (props) => {
                 nyc restaurant info
                     <img alt="working trademark" className="tm" src={require("../../helpers/tm.png")} />
                 </h1>                </Link>
-            <h2 style={{marginTop: '48px'}}>{borough}</h2>
+            <h2 style={{marginTop: '48px', fontWeight: 400}}>{borough}</h2>
             <Suspense fallback={<Loader
               type="ThreeDots"
               color="#d3d3d3"
@@ -342,19 +339,6 @@ export const Browse = (props) => {
               <Fragment>
                 <div className="desktopSearch">
                   <RestaurantSearchBar borough={borough} />
-                </div>
-                <div className="subheader"> Browse recent restaurant inspections below &nbsp;
-                  <HtmlTooltip
-                    title={
-                      <Fragment>
-                        <Typography>How should I use this table?</Typography><br />
-                            Below you will find the most-recent {mapBorough(borough)} restaurant inspections. <br /><br />
-                            Clicking on a line item below will pull up the detail page for that restaurant,
-                            where you can find the health code grade and full inspection history. <br /><br />
-                      </Fragment>
-                    }>
-                      <img width={10} src={require("../../helpers/question.png")} alt={"tooltip question mark"}></img>
-                  </HtmlTooltip>
                 </div>
               </Fragment>
             </Suspense>
@@ -402,6 +386,7 @@ export const Browse = (props) => {
                     />
                   </div>
                 </div>
+                <p>Recent Inspections</p>
                 <div className="mobileTable">
                   <Paper className="container">
                     <TableContainer>
@@ -485,8 +470,9 @@ export const Browse = (props) => {
                     />
                   </div>
                 </div>
-              <div className="desktopTable">
+              <div className="desktopTable" style={{marginBottom: 250}}>
                 <Paper className={classes.paper}>
+                <p style={{paddingBottom: '16px'}}>Recent Inspections</p>
                   <TableContainer>
                     <Table
                       className={classes.desktopTable}
@@ -523,7 +509,7 @@ export const Browse = (props) => {
                     </TableContainer>
                   </div>
                   <TablePagination
-                    rowsPerPageOptions={[20, 50, 100]}
+                    rowsPerPageOptions={[20, 50, 100, 500]}
                     component="div"
                     count={results.length}
                     rowsPerPage={rowsPerPage}

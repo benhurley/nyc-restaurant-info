@@ -78,7 +78,6 @@ th {
 .browse {
   margin-left: 40px;
   margin-right: 40px;
-  margin-bottom: 164px;
 }
 
 .desktopTable {
@@ -127,13 +126,15 @@ tr:hover {
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: black;
-  padding-bottom: 30px;
+  padding-bottom: 24px;
 }
 
 .filterBar {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  margin-bottom: 32px;
+
 }
 
 .zipCodeFilter {

@@ -1,0 +1,43 @@
+.attributionContainer {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 8px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding: 0;
+    }
+}
+
+.styledLink {
+    margin: 0px 3px;
+    color: black;
+    text-decoration: none;
+}
+
+.Link {
+    margin: 0px 3px;
+    color: black;
+}
+
+.styledLink:hover {
+    text-decoration: underline;
+}
+
+.mr-1 {
+    margin-right: 1rem;
+}
+
+.underline {
+    text-decoration: underline;
+}
+
+.attributionImage {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 8px;
+}
