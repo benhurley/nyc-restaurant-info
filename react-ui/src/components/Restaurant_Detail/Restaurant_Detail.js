@@ -363,11 +363,11 @@ export const RestaurantDetail = (props) => {
                                         alignItems='center'
                                     >
                                         <Grid item xs={12} sm={6}>
-                                            <Typography variant="h5" className="standard-padding" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+                                            <Typography variant="h5" className="standard-padding" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', textAlign: 'center' }}>
                                                 {toTitleCase(mostRecentInspection.dba)}
                                             </Typography>
                                             <CardContent style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: -24, marginBottom: -16 }}>
-                                                <p><b>{`${mapProps.formatted_address}`}</b></p>
+                                                <p style={{textAlign: 'center'}}><b>{`${mapProps.formatted_address}`}</b></p>
                                             </CardContent>
                                             <CardContent style={{ marginBottom: '-16px' }}>
                                                 <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>

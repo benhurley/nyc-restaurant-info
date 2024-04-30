@@ -7,8 +7,8 @@ export const Footer = () => {
   const isMobile = DetectMobile();
 
   return (
-    <div className="disclaimer" style={{ position: isMobile ? 'relative' : 'fixed', width:'100%' }}>
-      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+    <div className="disclaimer" style={{ position: isMobile ? 'relative' : 'fixed', width: isMobile ? 'auto' : '100%' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginRight: '20px', }}>
         <Attribution />
       </div>
       <div>
