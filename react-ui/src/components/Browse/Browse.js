@@ -120,7 +120,7 @@ function EnhancedTableHead(props) {
                 </TableSortLabel>
               }
               {isMobile &&
-                <div className="mobileTableHeader">
+                <div className="mobileTableHeader" style={{display: headCell.id === 'grade' && 'flex'}}>
                   {headCell.label}
                 </div>
               }
@@ -414,7 +414,7 @@ export const Browse = (props) => {
                               .map((result) => (
                                 <StyledTableRow key={result.restaurantinspectionid} onClick={() => handleRestaurant(result.dba)}>
                                   <StyledTableCell component="th" scope="row">{toTitleCase(result.dba)}</StyledTableCell>
-                                  <StyledTableCell align="left">{getGradeImage(result.grade)}</StyledTableCell>
+                                  <StyledTableCell align="center">{getGradeImage(result.grade)}</StyledTableCell>
                                   <StyledTableCell align="left">{result.zipcode}</StyledTableCell>
                                 </StyledTableRow>
                               ))}

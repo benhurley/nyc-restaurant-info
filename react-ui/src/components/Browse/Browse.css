@@ -89,6 +89,7 @@ th {
 .mobileTableHeader {
   font-weight: bold;
   display: inline-block;
+  justify-content: center;
 }
 
 .mobileTable {
