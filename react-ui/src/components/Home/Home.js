@@ -5,11 +5,13 @@ import Loader from 'react-loader-spinner';
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 import './Home.css';
+import { DetectMobile } from '../../helpers/Window_Helper';
 
 //lazy-loaded components
 const BoroughMap = lazy(() => import('../Borough_Map/Borough_Map').then(module => ({ default: module.BoroughMap })));
 
 export const Home = () => {
+  const isMobile = DetectMobile();
   return (
       <Fragment>
         <div className="Home">
@@ -21,7 +23,9 @@ export const Home = () => {
               </h1>
             </Link>
           </header>
-          <p className="sub-header">Explore NYC Restaurant Grades and Health Reports</p>
+          {isMobile 
+          ?<p className="mobile-sub-header">Explore NYC Restaurant Grades and Health Reports</p>
+          :<p className="sub-header">Explore NYC Restaurant Grades and Health Reports</p>}
           <Suspense fallback={<Loader
             type="ThreeDots"
             color="#d3d3d3"
