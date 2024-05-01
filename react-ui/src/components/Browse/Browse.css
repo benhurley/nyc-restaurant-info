@@ -149,11 +149,13 @@ tr:hover {
 .zipCodeFilterMobile {
   width: 125px;
   padding-right: 4px;
+  font-size: 14px;
 }
 
 .gradeFilterMobile {
   width: 125px;
   padding-left: 4px;
+  font-size: 14px;
 }
 
 .tm {
